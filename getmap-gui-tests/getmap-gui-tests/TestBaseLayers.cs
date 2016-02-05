@@ -53,7 +53,7 @@ namespace GetMapTest
             GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
 
-            MenuNavigation.get(driver).FullExtentButton().GotoCoordsButton().IdentificationButton().MagnifyButton().MoveButton().RuleButton().SelectionButton().ZoomArea();              
+                  
         }
         private void OpenBaseLayers()
         { 
