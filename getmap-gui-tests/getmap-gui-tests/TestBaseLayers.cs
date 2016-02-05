@@ -51,7 +51,9 @@ namespace GetMapTest
         private void LogOn()
         {
             GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
-            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");                  
+            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
+
+                  
         }
         private void OpenBaseLayers()
         { 
