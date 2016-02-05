@@ -26,7 +26,7 @@ namespace GetMapTest
         private const string locationLayerSputnik = "dijit_form_RadioButton_1";
         private const string locationLayerScheme = "#stdportal_LayerManagerBase_0 input.dijitReset.dijitCheckBoxInput";
         private const string locationLayerGibrid = "dijit_form_RadioButton_2";
-
+        
         [TestInitialize]
         public void Setup()
         {
