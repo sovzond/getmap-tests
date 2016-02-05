@@ -23,11 +23,22 @@ namespace GetMapTest
         private const string locationPlacesDecTransButton = "#dojoUnique3 div.dijitSliderDecrementIconH";
         private const string locationDNSDecTransButton = "#dojoUnique4 div.dijitSliderDecrementIconH";
         private const string locationMap = "#OpenLayers_Layer_OSM_2 img[src*='/11/1422/584.png']";
+        private const string pathDirectory = @"C:\Users\student\Desktop\Directory for test image";
+        private const string pathDirectoryFakel = @"C:\Users\student\Desktop\Directory for test image\ImageFakel";
+        private const string pathDirectoryAmbar = @"C:\Users\student\Desktop\Directory for test image\ImageAmbar";
+        private const string pathDirectoryPlaces = @"C:\Users\student\Desktop\Directory for test image\ImagePlaces";
+        private const string pathDirectoryDNS = @"C:\Users\student\Desktop\Directory for test image\ImageDNS";
+        private const string VisibleLayer = @"\visibleLayer.png";
+        private const string NotVisibleLayer = @"\notVisibleLayer.png";
+        private string pathVisibleLayer;
+        private string pathNotVisibleLayer;
 
         [TestInitialize]
         public void Setup()
         {
             driver = Settings.Instance.createDriver();
+            pathVisibleLayer = "";
+            pathNotVisibleLayer = "";
         }
 
         /// <summary>
@@ -51,15 +62,20 @@ namespace GetMapTest
         {
             GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
+            CreateDirectoryes();
         }
 
         private void DecTransparencyFakel()
-        {         
+        {
+            pathVisibleLayer = pathDirectoryFakel + VisibleLayer;
+            pathNotVisibleLayer = pathDirectoryFakel + NotVisibleLayer;   
             Bitmap imageFakelVisible = TakeScreenshot(); 
             driver.FindElement(By.CssSelector(locationLegenda)).Click();
             for (int i = 0; i < 55; i++)
                 driver.FindElement(By.CssSelector(locationFakelDecTransButton)).Click();
             Bitmap imageFakelNotVisible = TakeScreenshot();
+            imageFakelVisible.Save(pathVisibleLayer, ImageFormat.Png);
+            imageFakelNotVisible.Save(pathNotVisibleLayer,ImageFormat.Png);
 
         }
         private Bitmap TakeScreenshot()
@@ -129,5 +145,19 @@ namespace GetMapTest
             }
              return diffImage;
         }
+        private void CreateDirectoryes()
+        {
+            if (!Directory.Exists(pathDirectory))
+                Directory.CreateDirectory(pathDirectory);
+            if (!Directory.Exists(pathDirectoryFakel))
+                Directory.CreateDirectory(pathDirectoryFakel);
+            if (!Directory.Exists(pathDirectoryAmbar))
+                Directory.CreateDirectory(pathDirectoryAmbar);
+            if (!Directory.Exists(pathDirectoryPlaces))
+                Directory.CreateDirectory(pathDirectoryPlaces);
+            if (!Directory.Exists(pathDirectoryDNS))
+                Directory.CreateDirectory(pathDirectoryDNS);
+        }
+
     }
 }

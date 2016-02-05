@@ -38,15 +38,19 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WebDriver, Version=2.50.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selenium.WebDriver.2.50.1\lib\net40\WebDriver.dll</HintPath>
+    <Reference Include="WebDriver, Version=2.50.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.WebDriver.2.50.0\lib\net40\WebDriver.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InputCoordWnd.cs" />
     <Compile Include="Login.cs" />
+    <Compile Include="MenuDop.cs" />
+    <Compile Include="MenuNavigation.cs" />
+    <Compile Include="MenuNavigationHistory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScaleMenu.cs" />
     <Compile Include="SlideMenu.cs" />
   </ItemGroup>
   <ItemGroup>
