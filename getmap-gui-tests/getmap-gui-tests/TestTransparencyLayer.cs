@@ -34,7 +34,7 @@ namespace GetMapTest
         ///
         ///</summary>
         [TestMethod]
-        public void TestTransparency()
+        public void CheckTransparency()
         {
             LogOn();
             DecTransparencyFakel();
