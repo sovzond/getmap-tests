@@ -7,6 +7,9 @@ using OpenQA.Selenium.Firefox;
 
 namespace GetMapTest
 {
+    /// <summary>
+    /// Содержит данные для запуска браузера и базовую ссылку.
+    /// </summary>
     public sealed class Settings
     {
         private static readonly Settings instance = new Settings();
@@ -20,7 +23,10 @@ namespace GetMapTest
                 return instance;
             }
         }
-
+        /// <summary>
+        /// Выполняет запуск браузера.
+        /// </summary>
+        /// <returns></returns>
         public IWebDriver createDriver()
         {
             return new FirefoxDriver();
@@ -28,6 +34,9 @@ namespace GetMapTest
 
         private const string baseUrl = "http://91.143.44.249/sovzond_test/portal/";
 
+        /// <summary>
+        /// Адрес базовой ссылки.
+        /// </summary>
         public string BaseUrl
         {
             get
