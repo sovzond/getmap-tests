@@ -10,7 +10,7 @@ namespace GetMapTest.GUI
     /// <summary>
     /// Необходим для чистки браузера после выполнения теста.
     /// </summary>
-    class Cleanup
+   public class Cleanup
     {
         /// <summary>
         /// Закрывает браузер спустя 2 секунду после окончания работы теста.
