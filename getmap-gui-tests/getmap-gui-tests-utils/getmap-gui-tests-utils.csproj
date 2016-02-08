@@ -45,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DegreeFormat.cs" />
-    <Compile Include="ImageComparer.cs" />
     <Compile Include="JS.cs" />
     <Compile Include="LonLat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

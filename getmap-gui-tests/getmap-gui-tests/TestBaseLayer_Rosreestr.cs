@@ -68,7 +68,12 @@ namespace GetMapTest
                string id = getId();
            /* IWebElement element2 = driver.FindElement(By.Id(id));*/
             IList < IWebElement> element2 =driver.FindElements(By.CssSelector("div.olMap img[src*='http://maps.rosreestr.ru/']"));
-      
+            List<string> listAttributeSrc = new List<string>();
+            foreach(var el in element2)
+            {
+                listAttributeSrc.Add(el.GetAttribute("src"));
+            }
+
           
         }
     }

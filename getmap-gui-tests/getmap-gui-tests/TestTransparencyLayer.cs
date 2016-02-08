@@ -27,7 +27,7 @@ namespace GetMapTest
         [TestInitialize]
         public void Setup()
         {
-            driver = Settings.Instance.createDriver();
+            driver = Settings.Instance.createDriver();        
         }
 
         /// <summary>
@@ -54,14 +54,13 @@ namespace GetMapTest
         }
 
         private void DecTransparencyFakel()
-        {
-            Bitmap imageFakelVisible = TakeScreenshot();
+        {         
+            Bitmap imageFakelVisible = TakeScreenshot(); 
             driver.FindElement(By.CssSelector(locationLegenda)).Click();
             for (int i = 0; i < 55; i++)
                 driver.FindElement(By.CssSelector(locationFakelDecTransButton)).Click();
             Bitmap imageFakelNotVisible = TakeScreenshot();
-            Utils.ImageComparer comp = new Utils.ImageComparer(imageFakelVisible, imageFakelNotVisible);
-            int nP = comp.getDifference();
+
         }
         private Bitmap TakeScreenshot()
         {
@@ -72,6 +71,5 @@ namespace GetMapTest
             var cutArea = new Rectangle(element.Location, element.Size);
             return bitmapScreen.Clone(cutArea, bitmapScreen.PixelFormat);
         }
-
     }
 }
