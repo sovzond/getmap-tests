@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
-
+using OpenQA.Selenium.Firefox;
 namespace GetMapTest
 {
     [TestClass]
@@ -66,6 +66,11 @@ namespace GetMapTest
                 Assert.Fail("не показан файл из http://maps.rosreestr.ru/ ");
             }              
                string id = getId();
+           /* IWebElement element2 = driver.FindElement(By.Id(id));*/
+            IList < IWebElement> element2 =driver.FindElements(By.CssSelector("div.olMap img[src*='http://maps.rosreestr.ru/']"));
+      
+          
         }
     }
 }
+
