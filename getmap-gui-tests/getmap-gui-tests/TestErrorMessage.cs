@@ -26,7 +26,7 @@ namespace GetMapTest
         ///Данный метод проводит проверку на наличае всплывающего окна при вводе цифры привышающей диапазон.
         ///</summary>
         [TestMethod]
-        public void TestInt()
+        public void CheckInt()
         {
             LogOn();
             InputInt();
@@ -36,7 +36,7 @@ namespace GetMapTest
         ///Данный метод проводит проверку на наличае всплывающего окна при вводе недопустимого значение.
         ///</summary>
         [TestMethod]
-        public void TestChar()
+        public void CheckChar()
         {
             LogOn();
             InputChar();
