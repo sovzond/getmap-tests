@@ -32,13 +32,21 @@ namespace GetMapTest.GUI
             return new SlideMenu(driver);
         }
         /// <summary>
+        /// Открывает саму плажку 'СЛОИ'.
+        /// </summary>
+        /// <returns></returns>
+        public SlideMenu OpenLayers()
+        {
+            System.Threading.Thread.Sleep(1000);
+            driver.FindElement(By.CssSelector(locationSlideMenu)).Click();
+            return this;
+        }
+        /// <summary>
         /// Открывает базовые слои вкладки 'СЛОИ'.
         /// </summary>
         /// <returns></returns>
         public SlideMenu OpenBaseLayers()
         {
-            System.Threading.Thread.Sleep(1000);
-            driver.FindElement(By.CssSelector(locationSlideMenu)).Click();
             System.Threading.Thread.Sleep(1000);
             driver.FindElement(By.CssSelector(locationBaseLayers)).Click();
             return this;
