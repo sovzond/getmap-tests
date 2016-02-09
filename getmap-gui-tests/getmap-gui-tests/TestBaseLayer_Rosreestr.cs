@@ -43,7 +43,6 @@ namespace GetMapTest
             {
                 return true;
             }
-
         }
         private bool getElementByText(IList<IWebElement> els, string text)
         {
