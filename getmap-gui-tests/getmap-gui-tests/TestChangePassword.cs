@@ -16,7 +16,7 @@ namespace GetMapTest
         }
         [TestMethod]
         public void TestPswOn()                                                                                  //необходимо сменить пароль
-        {
+        { 
             driver.Navigate().GoToUrl(Settings.Instance.BaseUrl);
             driver.FindElement(By.CssSelector("#txtUser")).SendKeys("student");                                  //логин
             driver.FindElement(By.CssSelector("#txtPsw")).SendKeys("123");                                       //пароль
