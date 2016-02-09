@@ -67,7 +67,6 @@ namespace GetMapTest
             {
                 return true;
             }
-
         }
 
     private List<string> listAttributeSrcRos()
