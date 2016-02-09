@@ -10,12 +10,11 @@ using System.Drawing.Imaging;
 namespace GetMapTest
 {
     /// <summary>
-    /// 
+    /// Выполняет проверку прозрачности всех слоев.
     /// </summary>
     [TestClass]
     public class TestTransparencyLayer
     {
-
         private IWebDriver driver;
         private const string locationLegenda = "#menuSlide div.svzSimpleButton.slidePanelLegendButton";
         private const string locationFakelDecTransButton = "#dojoUnique1 div.dijitSliderDecrementIconH";
@@ -31,20 +30,24 @@ namespace GetMapTest
         }
 
         /// <summary>
-        ///
+        ///Делает скриншот карты и проверяет, были ли внесены изменения прозрачности слоя,
+        ///после сдвига ползунка влево.
         ///</summary>
         [TestMethod]
-        public void TestTransparency()
+        public void CheckTransparency()
         {
             LogOn();
-            DecTransparencyFakel();
+            driver.FindElement(By.CssSelector(locationLegenda)).Click();
+            DecTransparency(locationFakelDecTransButton);
+            DecTransparency(locationAmbarDecTransButton);
+            DecTransparency(locationPlacesDecTransButton);
+            DecTransparency(locationDNSDecTransButton);
         }
 
         [TestCleanup]
         public void Clean()
         {
-            System.Threading.Thread.Sleep(2000);
-            driver.Quit();
+            GUI.Cleanup.get(driver).Quit();
         }
 
         private void LogOn()
@@ -52,16 +55,39 @@ namespace GetMapTest
             GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
         }
-
-        private void DecTransparencyFakel()
-        {         
-            Bitmap imageFakelVisible = TakeScreenshot(); 
-            driver.FindElement(By.CssSelector(locationLegenda)).Click();
-            for (int i = 0; i < 55; i++)
-                driver.FindElement(By.CssSelector(locationFakelDecTransButton)).Click();
-            Bitmap imageFakelNotVisible = TakeScreenshot();
-
+ 
+        private void DecTransparency(string locationDecTransButton)
+        {
+            string nameLayer = "";
+            if (locationFakelDecTransButton == locationDecTransButton)
+                nameLayer = " 'Факел' ";
+            if (locationAmbarDecTransButton == locationDecTransButton)
+                nameLayer = " 'Амбар' ";
+            if (locationPlacesDecTransButton == locationDecTransButton)
+                nameLayer = " 'Кустовые площадки' ";
+            if (locationDNSDecTransButton == locationDecTransButton)
+                nameLayer = " 'ДНС' ";
+            Bitmap imagelVisible = TakeScreenshot();
+            Utils.ImageComparer compVisible = new Utils.ImageComparer(imagelVisible, imagelVisible);
+            int nPixelsVisible = compVisible.nDifferentPixels;
+            for (int i = 0; i < 25; i++)
+                driver.FindElement(By.CssSelector(locationDecTransButton)).Click();
+            Bitmap imageHalfVisible = TakeScreenshot();
+            Utils.ImageComparer compHalfVisible = new Utils.ImageComparer(imagelVisible, imageHalfVisible);
+            bool equalHalfVisible = compHalfVisible.IsEqual();
+            int nPixelsHalfVisible = compHalfVisible.nDifferentPixels;
+            if (nPixelsVisible == nPixelsHalfVisible && equalHalfVisible == true)
+                Assert.Fail("Слой" + nameLayer + "не стал прозрачным на половину, после сдвига ползунка.");
+            for (int i = 0; i < 30; i++)
+                driver.FindElement(By.CssSelector(locationDecTransButton)).Click();
+            Bitmap imageNotVisible = TakeScreenshot();
+            Utils.ImageComparer compNotVisible = new Utils.ImageComparer(imageHalfVisible, imageNotVisible);
+            bool equalNotVisible = compNotVisible.IsEqual();
+            int nPixelsNotVisible = compNotVisible.nDifferentPixels;
+            if (nPixelsHalfVisible == nPixelsNotVisible && equalNotVisible == true)
+                Assert.Fail("Слой" + nameLayer + " не стал полностью прозрачным после сдвига ползунка.");
         }
+
         private Bitmap TakeScreenshot()
         {
             var screenshotDriver = driver as ITakesScreenshot;
@@ -70,64 +96,6 @@ namespace GetMapTest
             IWebElement element = driver.FindElement(By.CssSelector(locationMap));
             var cutArea = new Rectangle(element.Location, element.Size);
             return bitmapScreen.Clone(cutArea, bitmapScreen.PixelFormat);
-        }
-        private unsafe Bitmap EqualImage(Bitmap image1,Bitmap image2,Color color)
-        {
-            if (image1 == null || image2 == null)
-                return null;
-            if (image1.Width != image2.Width || image1.Height != image2.Height)
-                return null;
-            Bitmap diffImage = image2.Clone() as Bitmap;
-            int height = image1.Height;
-            int width = image1.Width;
-            BitmapData data1 = image1.LockBits(new Rectangle(0, 0, width, height),
-                ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
-            BitmapData data2 = image2.LockBits(new Rectangle(0, 0, width, height),
-                ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
-            BitmapData diffData = diffImage.LockBits(new Rectangle(0, 0, width, height),
-         ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
-            byte* data1Ptr = (byte*)data1.Scan0;
-            byte* data2Ptr = (byte*)data2.Scan0;
-            byte* diffPtr = (byte*)diffData.Scan0;
-            byte[] swapColor = new byte[3];
-            swapColor[0] = color.R;
-            swapColor[1] = color.G;
-            swapColor[2] = color.B;
-            int rowPadding = data1.Stride - (image1.Width * 3);
-            for (int i = 0; i < height; i++)
-            {
-                for (int j = 0; j < width; j++)
-                {
-                    int same = 0;
-                    byte[] tmp = new byte[3];
-                    for (int x = 0; x < 3; x++)
-                    {
-                        tmp[x] = data2Ptr[0];
-                        if (data1Ptr[0] == data2Ptr[0])
-                        {
-                            same++;
-                        }
-                        data1Ptr++;
-                        data2Ptr++;
-                        for (int y = 0; y < 3; y++)
-                        {
-                            diffPtr[0] = (same == 3) ? swapColor[x] : tmp[x];
-                            diffPtr++;
-                            if (rowPadding > 0)
-                            {
-                                data1Ptr += rowPadding;
-                                data2Ptr += rowPadding;
-                                diffPtr += rowPadding;
-                            }
-                        }
-                        image1.UnlockBits(data1);
-                        image2.UnlockBits(data2);
-                        diffImage.UnlockBits(diffData);
-                       
-                    }
-                }
-            }
-             return diffImage;
         }
     }
 }

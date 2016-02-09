@@ -40,7 +40,7 @@ namespace GetMapTest
         ///Перемещает каждый последний слой на позицию первого.
         ///</summary>
         [TestMethod]
-        public void IncrementLayers()
+        public void СheckIncrementLayers()
         {
             LogOn();
             IncrementLayerDNS();

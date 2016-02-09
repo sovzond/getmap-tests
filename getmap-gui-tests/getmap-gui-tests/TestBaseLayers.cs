@@ -40,7 +40,12 @@ namespace GetMapTest
         public void CheckBaseLayers()
         {
             LogOn();
-         
+            OpenBaseLayers();
+            CheckSelectedOSM();
+            OpenGoogle();
+            CheckLayerScheme();
+            CheckLayerSputnik();
+            CheckLayerGibrid();
         }
         [TestCleanup]
         public void Clean()
@@ -52,35 +57,33 @@ namespace GetMapTest
         {
             GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
-
-            MenuNavigation.get(driver).FullExtentButton().GotoCoordsButton().IdentificationButton().MagnifyButton().MoveButton().RuleButton().SelectionButton().ZoomArea();              
         }
         private void OpenBaseLayers()
-        { 
-            driver.FindElement(By.CssSelector(locationSlideMenu)).Click();    
+        {
+            driver.FindElement(By.CssSelector(locationSlideMenu)).Click();
             IWebElement elementBaseLayer = driver.FindElement(By.CssSelector(locationBaseLayers));
             var builderBaseLayers = new Actions(driver);
             System.Threading.Thread.Sleep(1000);
-            builderBaseLayers.Click(elementBaseLayer).Perform(); 
+            builderBaseLayers.Click(elementBaseLayer).Perform();
             System.Threading.Thread.Sleep(1000);
         }
         private void CheckSelectedOSM()
-        {     
+        {
             IWebElement elementRadioButtonTrue = driver.FindElement(By.Id(locationBaseLayersChildContainer)).
-              FindElement(By.XPath("//input[@aria-checked='true']")); 
-            IWebElement elementOSM = driver.FindElement(By.CssSelector(locationRadioButtonOSM)); 
+              FindElement(By.XPath("//input[@aria-checked='true']"));
+            IWebElement elementOSM = driver.FindElement(By.CssSelector(locationRadioButtonOSM));
             Assert.AreEqual(elementOSM.Location.X, elementRadioButtonTrue.Location.X, "Базовый слой OpenStreetMap отключен");
-            Assert.AreEqual(elementOSM.Location.Y, elementRadioButtonTrue.Location.Y, "Базовый слой OpenStreetMap отключен"); 
+            Assert.AreEqual(elementOSM.Location.Y, elementRadioButtonTrue.Location.Y, "Базовый слой OpenStreetMap отключен");
         }
         private void OpenGoogle()
         {
-            driver.FindElement(By.CssSelector(locationGoogle)).Click(); 
+            driver.FindElement(By.CssSelector(locationGoogle)).Click();
             System.Threading.Thread.Sleep(1000);
         }
         private void CheckLayerScheme()
         {
             driver.FindElement(By.Id(locationLayerSputnik)).Click();
-            driver.FindElement(By.CssSelector(locationLayerScheme)).Click(); 
+            driver.FindElement(By.CssSelector(locationLayerScheme)).Click();
             System.Threading.Thread.Sleep(1000);
             IList<IWebElement> elementScheme = driver.FindElements(By.CssSelector("div.gm-style img[src*='google']"));
             Assert.AreEqual(urlImageScheme, elementScheme[0].GetAttribute("src"), "Слой схема отобразил не корректный слой.");
