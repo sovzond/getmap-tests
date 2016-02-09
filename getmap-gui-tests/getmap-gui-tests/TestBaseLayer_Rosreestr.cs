@@ -70,7 +70,6 @@ namespace GetMapTest
 
     private List<string> listAttributeSrcRos()
         {  
-
             IList<IWebElement> element2 = driver.FindElements(By.CssSelector("div.olMap img[src*='http://maps.rosreestr.ru']"));
             List<string> listAttributeSrc = new List<string>();
             foreach (var el in element2)
