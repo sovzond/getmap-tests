@@ -67,12 +67,12 @@ namespace GetMapTest
                 nameLayer = " 'Кустовые площадки' ";
             if (locationDNSDecTransButton == locationDecTransButton)
                 nameLayer = " 'ДНС' ";
-            Bitmap imagelVisible = TakeScreenshot();
+            Bitmap imagelVisible = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationMap);
             Utils.ImageComparer compVisible = new Utils.ImageComparer(imagelVisible, imagelVisible);
             int nPixelsVisible = compVisible.nDifferentPixels;
             for (int i = 0; i < 25; i++)
                 driver.FindElement(By.CssSelector(locationDecTransButton)).Click();
-            Bitmap imageHalfVisible = TakeScreenshot();
+            Bitmap imageHalfVisible = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationMap);
             Utils.ImageComparer compHalfVisible = new Utils.ImageComparer(imagelVisible, imageHalfVisible);
             bool equalHalfVisible = compHalfVisible.IsEqual();
             int nPixelsHalfVisible = compHalfVisible.nDifferentPixels;
@@ -80,7 +80,7 @@ namespace GetMapTest
                 Assert.Fail("Слой" + nameLayer + "не стал прозрачным на половину, после сдвига ползунка.");
             for (int i = 0; i < 30; i++)
                 driver.FindElement(By.CssSelector(locationDecTransButton)).Click();
-            Bitmap imageNotVisible = TakeScreenshot();
+            Bitmap imageNotVisible = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationMap);
             Utils.ImageComparer compNotVisible = new Utils.ImageComparer(imageHalfVisible, imageNotVisible);
             bool equalNotVisible = compNotVisible.IsEqual();
             int nPixelsNotVisible = compNotVisible.nDifferentPixels;
@@ -88,14 +88,6 @@ namespace GetMapTest
                 Assert.Fail("Слой" + nameLayer + " не стал полностью прозрачным после сдвига ползунка.");
         }
 
-        private Bitmap TakeScreenshot()
-        {
-            var screenshotDriver = driver as ITakesScreenshot;
-            Screenshot screenshot = screenshotDriver.GetScreenshot();
-            var bitmapScreen = new Bitmap(new MemoryStream(screenshot.AsByteArray));
-            IWebElement element = driver.FindElement(By.CssSelector(locationMap));
-            var cutArea = new Rectangle(element.Location, element.Size);
-            return bitmapScreen.Clone(cutArea, bitmapScreen.PixelFormat);
-        }
+    
     }
 }
