@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium.Firefox;
 namespace GetMapTest
 {
     [TestClass]
@@ -13,7 +12,6 @@ namespace GetMapTest
         private IWebDriver driver;
         private List<string> listAttributeSrcOpen()
         {
-
             IList<IWebElement> element = driver.FindElements(By.CssSelector("div.olMap img[src*='http://c.tile.openstreetmap.org']"));
             IList<IWebElement> element1 = driver.FindElements(By.CssSelector("div.olMap img[src*='http://a.tile.openstreetmap.org']"));
             IList<IWebElement> element2 = driver.FindElements(By.CssSelector("div.olMap img[src*='http://b.tile.openstreetmap.org']"));
@@ -34,7 +32,6 @@ namespace GetMapTest
         }
         private Boolean AssertAttributeSrcOpen(string ListAttributeSrc)
         {
-
             if (ListAttributeSrc.StartsWith("http://c.tile.openstreetmap.org") != true && ListAttributeSrc.StartsWith("http://a.tile.openstreetmap.org") != true && ListAttributeSrc.StartsWith("http://b.tile.openstreetmap.org") != true)
             {
                 return false;
@@ -57,7 +54,6 @@ namespace GetMapTest
         }
         private Boolean AssertAttributeSrcRos(string ListAttributeSrc)
         {
-
             if (ListAttributeSrc.StartsWith("http://maps.rosreestr.ru/") != true)
             {
                 return false;
@@ -67,7 +63,6 @@ namespace GetMapTest
                 return true;
             }
         }
-
     private List<string> listAttributeSrcRos()
         {  
             IList<IWebElement> element2 = driver.FindElements(By.CssSelector("div.olMap img[src*='http://maps.rosreestr.ru']"));
@@ -77,16 +72,14 @@ namespace GetMapTest
                 listAttributeSrc.Add(el.GetAttribute("src"));
             }
             return listAttributeSrc;
-        }
-
+        }    
         private void AssertGetElementByText()
         {
             IList<IWebElement> el = driver.FindElements(By.ClassName("svzLayerManagerItem"));
             if (getElementByText(el, "Google") == false) Assert.Fail("не найден Google");
             if (getElementByText(el, "Росреестр") == false) Assert.Fail("не найден Росреестр");
             if (getElementByText(el, "OpenStreetMap") == false) Assert.Fail("не найден OpenStreetMap");
-        }
-              
+        }              
         [TestMethod]
         public void TestRosreestr()
         {
