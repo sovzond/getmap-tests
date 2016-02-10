@@ -64,9 +64,9 @@
     <Compile Include="TestBaseLayers.cs" />
     <Compile Include="TestChangeSortLayers.cs" />
     <Compile Include="TestCurrentExtent.cs" />
-    <Compile Include="TestEnableLayer.cs" />
     <Compile Include="TestErrorMessage.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="TestScale.cs" />
     <Compile Include="TestTransparencyLayer.cs" />
     <Compile Include="TestGoTo.cs" />
     <Compile Include="TestSearch.cs" />

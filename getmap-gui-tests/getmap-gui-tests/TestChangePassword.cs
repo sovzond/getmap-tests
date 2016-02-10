@@ -16,12 +16,8 @@ namespace GetMapTest
         }
         [TestMethod]
         public void TestPswOn()                                                                                  //необходимо сменить пароль
-        { 
-            driver.Navigate().GoToUrl(Settings.Instance.BaseUrl);
-            driver.FindElement(By.CssSelector("#txtUser")).SendKeys("student");                                  //логин
-            driver.FindElement(By.CssSelector("#txtPsw")).SendKeys("123");                                       //пароль
-            Thread.Sleep(2000);
-            driver.FindElement(By.CssSelector("#cmdLogin")).Click();                                             //вход   
+        {
+            GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "123");
             driver.FindElement(By.CssSelector("#cmdChangePassword")).Click();                                    //"Изменить пароль"
             Thread.Sleep(2000);
             Assert.IsTrue(IsElementPresent(By.CssSelector("#stdportal_Window_5")));                              //проверка окно "Изменить пароль"
@@ -35,12 +31,7 @@ namespace GetMapTest
             driver.FindElement(By.CssSelector("#exit")).Click();                                                 //выход 
             Assert.IsFalse(IsElementPresent(By.CssSelector("#contentpane")));
             Thread.Sleep(2000);
-            driver.FindElement(By.CssSelector("#txtUser")).Clear();
-            driver.FindElement(By.CssSelector("#txtUser")).SendKeys("student");
-            driver.FindElement(By.CssSelector("#txtPsw")).Clear();
-            driver.FindElement(By.CssSelector("#txtPsw")).SendKeys("12345");                                     //новый пароль
-            Thread.Sleep(2000);
-            driver.FindElement(By.CssSelector("#cmdLogin")).Click();                                             //вход под новым паролем
+            GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "12345");
             Thread.Sleep(2000);
             Assert.IsTrue(IsElementPresent(By.CssSelector("#contentpane")));                                    //проверка "вход под новым паролем"
             driver.FindElement(By.Id("cmdChangePassword")).Click();                                             //откат изменений
@@ -54,10 +45,7 @@ namespace GetMapTest
             driver.FindElement(By.CssSelector("#exit")).Click();
             Thread.Sleep(2000);
             Assert.IsFalse(IsElementPresent(By.CssSelector("#contentpane")));
-            driver.FindElement(By.CssSelector("#txtUser")).Clear();
-            driver.FindElement(By.CssSelector("#txtUser")).SendKeys("student");
-            driver.FindElement(By.CssSelector("#txtPsw")).Clear();
-            driver.FindElement(By.CssSelector("#txtPsw")).SendKeys("123");
+            GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "123");
             Thread.Sleep(2000);
             driver.FindElement(By.CssSelector("#cmdLogin")).Click();
             Assert.IsTrue(IsElementPresent(By.CssSelector("#contentpane")));                                 //проверка отката изменений
@@ -66,11 +54,7 @@ namespace GetMapTest
         [TestMethod]
         public void TestPswOff()                                                         //нет входа под новым неподтвержденным паролем          
         {
-            driver.Navigate().GoToUrl(Settings.Instance.BaseUrl);
-            driver.FindElement(By.CssSelector("#txtUser")).SendKeys("student");         //логин
-            driver.FindElement(By.CssSelector("#txtPsw")).SendKeys("123");              //пароль  
-            Thread.Sleep(2000);
-            driver.FindElement(By.CssSelector("#cmdLogin")).Click();                   //вход
+            GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "123");
             Thread.Sleep(2000);
             Assert.IsTrue(IsElementPresent(By.CssSelector("#contentpane")));
             driver.FindElement(By.Id("cmdChangePassword")).Click();                    //"Изменить пароль"
@@ -83,21 +67,14 @@ namespace GetMapTest
             Thread.Sleep(2000);
             driver.FindElement(By.Id("exit")).Click();                                //выход 
             Assert.IsFalse(IsElementPresent(By.CssSelector("#contentpane")));
-            driver.FindElement(By.CssSelector("#txtUser")).Clear();
-            driver.FindElement(By.CssSelector("#txtUser")).SendKeys("student");
-            driver.FindElement(By.CssSelector("#txtPsw")).Clear();
-            driver.FindElement(By.CssSelector("#txtPsw")).SendKeys("12315");          //новый пароль
-            driver.FindElement(By.CssSelector("#cmdLogin")).Click();                 //вход под новым паролем
+            GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "12315");
             Assert.IsFalse(IsElementPresent(By.CssSelector("#contentpane")));        //проверка "вход под новым паролем не выполнен"
         }
 
         [TestMethod]
         public void TestPswFalse()                                                                                                              //"новый пароль" и "потвердить новый пароль" не совпадают
         {
-            driver.Navigate().GoToUrl(Settings.Instance.BaseUrl);
-            driver.FindElement(By.CssSelector("#txtUser")).SendKeys("student");                                                                 //логин
-            driver.FindElement(By.CssSelector("#txtPsw")).SendKeys("123");                                                                      //пароль  
-            driver.FindElement(By.CssSelector("#cmdLogin")).Click();                                                                            //вход
+            GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "123");
             Thread.Sleep(2000);
             Assert.IsTrue(IsElementPresent(By.CssSelector("#contentpane")));
             driver.FindElement(By.Id("cmdChangePassword")).Click();                                                                             //"Изменить пароль"
