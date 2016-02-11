@@ -89,12 +89,12 @@ namespace GetMapTest.GUI
             private IList<IWebElement> listButtonsLayers;
             private const string locationButtonsLayers = "#stdportal_LayerManagerBase_1 div.svzLayerManagerText";
             private const string locationCheckBoxs = "#stdportal_LayerManagerBase_1 div.dijit.dijitReset.dijitInline.dijitCheckBox input";
+
             private TestLayerClass(IWebDriver driver)
             {
                 this.driver = driver;
                 SetValueList();
-                SetValueElements();
-                elementButtonForOpenList.Click();
+                SetValueElements();            
             }
 
             /// <summary>
@@ -125,6 +125,16 @@ namespace GetMapTest.GUI
                 elementBase_raster = listCheckBoxs[2];
                 elementAmbar = listCheckBoxs[3];
                 elementButtonForOpenList = listButtonsLayers[0];
+                return this;
+            }
+
+            /// <summary>
+            /// Открывает или же закрывает выпадающее меню 'Тест' в зависимости от того, в каком состоянии оно было до вызова данного метода.
+            /// </summary>
+            /// <returns></returns>
+            public TestLayerClass OpenCloseList()
+            {
+                elementButtonForOpenList.Click();
                 return this;
             }
 
@@ -190,8 +200,7 @@ namespace GetMapTest.GUI
             {
                 this.driver = driver;
                 SetValueList();
-                SetValueElements();
-                elementButtonForOpenList.Click();
+                SetValueElements();         
             }
 
             /// <summary>
@@ -222,6 +231,17 @@ namespace GetMapTest.GUI
             {
                 Thread.Sleep(2000);              
             }
+
+            /// <summary>
+            /// Открывает или же закрывает выпадающее меню 'Новая группа' в зависимости от того, в каком состоянии оно было до вызова данного метода.
+            /// </summary>
+            /// <returns></returns>
+            public NewGroupClass OpenCloseList()
+            {
+                elementButtonForOpenList.Click();
+                return this;
+            }
+
 
             /// <summary>
             /// Выполняет клик по чекбоксу 'tsp_25'.
@@ -267,7 +287,7 @@ namespace GetMapTest.GUI
                 this.driver = driver;
                 SetValueList();
                 SetValueElements();
-                elementButtonForOpenList.Click();
+                
             }
 
             private void Sleep()
@@ -288,6 +308,16 @@ namespace GetMapTest.GUI
                 elementGazoprovod = listCheckBoxs[8];
                 elementGPZPoligon = listCheckBoxs[9];
                 elementButtonForOpenList = listButtonsLayers[6];
+                return this;
+            }
+
+            /// <summary>
+            /// Открывает или же закрывает выпадающее меню 'Газовая инфраструктура' в зависимости от того, в каком состоянии оно было до вызова данного метода.
+            /// </summary>
+            /// <returns></returns>
+            public GasStructClass OpenCloseList()
+            {
+                elementButtonForOpenList.Click();
                 return this;
             }
 
@@ -369,7 +399,6 @@ namespace GetMapTest.GUI
                 this.driver = driver;
                 SetValueList();
                 SetValueElements();
-                elementButtonForOpenList.Click();
             }
 
             private void Sleep()
@@ -392,6 +421,16 @@ namespace GetMapTest.GUI
                 elementElectroStationPoligon  = listCheckBoxs[14];
                 elementPodstationPoligon = listCheckBoxs[15];
                 elementButtonForOpenList = listButtonsLayers[10];
+                return this;
+            }
+
+            /// <summary>
+            /// Открывает или же закрывает выпадающее меню 'Энергетическая инфраструктура' в зависимости от того, в каком состоянии оно было до вызова данного метода.
+            /// </summary>
+            /// <returns></returns>
+            public EnergyStructClass OpenCloseList()
+            {
+                elementButtonForOpenList.Click();
                 return this;
             }
 
@@ -494,7 +533,6 @@ namespace GetMapTest.GUI
                 this.driver = driver;
                 SetValueList();
                 SetValueElements();
-                elementButtonForOpenList.Click();
             }
 
             private void Sleep()
@@ -516,6 +554,16 @@ namespace GetMapTest.GUI
                 elementPlaces = listCheckBoxs[19];
                 elementDNS = listCheckBoxs[20];
                 elementButtonForOpenList = listButtonsLayers[16];
+                return this;
+            }
+
+            /// <summary>
+            /// Открывает или же закрывает выпадающее меню 'Нефтяная инфраструктура' в зависимости от того, в каком состоянии оно было до вызова данного метода.
+            /// </summary>
+            /// <returns></returns>
+            public NeftyStructClass OpenCloseList()
+            {
+                elementButtonForOpenList.Click();
                 return this;
             }
 
@@ -609,7 +657,6 @@ namespace GetMapTest.GUI
                 this.driver = driver;
                 SetValueList();
                 SetValueElements();
-                elementButtonForOpenList.Click();
             }
 
             private void Sleep()
@@ -633,6 +680,16 @@ namespace GetMapTest.GUI
                 elementCheckBox5 = listCheckBoxs[26];
                 elementCheckBox6 = listCheckBoxs[27];
                 elementButtonForOpenList = listButtonsLayers[21];
+                return this;
+            }
+
+            /// <summary>
+            /// Открывает или же закрывает выпадающее меню 'Тематические карты' в зависимости от того, в каком состоянии оно было до вызова данного метода.
+            /// </summary>
+            /// <returns></returns>
+            public TematicMapClass OpenCloseList()
+            {
+                elementButtonForOpenList.Click();
                 return this;
             }
 
@@ -742,7 +799,6 @@ namespace GetMapTest.GUI
                 this.driver = driver;
                 SetValueList();
                 SetValueElements();
-                elementButtonForOpenList.Click();
             }
 
             private void Sleep()
@@ -763,6 +819,17 @@ namespace GetMapTest.GUI
                 elementButtonForOpenList = listButtonsLayers[28];
                 return this;
             }
+
+            /// <summary>
+            /// Открывает или же закрывает выпадающее меню 'Космические снимки' в зависимости от того, в каком состоянии оно было до вызова данного метода.
+            /// </summary>
+            /// <returns></returns>
+            public CosmoPhotoClass OpenCloseList()
+            {
+                elementButtonForOpenList.Click();
+                return this;
+            }
+
             /// <summary>
             /// Принимает параметр типа IWebDriver для дальнейшей навигации по сайту.
             /// </summary>
