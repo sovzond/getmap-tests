@@ -6,7 +6,7 @@
     <ProjectGuid>{CD38D8F5-A921-4574-88F0-1460D900DBDF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>getmap_gui_tests</RootNamespace>
+    <RootNamespace>GetMapTest</RootNamespace>
     <AssemblyName>getmap-gui-tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -42,8 +42,8 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
-    <Reference Include="WebDriver, Version=2.51.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selenium.WebDriver.2.51.0\lib\net40\WebDriver.dll</HintPath>
+    <Reference Include="WebDriver, Version=2.50.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.WebDriver.2.50.1\lib\net40\WebDriver.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -63,10 +63,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestBaseLayers.cs" />
     <Compile Include="TestChangeSortLayers.cs" />
+    <Compile Include="TestCheckCoordsView.cs" />
     <Compile Include="TestCurrentExtent.cs" />
     <Compile Include="TestEnableLayer.cs" />
     <Compile Include="TestErrorMessage.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="TestScale.cs" />
     <Compile Include="TestTransparencyLayer.cs" />
     <Compile Include="TestGoTo.cs" />
     <Compile Include="TestSearch.cs" />
