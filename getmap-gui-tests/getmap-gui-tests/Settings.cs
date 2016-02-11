@@ -15,7 +15,9 @@ namespace GetMapTest
         private static readonly Settings instance = new Settings();
 
         private Settings() { }
-
+        /// <summary>
+        /// Создает объект класса Settings для доступа к его методам, свойствам. 
+        /// </summary>
         public static Settings Instance
         {
             get

@@ -10,7 +10,7 @@ namespace GetMapTest.Utils
     public class ImageComparer
     {
         private Bitmap result;
-        private int nDifferentPixels;
+        public int nDifferentPixels;
         private int nPixels;
         private Color compColor = Color.FromArgb(0, 255, 0, 0);
 
@@ -47,7 +47,7 @@ namespace GetMapTest.Utils
             for (int x = 0; x < height; x++)
             {
                 for (int y = 0; y < width; y++)
-                {
+                {  
                     Color c1 = image1.GetPixel(x, y);
                     Color c2 = image2.GetPixel(x, y);
                     if (c1.ToArgb() != c2.ToArgb())
