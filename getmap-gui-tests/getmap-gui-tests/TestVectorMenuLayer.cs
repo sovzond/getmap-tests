@@ -47,7 +47,7 @@ namespace GetMapTest
             GUI.Layers.NeftyStructClass.SettingsButtonsClass.get(driver).FakelSettingsButtonClick();
             try
             {
-                GUI.Layers.NeftyStructClass.VectorButtonsClass.get(driver).StatisticsLayerClick().ZoomToLayerExtent();
+                GUI.Layers.VectorButtonsClass.get(driver).StatisticsLayerClick().ZoomToLayerExtent();
             }
             catch(Exception)
             {
