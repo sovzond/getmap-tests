@@ -78,9 +78,9 @@ namespace GetMapTest.GUI
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Тест.'
         /// </summary>
-        public class TestLayerClass 
+        public class TestLayerClass
         {
-            private IWebDriver driver;           
+            private IWebDriver driver;
             private IWebElement elementAmerica;
             private IWebElement elementBase_raster;
             private IWebElement elementAmbar;
@@ -94,7 +94,7 @@ namespace GetMapTest.GUI
             {
                 this.driver = driver;
                 SetValueList();
-                SetValueElements();            
+                SetValueElements();
             }
 
             /// <summary>
@@ -109,7 +109,7 @@ namespace GetMapTest.GUI
 
             private void Sleep()
             {
-                Thread.Sleep(2000);               
+                Thread.Sleep(2000);
             }
 
             private TestLayerClass SetValueList()
@@ -200,7 +200,7 @@ namespace GetMapTest.GUI
             {
                 this.driver = driver;
                 SetValueList();
-                SetValueElements();         
+                SetValueElements();
             }
 
             /// <summary>
@@ -229,7 +229,7 @@ namespace GetMapTest.GUI
 
             private void Sleep()
             {
-                Thread.Sleep(2000);              
+                Thread.Sleep(2000);
             }
 
             /// <summary>
@@ -253,7 +253,7 @@ namespace GetMapTest.GUI
                 elementTsp_25.Click();
                 return this;
             }
-   
+
         }
 
         /// <summary>
@@ -287,7 +287,7 @@ namespace GetMapTest.GUI
                 this.driver = driver;
                 SetValueList();
                 SetValueElements();
-                
+
             }
 
             private void Sleep()
@@ -330,7 +330,7 @@ namespace GetMapTest.GUI
             {
                 return new GasStructClass(driver);
             }
-       
+
             /// <summary>
             /// Выполняет клик по чекбоксу 'ГПЗ (точка)'.
             /// </summary>
@@ -363,9 +363,9 @@ namespace GetMapTest.GUI
                 elementGPZPoligon.Click();
                 return this;
             }
-         
+
         }
-            
+
         /// <summary>
         /// Выполняет клик по чекбоксу выпадающего меню 'Энергетическая инфраструктура'.
         /// </summary>
@@ -393,8 +393,8 @@ namespace GetMapTest.GUI
             private IList<IWebElement> listButtonsLayers;
             private const string locationButtonsLayers = "#stdportal_LayerManagerBase_1 div.svzLayerManagerText";
             private const string locationCheckBoxs = "#stdportal_LayerManagerBase_1 div.dijit.dijitReset.dijitInline.dijitCheckBox input";
-            
-            private EnergyStructClass (IWebDriver driver)
+
+            private EnergyStructClass(IWebDriver driver)
             {
                 this.driver = driver;
                 SetValueList();
@@ -416,9 +416,9 @@ namespace GetMapTest.GUI
             private EnergyStructClass SetValueElements()
             {
                 elementElectroStationPoint = listCheckBoxs[11];
-                elementPodstationPoint = listCheckBoxs[12]; 
+                elementPodstationPoint = listCheckBoxs[12];
                 elementLEP = listCheckBoxs[13];
-                elementElectroStationPoligon  = listCheckBoxs[14];
+                elementElectroStationPoligon = listCheckBoxs[14];
                 elementPodstationPoligon = listCheckBoxs[15];
                 elementButtonForOpenList = listButtonsLayers[10];
                 return this;
@@ -498,7 +498,7 @@ namespace GetMapTest.GUI
                 elementPodstationPoligon.Click();
                 return this;
             }
-        
+
         }
 
         /// <summary>
@@ -619,6 +619,102 @@ namespace GetMapTest.GUI
                 Sleep();
                 elementDNS.Click();
                 return this;
+            }
+
+            /// <summary>
+            /// Выполняет клик по кнопкам 'Настройка слоя' всех слоев данного раздела.
+            /// </summary>
+            public class SettingsButtonsClass
+            {
+                private IWebDriver driver;
+                private IWebElement elementFakelSettings;
+                private IWebElement elementAmbatSettings;
+                private IWebElement elementPlacesSettings;
+                private IWebElement elementDNSSettings;
+                private IList<IWebElement> listButtonsLayer;
+                private const string locationButtonsLayer = "div.svzLayerManagerItem.svzLayerManagerItem1 > div.svzSimpleButton.layerContextMenu";
+
+                private SettingsButtonsClass(IWebDriver driver)
+                {
+                    this.driver = driver;
+                    SetValueList();
+                    SetValueElements();
+                }
+
+                private SettingsButtonsClass SetValueList()
+                {
+                    listButtonsLayer = driver.FindElements(By.CssSelector(locationButtonsLayer));
+                    return this;
+                }
+
+                private SettingsButtonsClass SetValueElements()
+                {
+                    elementFakelSettings = listButtonsLayer[10];
+                    elementAmbatSettings = listButtonsLayer[11];
+                    elementPlacesSettings = listButtonsLayer[12];
+                    elementDNSSettings = listButtonsLayer[13];
+                    return this;
+                }
+
+                private void Sleep()
+                {
+                    Thread.Sleep(2000);
+                }
+
+                /// <summary>
+                /// Принимает параметр типа IWebDriver для дальнейшей навигации по сайту.
+                /// </summary>
+                /// <param name="driver">Передает аргумент для закрытого конструктора</param>
+                /// <returns></returns>
+                public static SettingsButtonsClass get(IWebDriver driver)
+                {
+                    return new SettingsButtonsClass(driver);
+                }
+
+                /// <summary>
+                /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Факел'.
+                /// </summary>
+                /// <returns></returns>
+                public SettingsButtonsClass FakelSettingsButtonClick()
+                {
+                    Sleep();
+                    elementFakelSettings.Click();
+                    return this;
+                }
+
+                /// <summary>
+                /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Амбар'.
+                /// </summary>
+                /// <returns></returns>
+                public SettingsButtonsClass AmbarSettingsButtonClick()
+                {
+                    Sleep();
+                    elementAmbatSettings.Click();
+                    return this;
+                }
+
+                /// <summary>
+                /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Кустовые площадки'.
+                /// </summary>
+                /// <returns></returns>
+                public SettingsButtonsClass PlacesSettingsClick()
+                {
+                    Sleep();
+                    elementPlacesSettings.Click();
+                    return this;
+                }
+
+                /// <summary>
+                /// Выполняет клик по кнопке 'Настройка слоя' слоя 'ДНС'.
+                /// </summary>
+                /// <returns></returns>
+                public SettingsButtonsClass DNSSettingsClick()
+                {
+                    Sleep();
+                    elementDNSSettings.Click();
+                    return this;
+                }
+
             }
 
         }
@@ -805,7 +901,7 @@ namespace GetMapTest.GUI
             {
                 Thread.Sleep(2000);
             }
-          
+
             private CosmoPhotoClass SetValueList()
             {
                 listCheckBoxs = driver.FindElements(By.CssSelector(locationCheckBoxs));
@@ -851,6 +947,77 @@ namespace GetMapTest.GUI
                 return this;
             }
         }
+
+        /// <summary>
+        /// Выполняет клик по векторным кнопкам любого слоя.
+        /// </summary>
+        public class VectorButtonsClass
+        {
+            private IWebDriver driver;
+            private IWebElement elementStatisticsLayer;
+            private IWebElement elementZoomToLayerExtext;
+            private IList<IWebElement> listButtonsVectorLayer;
+            private const string locationButtonsVectorLayer = "div.userLayerMenuContainer.userLayerMenuContainerActive > div.svzSimpleButton";
+
+            private VectorButtonsClass(IWebDriver driver)
+            {
+                this.driver = driver;
+                SetValueList();
+                SetValueElements();
+            }
+
+            private void Sleep()
+            {
+                Thread.Sleep(2000);
+            }
+
+            private VectorButtonsClass SetValueList()
+            {
+                listButtonsVectorLayer = driver.FindElements(By.CssSelector(locationButtonsVectorLayer));
+                return this;
+            }
+
+            private VectorButtonsClass SetValueElements()
+            {
+                Sleep();
+                elementStatisticsLayer = listButtonsVectorLayer[0];
+                elementZoomToLayerExtext = listButtonsVectorLayer[1];
+                return this;
+            }
+
+            /// <summary>
+            /// Принимает параметр типа IWebDriver для дальнейшей навигации по сайту.
+            /// </summary>
+            /// <param name="driver">Передает аргумент для закрытого конструктора</param>
+            /// <returns></returns>
+            public static VectorButtonsClass get(IWebDriver driver)
+            {
+                return new VectorButtonsClass(driver);
+            }
+
+            /// <summary>
+            /// Выполянет клик по векторной кнопке 'Статистика слоя'.
+            /// </summary>
+            /// <returns></returns>
+            public VectorButtonsClass StatisticsLayerClick()
+            {
+                Sleep();
+                elementStatisticsLayer.Click();
+                return this;
+            }
+
+            /// <summary>
+            /// Выполняет клик по векторной  кнопке 'Приближение к экстенту слоя'.
+            /// </summary>
+            /// <returns></returns>
+            public VectorButtonsClass ZoomToLayerExtent()
+            {
+                Sleep();
+                elementZoomToLayerExtext.Click();
+                return this;
+            }
+        }
+    
     }
 }
 
