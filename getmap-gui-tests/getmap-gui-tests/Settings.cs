@@ -12,9 +12,11 @@ namespace GetMapTest
     /// </summary>
     public sealed class Settings
     {
+
         private static readonly Settings instance = new Settings();
 
         private Settings() { }
+   
         /// <summary>
         /// Создает объект класса Settings для доступа к его методам, свойствам. 
         /// </summary>
@@ -45,6 +47,16 @@ namespace GetMapTest
             {
                 return baseUrl;
             }
+        }
+
+        /// <summary>
+        /// Осущевляет переход по ссылке.
+        /// </summary>
+        /// <param name="driver">Передает аргумент для закрытого конструктора</param>
+        /// <param name="url">Url по которому будет осуществлен переход.</param>
+        public void Open(IWebDriver driver ,string url)
+        {
+            driver.Navigate().GoToUrl(url);
         }
     }
 }
