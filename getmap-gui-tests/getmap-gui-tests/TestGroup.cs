@@ -9,48 +9,64 @@ namespace GetMapTest
     [TestClass]
     public class UnitTest1
     {
-        private IWebDriver driver;
-      
-        public void MouseMoveByOffset(int offsetX, int offsetY)
+        public class XY
         {
-           
-            var builder = new Actions(driver);
-            builder.MoveByOffset(offsetX, offsetY).Perform();
+            private int Y;
+            private int X;       
+            public  XY(String arrg)
+            {
+                String[] arr = arrg.Split(new Char[] { ',', '=' });
+
+                this.Y = Int32.Parse(arr[3]);
+                this.X = Int32.Parse(arr[1]);                 
+            }
+            public XY(int X, int Y)
+            {
+                this.X = X;
+                this.Y = Y;
+            }
+            public  int getX()
+            {
+                return X;
+            }
+            public int getY()
+            {
+                return Y;
+            }
         }
-        public void MouseMoveToElement(IWebElement element, int offsetX, int offsetY)
-        {
-            
-            var builder = new Actions(driver);
-            builder.MoveToElement(element, offsetX, offsetY).Perform();
-        }
-        
         [TestMethod]
         public void TestMet1()
         {
             
             IWebDriver driver = Settings.Instance.createDriver();
             var builder = new Actions(driver);
+            
             IJavaScriptExecutor js = driver as IJavaScriptExecutor;
+            Utils.TransformJS js1 = new Utils.TransformJS(driver);
             GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
-            driver.FindElement(By.Id("sovzond_widget_SimpleButton_13")).Click();
+            GUI.MenuNavigation.get(driver).MagnifyButton();
             string left = (string)js.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(70,60.88).transform('EPSG:4326','EPSG:3857')).toString()");
             string right = (string)js.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(70.024,60.895).transform('EPSG:4326','EPSG:3857')).toString()");
-            String[] arrL = left.Split(new Char[] { ',', '=' });
-            String[] arrR = right.Split(new Char[] { ',', '=' });          
-            int XL = Int32.Parse(arrL[1]);
-            int YL = Int32.Parse(arrL[3]);
-            int XR = Int32.Parse(arrR[1]);
-            int YR = Int32.Parse(arrR[3]);
+            XY L = new XY(left);
+            XY R= new XY(right);                
+            int XL = L.getX();
+            int YL = L.getY();
+            int XR = R.getX(); ;
+            int YR = R.getY(); ;
             IWebElement j = driver.FindElement(By.Id("map"));
-            builder.MoveToElement(j, XL, YL).ClickAndHold().Perform();
+            builder.MoveToElement(j, XL, YL).ClickAndHold().MoveToElement(j, XR, YR).Release().Perform();
             Thread.Sleep(5000);
-            builder.MoveToElement(j, XR, YR).Release().Perform();
-            Thread.Sleep(5000);
-            /* builder.MoveToElement(j);
-             Thread.Sleep(5000);
-             builder.MoveByOffset(XL, YL).ClickAndHold();
-             builder.MoveByOffset(XR, YR).Release();
-             Thread.Sleep(5000);*/
+            double k= Math.Round(((70+ 70.024)/2),2);//находим серидину по долготе
+            double k1 = Math.Round(((60.88 + 60.895) / 2),2); //находим серидину по широте
+            Utils.LonLat startPoint = js1.getMapCenter();
+            double lon = startPoint.getLon();
+            double lat = startPoint.getLat();
+            if (k != lon || k1!= lat)
+            {
+                Assert.Fail("не правильный переход");
+            }
+            
+            
 
         }
 
