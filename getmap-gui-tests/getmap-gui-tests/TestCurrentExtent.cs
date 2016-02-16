@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -79,7 +79,7 @@ namespace GetMapTest
             idxExtentCoords++;
             string onlyExtentCoords = fullLink.Substring(idxExtentCoords);
             string[] splitedExtentCoords = onlyExtentCoords.Split(',');
-            string[] splitedExtentCoordsCurrent = Utils.GetExtents.get(driver).GetCurrentExtent;
+            string[] splitedExtentCoordsCurrent = GUI.GetExtents.get(driver).GetCurrentExtent;
             for (int i = 0; i < 4; i++)
                 Assert.AreEqual(splitedExtentCoordsCurrent[i], splitedExtentCoords[i], "Текущий экстент карты не совпадает с ссылкой на экстент в текстовом поле.");
             GUI.Cleanup.get(driver).Close();
@@ -88,10 +88,10 @@ namespace GetMapTest
         private void ButtonFullExtent()
         {
             Settings.Instance.Open(driver, Settings.Instance.BaseUrl);
-            string[] BaseExtentCoords = Utils.GetExtents.get(driver).GetBaseExtent;
+            string[] BaseExtentCoords = GUI.GetExtents.get(driver).GetBaseExtent;
             GUI.InputCoordWnd.get(driver).setLon(60, 50, 50).setLat(60, 50, 50).click();
             GUI.MenuNavigation.get(driver).FullExtentButton();
-            string[] CurrentExtentCoords = Utils.GetExtents.get(driver).GetCurrentExtent;
+            string[] CurrentExtentCoords = GUI.GetExtents.get(driver).GetCurrentExtent;
             for (int i = 0; i < 4; i++)
                 Assert.AreEqual(BaseExtentCoords[i], CurrentExtentCoords[i], "После клика по кнопке 'Полный экстент' экстент перестал совпадать с тем, который отображается при входе. ");
             GUI.Cleanup.get(driver).Close();
@@ -100,14 +100,14 @@ namespace GetMapTest
         private void BackButton()
         {
             Settings.Instance.Open(driver, Settings.Instance.BaseUrl);
-            string[] BaseExtentCoords = Utils.GetExtents.get(driver).GetCurrentExtent;
+            string[] BaseExtentCoords = GUI.GetExtents.get(driver).GetCurrentExtent;
             GUI.MenuNavigation.get(driver).MoveButton();
             IWebElement elementForMove = driver.FindElement(By.CssSelector(locationElementForMove));
             var builder = new Actions(driver);
             builder.MoveToElement(elementForMove, 731, 60).ClickAndHold().Perform();
             builder.MoveToElement(elementForMove, 800, 40).Release().Perform();
             GUI.MenuNavigationHistory.get(driver).Back();
-            string[] CurrentExtentCoords = Utils.GetExtents.get(driver).GetCurrentExtent;
+            string[] CurrentExtentCoords = GUI.GetExtents.get(driver).GetCurrentExtent;
             for (int i = 0; i < 4; i++)
                 Assert.AreEqual(BaseExtentCoords[i], CurrentExtentCoords[i], "После клика по кнопке 'Предыдущий экстент' экстент перестал совпадать с тем, который был до перемещения карты. ");
             GUI.Cleanup.get(driver).Close();
@@ -116,10 +116,10 @@ namespace GetMapTest
         private void NextButton()
         {
              Settings.Instance.Open(driver, Settings.Instance.BaseUrl);
-            string[] BaseExtentCoords = Utils.GetExtents.get(driver).GetBaseExtent;
+            string[] BaseExtentCoords = GUI.GetExtents.get(driver).GetBaseExtent;
             GUI.InputCoordWnd.get(driver).setLon(60, 50, 50).setLat(60, 50, 50).click();
             GUI.MenuNavigationHistory.get(driver).Back().Next();
-            string[] CurrentExtentCoords = Utils.GetExtents.get(driver).GetCurrentExtent;
+            string[] CurrentExtentCoords = GUI.GetExtents.get(driver).GetCurrentExtent;
             for (int i = 0; i < 4; i++)
                 Assert.AreEqual(BaseExtentCoords[i], CurrentExtentCoords[i], "После клика по кнопке 'Слующий экстент' экстент перестал совпадать с тем, который был до клика по кнопке 'Предыдущий экстент' .");
             GUI.Cleanup.get(driver).Close();
