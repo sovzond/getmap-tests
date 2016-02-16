@@ -38,5 +38,12 @@ namespace GetMapTest.GUI
             driver.Quit();
         }
 
+        /// <summary>
+        /// Закрывает текущую вкладку.
+        /// </summary>
+        public void Close()
+        {
+            driver.Close();
+        }
     }
 }

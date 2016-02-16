@@ -45,7 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cleanup.cs" />
+    <Compile Include="GetExtents.cs" />
     <Compile Include="InputCoordWnd.cs" />
+    <Compile Include="Layers.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="MenuDop.cs" />
     <Compile Include="MenuNavigation.cs" />
