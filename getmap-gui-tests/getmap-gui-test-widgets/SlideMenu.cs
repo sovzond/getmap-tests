@@ -9,7 +9,7 @@ namespace GetMapTest.GUI
 {
     /// <summary>
     /// Открывает плажку в левой части экрана (Слои, Легенда). 
-    /// Так же открывает вкладки данной плажки.
+    /// Так же открывает вкладки данной плажки и прокликивает чекбосы.
     /// </summary>
     public class SlideMenu
     {
@@ -18,10 +18,15 @@ namespace GetMapTest.GUI
         private const string locationBaseLayers = "#layersCon div.svzSimpleButton.accordionButton";
         private const string locationGoogle = "#stdportal_LayerManagerBase_0 div.svzLayerManagerText";
         private const string locationLegenda = "#menuSlide div.svzSimpleButton.slidePanelLegendButton";
+        private const string locationRadioButtons = "div.svzLayerManagerItem input";
+        private IList<IWebElement> listLayersInBaseLayers;
+
         private SlideMenu(IWebDriver driver)
         {
             this.driver = driver;
+            listLayersInBaseLayers = driver.FindElements(By.CssSelector(locationRadioButtons));
         }
+
         /// <summary>
         /// Принимает параметр типа IWebDriver для дальнейшей навигации по сайту.
         /// </summary>
@@ -41,6 +46,7 @@ namespace GetMapTest.GUI
             driver.FindElement(By.CssSelector(locationSlideMenu)).Click();
             return this;
         }
+
         /// <summary>
         /// Открывает базовые слои вкладки 'СЛОИ'.
         /// </summary>
@@ -51,6 +57,27 @@ namespace GetMapTest.GUI
             driver.FindElement(By.CssSelector(locationBaseLayers)).Click();
             return this;
         }
+
+        /// <summary>
+        /// Активирует чекбокс Росреестр(выполняет по нему клик).
+        /// </summary>
+        /// <returns></returns>
+        public SlideMenu RosreestrClick()
+        {
+            listLayersInBaseLayers[3].Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Активирует чекбокс OpenStreetMap(выполняет по нему клик).
+        /// </summary>
+        /// <returns></returns>
+        public SlideMenu OpenStreetMapClick()
+        {
+            listLayersInBaseLayers[4].Click();      
+            return this;
+        }
+
         /// <summary>
         /// Открывает владку 'Google' во вкладке 'Базовые слои'.
         /// </summary>

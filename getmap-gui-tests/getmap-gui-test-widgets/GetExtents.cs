@@ -5,7 +5,7 @@ using System.Text;
 using OpenQA.Selenium;
 
 
-namespace GetMapTest.Utils
+namespace GetMapTest.GUI
 {
     /// <summary>
     /// Возвращает различные экстенты карты.
@@ -14,6 +14,7 @@ namespace GetMapTest.Utils
     {
         private IWebDriver driver;
         private const string locationFullExtentButton = "#menuNavigation div.svzSimpleButton.fullMap";
+        private const string baseExtent = "7713271.4528564,8560722.7548442,7860030.5471436,8612929.2451558";
 
         private GetExtents(IWebDriver driver)
         {
@@ -62,12 +63,8 @@ namespace GetMapTest.Utils
 
         private string[] getBaseExtent()
         {
-            System.Threading.Thread.Sleep(1000);
-            driver.FindElement(By.CssSelector(locationFullExtentButton)).Click();
-            IJavaScriptExecutor js = driver as IJavaScriptExecutor;
-            string onlyExtentCoordsCurrent = (string)js.ExecuteScript("return window.portal.stdmap.map.getExtent().toString()");
-            string[] splitedExtentCoordsCurrent = onlyExtentCoordsCurrent.Split(',');
-            return splitedExtentCoordsCurrent;
+            string[] splitedBaseExtent = baseExtent.Split(',');
+            return splitedBaseExtent;
         }
     }
 }

@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="CreateScreenshot.cs" />
     <Compile Include="DegreeFormat.cs" />
-    <Compile Include="GetExtents.cs" />
     <Compile Include="ImageComparer.cs" />
     <Compile Include="JS.cs" />
     <Compile Include="LonLat.cs" />
