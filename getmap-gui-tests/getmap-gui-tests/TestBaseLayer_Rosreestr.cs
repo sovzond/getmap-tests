@@ -84,15 +84,15 @@ namespace GetMapTest
         public void TestRosreestr()
         {
             driver = Settings.Instance.createDriver();
-            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);          
-            driver.FindElement(By.Id("sovzond_widget_SimpleButton_74")).Click();
+            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);           
+            driver.FindElement(By.Id("sovzond_widget_SimpleButton_74")).Click();//открывает слои
             Thread.Sleep(4000);
             var builder = new Actions(driver);
-            IWebElement element = driver.FindElement(By.Id("sovzond_widget_SimpleButton_0"));            
-            builder.Click(element).Perform();
+            IWebElement element = driver.FindElement(By.Id("sovzond_widget_SimpleButton_0"));         
+            builder.Click(element).Perform(); //открывает базовые слои  
             AssertGetElementByText();
             IWebElement element1 = driver.FindElement(By.Id("dijit_form_RadioButton_3"));
-            builder.Click(element1).Perform();               
+            builder.Click(element1).Perform(); //открывает Росреестр               
             Thread.Sleep(4000);
             List<string> ListAttributeSrc = listAttributeSrcRos();
             for (int n = 0; n < ListAttributeSrc.Count; n++)
@@ -108,13 +108,13 @@ namespace GetMapTest
         {
             driver = Settings.Instance.createDriver();
             GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
-            driver.FindElement(By.Id("sovzond_widget_SimpleButton_74")).Click();
+            driver.FindElement(By.Id("sovzond_widget_SimpleButton_74")).Click();//открывает слои
             Thread.Sleep(4000);
             var builder = new Actions(driver);
             IWebElement element = driver.FindElement(By.Id("sovzond_widget_SimpleButton_0"));
-            builder.Click(element).Perform();
+            builder.Click(element).Perform();//открывает базовые слои  
             IWebElement element1 = driver.FindElement(By.Id("dijit_form_RadioButton_4"));
-            builder.Click(element1).Perform();
+            builder.Click(element1).Perform(); //открывает OpenStreetMap   
             Thread.Sleep(4000);
             List<string> ListAttributeSrc = listAttributeSrcOpen();
             for (int n = 0; n < ListAttributeSrc.Count; n++)
