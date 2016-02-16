@@ -15,26 +15,26 @@ namespace GetMapTest
             driver = Settings.Instance.createDriver();
         }
         [TestMethod]
-        public void TestPswOn()                                                                                  //необходимо сменить пароль
+        public void TestPswOn()                                                                                  
         {
             GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "123");
-            driver.FindElement(By.CssSelector("#cmdChangePassword")).Click();                                    //"Изменить пароль"
+            driver.FindElement(By.CssSelector("#cmdChangePassword")).Click();                                    
             Thread.Sleep(2000);
-            Assert.IsTrue(IsElementPresent(By.CssSelector("#stdportal_Window_5")));                              //проверка окно "Изменить пароль"
+            Assert.IsTrue(IsElementPresent(By.CssSelector("#stdportal_Window_5")));                              
             driver.FindElement(By.Id("dojox_form__NewPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("12345");                               //новый пароль
+            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("12345");                               
             driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("12345");                            //подтвердить новый пароль
-            driver.FindElement(By.CssSelector("button[type=\"button\"]")).Click();                               //принять "Изменить пароль"
-            Assert.IsFalse(IsElementPresent(By.CssSelector("div.dijitTooltipContainer.dijitTooltipContents")));  //проверка "принять "Изменить пароль""
+            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("12345");                            
+            driver.FindElement(By.CssSelector("button[type=\"button\"]")).Click();                               
+            Assert.IsFalse(IsElementPresent(By.CssSelector("div.dijitTooltipContainer.dijitTooltipContents")));  
             Thread.Sleep(2000);
-            driver.FindElement(By.CssSelector("#exit")).Click();                                                 //выход 
+            driver.FindElement(By.CssSelector("#exit")).Click();                                                 
             Assert.IsFalse(IsElementPresent(By.CssSelector("#contentpane")));
             Thread.Sleep(2000);
             GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "12345");
             Thread.Sleep(2000);
-            Assert.IsTrue(IsElementPresent(By.CssSelector("#contentpane")));                                    //проверка "вход под новым паролем"
-            driver.FindElement(By.Id("cmdChangePassword")).Click();                                             //откат изменений
+            Assert.IsTrue(IsElementPresent(By.CssSelector("#contentpane")));                                    
+            driver.FindElement(By.Id("cmdChangePassword")).Click();                                             
             Assert.IsTrue(IsElementPresent(By.CssSelector("#stdportal_Window_5")));
             driver.FindElement(By.Id("dojox_form__NewPWBox_0")).Clear();
             driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("123");
@@ -48,42 +48,42 @@ namespace GetMapTest
             GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "123");
             Thread.Sleep(2000);
             driver.FindElement(By.CssSelector("#cmdLogin")).Click();
-            Assert.IsTrue(IsElementPresent(By.CssSelector("#contentpane")));                                 //проверка отката изменений
+            Assert.IsTrue(IsElementPresent(By.CssSelector("#contentpane")));                                 
         }
 
         [TestMethod]
-        public void TestPswOff()                                                         //нет входа под новым неподтвержденным паролем          
+        public void TestPswOff()                                                                  
         {
             GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "123");
             Thread.Sleep(2000);
             Assert.IsTrue(IsElementPresent(By.CssSelector("#contentpane")));
-            driver.FindElement(By.Id("cmdChangePassword")).Click();                    //"Изменить пароль"
+            driver.FindElement(By.Id("cmdChangePassword")).Click();                    
             driver.FindElement(By.Id("dojox_form__NewPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("12315");     //новый пароль  
+            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("12315");     
             driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("12315"); //подтвердить новый пароль
+            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("12315"); 
             Thread.Sleep(2000);
-            driver.FindElement(By.XPath("(//button[@type='button'])[2]")).Click();    //отменить "Изменить пароль"
+            driver.FindElement(By.XPath("(//button[@type='button'])[2]")).Click();    
             Thread.Sleep(2000);
-            driver.FindElement(By.Id("exit")).Click();                                //выход 
+            driver.FindElement(By.Id("exit")).Click();                                
             Assert.IsFalse(IsElementPresent(By.CssSelector("#contentpane")));
             GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "12315");
-            Assert.IsFalse(IsElementPresent(By.CssSelector("#contentpane")));        //проверка "вход под новым паролем не выполнен"
+            Assert.IsFalse(IsElementPresent(By.CssSelector("#contentpane")));        
         }
 
         [TestMethod]
-        public void TestPswFalse()                                                                                                              //"новый пароль" и "потвердить новый пароль" не совпадают
+        public void TestPswFalse()                                                                                                              
         {
             GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "123");
             Thread.Sleep(2000);
             Assert.IsTrue(IsElementPresent(By.CssSelector("#contentpane")));
-            driver.FindElement(By.Id("cmdChangePassword")).Click();                                                                             //"Изменить пароль"
+            driver.FindElement(By.Id("cmdChangePassword")).Click();                                                                             
             driver.FindElement(By.Id("dojox_form__NewPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("12345");                                                              //новый пароль
+            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("12345");                                                              
             driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("1276");                                                            //потвердить новый пароль (ошибка)
-            driver.FindElement(By.CssSelector("button[type=\"button\"]")).Click();                                                              //принять "Изменить пароль"
-            Assert.AreEqual("Пароли не совпадают.", driver.FindElement(By.CssSelector(".dijitTooltipContainer")).Text); //проверка на ошибку "принять "Изменить пароль""
+            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("1276");                                                            
+            driver.FindElement(By.CssSelector("button[type=\"button\"]")).Click();                                                             
+            Assert.AreEqual("Пароли не совпадают.", driver.FindElement(By.CssSelector(".dijitTooltipContainer")).Text); 
         }
         [TestCleanup]
         public void Clean()

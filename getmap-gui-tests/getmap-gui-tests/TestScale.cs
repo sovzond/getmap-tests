@@ -10,55 +10,48 @@ namespace GetMapTest
     public class TestScale
     {
         private IWebDriver driver;
-        private const string baseURL = "http://91.143.44.249/sovzond/portal/login.aspx?ReturnUrl=%2fsovzond%2fportal";
         [TestInitialize]
         public void SetupTest()
         {
-            driver = new FirefoxDriver();
+            driver = Settings.Instance.createDriver();
         }
          [TestMethod]
-        public void TestMasshtabPlus()                                                                               //тест на увеличение масштаба
+        public void TestMasshtabPlus()                                                                               
         {
             IJavaScriptExecutor js = driver as IJavaScriptExecutor;
-            driver.Navigate().GoToUrl(baseURL);
-            driver.FindElement(By.Id("txtUser")).SendKeys("student");                                                //логин
-            driver.FindElement(By.Id("txtPsw")).SendKeys("123");                                                     //пароль
-            driver.FindElement(By.Id("cmdLogin")).Click();                                                           //вход
+            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
             Thread.Sleep(2000);           
-            string Z = (string)js.ExecuteScript("return window.portal.stdmap.map.getZoom().toString()");
-            long convertZ = Convert.ToInt64(Z);                                                                  //снятие данных масштаба 1
-            driver.FindElement(By.Id("sovzond_widget_SimpleButton_7")).Click();                                      //"увеличить масштаб"
+            string Zamer = (string)js.ExecuteScript("return window.portal.stdmap.map.getZoom().toString()");
+            long convertZamer = Convert.ToInt64(Zamer);                                                                  
+            GUI.ScaleMenu.get(driver).IncrementButton();                                    
             Thread.Sleep(2000);
-            string Z1 = (string)js.ExecuteScript("return window.portal.stdmap.map.getZoom().toString()");
-            long convertZ1 = Convert.ToInt64(Z1);                                                                //снятие данных масштаба 2
-            if (convertZ >= convertZ1)                                                                           //проверка
+            string Izmer = (string)js.ExecuteScript("return window.portal.stdmap.map.getZoom().toString()");
+            long convertIzmer = Convert.ToInt64(Izmer);                                                                
+            if (convertZamer >= convertIzmer)                                                                           
                 Assert.Fail("после клика ");
-            double zoom2 = Convert.ToDouble(convertZ1);
-            if (zoom2 - 1 != convertZ)
-                Assert.Fail("уровень Zoom'а не увеличился на еденицу");                                                         //сообщение о неудачнй проверке
-
+            double zoom2 = Convert.ToDouble(convertIzmer);
+            if (zoom2 - 1 != convertZamer)
+                Assert.Fail("уровень Zoom'а не увеличился на еденицу");                                                         
+            
 
         }
         [TestMethod]
-        public void TestMasshtabMinus()                                                                              //тест на уменьшение масштаба
+        public void TestMasshtabMinus()                                                                              
         {
             IJavaScriptExecutor js = driver as IJavaScriptExecutor;
-            driver.Navigate().GoToUrl(baseURL);
-            driver.FindElement(By.Id("txtUser")).SendKeys("student");                                                //логин
-            driver.FindElement(By.Id("txtPsw")).SendKeys("123");                                                     //пароль
-            driver.FindElement(By.Id("cmdLogin")).Click();                                                           //вход
+            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
             Thread.Sleep(2000);
-            string Z = (string)js.ExecuteScript("return window.portal.stdmap.map.getZoom().toString()");
-            long convertZ = Convert.ToInt64(Z);                                                                  //снятие данных масштаба 1
-            driver.FindElement(By.Id("sovzond_widget_SimpleButton_8")).Click();                                      //"уменьшить масштаб"
+            string Zamer = (string)js.ExecuteScript("return window.portal.stdmap.map.getZoom().toString()");
+            long convertZamer = Convert.ToInt64(Zamer);                                                                  
+            GUI.ScaleMenu.get(driver).DecrementButton();                                                        
             Thread.Sleep(2000);
-            string Z1 = (string)js.ExecuteScript("return window.portal.stdmap.map.getZoom().toString()");
-            long convertZ1 = Convert.ToInt64(Z1);                                                                //снятие данных масштаба 2
-            if (convertZ <= convertZ1)                                                                           //проверка
+            string Izmer = (string)js.ExecuteScript("return window.portal.stdmap.map.getZoom().toString()");
+            long convertIzmer = Convert.ToInt64(Izmer);                                                                
+            if (convertZamer <= convertIzmer)                                                                           
                 Assert.Fail("после клика ");
-            double zoom2 = Convert.ToDouble(convertZ1);
-            if (zoom2 + 1 != convertZ)
-                Assert.Fail("уровень Zoom'а не уменьшился на еденицу");                                                         //сообщение о неудачнй проверке
+            double zoom2 = Convert.ToDouble(convertIzmer);
+            if (zoom2 + 1 != convertZamer)
+                Assert.Fail("уровень Zoom'а не уменьшился на еденицу");                                                         
 
 
         }
