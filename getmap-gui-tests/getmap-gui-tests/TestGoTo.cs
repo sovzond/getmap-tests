@@ -37,7 +37,6 @@ namespace GetMapTest
             IWebDriver driver = Settings.Instance.createDriver();
             Utils.TransformJS js = new Utils.TransformJS(driver);
             GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
-
             Utils.LonLat startPoint = js.getMapCenter();//находим центр
             GoToCoordWnd(driver);// ищем по заданным координатам
             IList<IWebElement> img = driver.FindElements(By.ClassName("olAlphaImg"));//находим указатель
