@@ -1,123 +1,121 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 using System.Threading;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
+using System.Drawing;
 
 namespace GetMapTest
 {
+    /// <summary>
+    /// Выполняет различные проверки с изменением пароля.
+    /// </summary>
     [TestClass]
     public class TestChangePassword
     {
         private IWebDriver driver;
+        private const string errorMessage = "Пароли не совпадают.";
+        private const string loginUrl = "http://91.143.44.249/sovzond_test/portal/login.aspx?ReturnUrl=%2fsovzond_test%2fportal%2f";
+        private const string locationErrorMEssage = ".dijitTooltipContainer";
+
         [TestInitialize]
         public void SetupTest()
         {
             driver = Settings.Instance.createDriver();
-        }
-        [TestMethod]
-        public void TestPswOn()                                                                                  
-        {
             GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "123");
-            driver.FindElement(By.CssSelector("#cmdChangePassword")).Click();                                    
-            Thread.Sleep(2000);
-            Assert.IsTrue(IsElementPresent(By.CssSelector("#stdportal_Window_5")));                              
-            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("12345");  //поле ввода нового пороля                             
-            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("12345"); //поле ввода проверки нового пароля                           
-            driver.FindElement(By.CssSelector("button[type=\"button\"]")).Click();                               
-            Assert.IsFalse(IsElementPresent(By.CssSelector("div.dijitTooltipContainer.dijitTooltipContents")));  
-            Thread.Sleep(2000);
-            driver.FindElement(By.CssSelector("#exit")).Click();                                                 
-            Assert.IsFalse(IsElementPresent(By.CssSelector("#contentpane")));
-            Thread.Sleep(2000);
-            GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "12345");
-            Thread.Sleep(2000);
-            Assert.IsTrue(IsElementPresent(By.CssSelector("#contentpane")));                                    
-            driver.FindElement(By.Id("cmdChangePassword")).Click();                                             
-            Assert.IsTrue(IsElementPresent(By.CssSelector("#stdportal_Window_5")));
-            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("123"); //поле ввода нового пороля  
-            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("123"); //поле ввода проверки нового пароля     
-            driver.FindElement(By.CssSelector("button[type=\"button\"]")).Click();
-            Thread.Sleep(2000);
-            driver.FindElement(By.CssSelector("#exit")).Click();
-            Thread.Sleep(2000);
-            Assert.IsFalse(IsElementPresent(By.CssSelector("#contentpane")));
-            GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "123");
-            Thread.Sleep(2000);
-            driver.FindElement(By.CssSelector("#cmdLogin")).Click();
-            Assert.IsTrue(IsElementPresent(By.CssSelector("#contentpane")));                                 
+            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию.");
         }
 
+        /// <summary>
+        /// Изменяет пароль и проверяет, изменился ли он действительно.
+        /// </summary>
         [TestMethod]
-        public void TestPswOff()                                                                  
+        public void TestPswOn()
         {
-            GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "123");
-            Thread.Sleep(2000);
-            Assert.IsTrue(IsElementPresent(By.CssSelector("#contentpane")));
-            driver.FindElement(By.Id("cmdChangePassword")).Click();                    
-            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("12315");     //поле ввода нового пороля  
-            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("12315"); //поле ввода проверки нового пароля     
-            Thread.Sleep(2000);
-            driver.FindElement(By.XPath("(//button[@type='button'])[2]")).Click();    
-            Thread.Sleep(2000);
-            driver.FindElement(By.Id("exit")).Click();                                
-            Assert.IsFalse(IsElementPresent(By.CssSelector("#contentpane")));
-            GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "12315");
-            Assert.IsFalse(IsElementPresent(By.CssSelector("#contentpane")));        
+            CheckChangePassword("12345");
+            CheckChangePassword("123");
         }
 
+        /// <summary>
+        /// Вводит пароль и нажимает кнопку 'Отмена', затем проверяет, действительно ли то, что пароль не изменился.
+        /// </summary>
         [TestMethod]
-        public void TestPswFalse()                                                                                                              
+        public void TestPswOff()
         {
-            GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "123");
-            Thread.Sleep(2000);
-            Assert.IsTrue(IsElementPresent(By.CssSelector("#contentpane")));
-            driver.FindElement(By.Id("cmdChangePassword")).Click();                                                                             
-            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("12345");      //поле ввода нового пороля                                                          
-            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("1276");         //поле ввода проверки нового пароля                                                        
-            driver.FindElement(By.CssSelector("button[type=\"button\"]")).Click();                                                             
-            Assert.AreEqual("Пароли не совпадают.", driver.FindElement(By.CssSelector(".dijitTooltipContainer")).Text); 
+            CheckNotChangePassword("12315");
         }
+
+        /// <summary>
+        /// Проверяет, действительно ли отображается всплывающее окно  при вводе разных паролей.
+        /// </summary>
+        [TestMethod]
+        public void TestPswFalse()
+        {
+            GUI.HeaderLinks.get(driver).ChangePasswordClick();
+            GUI.HeaderLinks.get(driver).ChangePasswordClick();
+            GUI.InputNewPassword.get(driver).NewPasswordSendKeys("12345")
+                .VerifyPasswordSendKeys("123");
+            Thread.Sleep(2000);
+            Assert.AreEqual(errorMessage, driver.FindElement(By.CssSelector(locationErrorMEssage)).Text, "После ввода разных паролей, всплывающее окно не было отображено.");
+        }
+
         [TestCleanup]
         public void Clean()
         {
             Thread.Sleep(2000);
             driver.Quit();
         }
-        private bool IsElementPresent(By by)
+
+        private void ChangePassswordInput(string password)
         {
-            try
-            {
-                driver.FindElement(by);
-                return true;
-            }
-            catch (NoSuchElementException)
-            {
-                return false;
-            }
+            GUI.HeaderLinks.get(driver).ChangePasswordClick();
+            GUI.InputNewPassword.get(driver).NewPasswordSendKeys(password)
+                .VerifyPasswordSendKeys(password)
+                .ButtonInputClick();
+            GUI.HeaderLinks.get(driver).ExitClick();
+            Sleep();
         }
 
-        private bool IsAlertPresent()
+        private void ChangePasswordCancel(string password)
         {
-            try
-            {
-                driver.SwitchTo().Alert();
-                return true;
-            }
-            catch (NoAlertPresentException)
-            {
-
-                return false;
-            }
+            GUI.HeaderLinks.get(driver).ChangePasswordClick();
+            GUI.InputNewPassword.get(driver).NewPasswordSendKeys(password)
+                .VerifyPasswordSendKeys(password)
+                .ButtonCancelClick();
+            GUI.HeaderLinks.get(driver).ExitClick();
+            Sleep();
         }
 
-        
+        private void IsFail(string password)
+        {
+            GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", password);
+            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Изменение пароля не прошло удачно");
+        }
+
+        private void IsNotFail(string password)
+        {
+            GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", password);
+            Assert.AreEqual(loginUrl, driver.Url, "После нажатия кнопки 'Отмена' , пароль все - таки был изменен.");
+        }
+
+        private void CheckChangePassword(string password)
+        {
+            ChangePassswordInput(password);
+            IsFail(password);
+        }
+
+        private void CheckNotChangePassword(string password)
+        {
+            ChangePasswordCancel(password);
+            IsNotFail(password);
+        }
+
+        private void Sleep()
+        {
+            Thread.Sleep(2000);
+        }
+    
+
     }
 }
