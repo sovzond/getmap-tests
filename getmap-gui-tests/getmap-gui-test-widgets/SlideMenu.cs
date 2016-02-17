@@ -27,6 +27,11 @@ namespace GetMapTest.GUI
             listLayersInBaseLayers = driver.FindElements(By.CssSelector(locationRadioButtons));
         }
 
+        private void Sleep()
+        {
+            System.Threading.Thread.Sleep(2000);
+        }
+
         /// <summary>
         /// Принимает параметр типа IWebDriver для дальнейшей навигации по сайту.
         /// </summary>
@@ -36,13 +41,14 @@ namespace GetMapTest.GUI
         {
             return new SlideMenu(driver);
         }
+
         /// <summary>
         /// Открывает саму плажку 'СЛОИ'.
         /// </summary>
         /// <returns></returns>
         public SlideMenu OpenLayers()
         {
-            System.Threading.Thread.Sleep(1000);
+            Sleep();
             driver.FindElement(By.CssSelector(locationSlideMenu)).Click();
             return this;
         }
@@ -53,8 +59,52 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public SlideMenu OpenBaseLayers()
         {
-            System.Threading.Thread.Sleep(1000);
+            Sleep();
             driver.FindElement(By.CssSelector(locationBaseLayers)).Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Активирует чекбокс Схема(выполняет по нему клик).
+        /// </summary>
+        /// <returns></returns>
+        public SlideMenu LayerSchemeClick()
+        {
+            Sleep();
+            listLayersInBaseLayers[0].Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Активирует чекбокс Спутник(выполняет по нему клик).
+        /// </summary>
+        /// <returns></returns>
+        public SlideMenu LayerSputnikClick()
+        {
+            Sleep();
+            listLayersInBaseLayers[1].Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Активирует чекбокс Гибрид(выполняет по нему клик).
+        /// </summary>
+        /// <returns></returns>
+        public SlideMenu LayerGibridClick()
+        {
+            Sleep();
+            listLayersInBaseLayers[2].Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Открывает владку 'Google' во вкладке 'Базовые слои'.
+        /// </summary>
+        /// <returns></returns>
+        public SlideMenu OpenGoogle()
+        {
+            Sleep();
+            driver.FindElement(By.CssSelector(locationGoogle)).Click();
             return this;
         }
 
@@ -64,6 +114,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public SlideMenu RosreestrClick()
         {
+            Sleep();
             listLayersInBaseLayers[3].Click();
             return this;
         }
@@ -74,30 +125,18 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public SlideMenu OpenStreetMapClick()
         {
-            listLayersInBaseLayers[4].Click();      
+            Sleep();
+            listLayersInBaseLayers[4].Click();
             return this;
         }
 
-        /// <summary>
-        /// Открывает владку 'Google' во вкладке 'Базовые слои'.
-        /// </summary>
-        /// <returns></returns>
-        public SlideMenu OpenGoogle()
-        {
-            System.Threading.Thread.Sleep(1000);
-            driver.FindElement(By.CssSelector(locationSlideMenu)).Click();
-            System.Threading.Thread.Sleep(1000);
-            driver.FindElement(By.CssSelector(locationBaseLayers)).Click();
-            driver.FindElement(By.CssSelector(locationGoogle)).Click();
-            return this;
-        }
         /// <summary>
         /// Открывает вкладку 'Легенда' на плажке в левой части экрана.
         /// </summary>
         /// <returns></returns>
         public SlideMenu OpenLegenda()
         {
-            System.Threading.Thread.Sleep(1000);
+            Sleep();
             driver.FindElement(By.CssSelector(locationLegenda)).Click();
             return this;
         }
