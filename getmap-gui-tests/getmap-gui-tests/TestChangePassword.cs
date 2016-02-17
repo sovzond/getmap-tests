@@ -22,9 +22,9 @@ namespace GetMapTest
             Thread.Sleep(2000);
             Assert.IsTrue(IsElementPresent(By.CssSelector("#stdportal_Window_5")));                              
             driver.FindElement(By.Id("dojox_form__NewPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("12345");                               
+            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("12345");  //поле ввода нового пороля                             
             driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("12345");                            
+            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("12345"); //поле ввода проверки нового пароля                           
             driver.FindElement(By.CssSelector("button[type=\"button\"]")).Click();                               
             Assert.IsFalse(IsElementPresent(By.CssSelector("div.dijitTooltipContainer.dijitTooltipContents")));  
             Thread.Sleep(2000);
@@ -37,9 +37,9 @@ namespace GetMapTest
             driver.FindElement(By.Id("cmdChangePassword")).Click();                                             
             Assert.IsTrue(IsElementPresent(By.CssSelector("#stdportal_Window_5")));
             driver.FindElement(By.Id("dojox_form__NewPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("123");
+            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("123"); //поле ввода нового пороля  
             driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("123");
+            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("123"); //поле ввода проверки нового пароля     
             driver.FindElement(By.CssSelector("button[type=\"button\"]")).Click();
             Thread.Sleep(2000);
             driver.FindElement(By.CssSelector("#exit")).Click();
@@ -59,9 +59,9 @@ namespace GetMapTest
             Assert.IsTrue(IsElementPresent(By.CssSelector("#contentpane")));
             driver.FindElement(By.Id("cmdChangePassword")).Click();                    
             driver.FindElement(By.Id("dojox_form__NewPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("12315");     
+            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("12315");     //поле ввода нового пороля  
             driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("12315"); 
+            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("12315"); //поле ввода проверки нового пароля     
             Thread.Sleep(2000);
             driver.FindElement(By.XPath("(//button[@type='button'])[2]")).Click();    
             Thread.Sleep(2000);
@@ -79,9 +79,9 @@ namespace GetMapTest
             Assert.IsTrue(IsElementPresent(By.CssSelector("#contentpane")));
             driver.FindElement(By.Id("cmdChangePassword")).Click();                                                                             
             driver.FindElement(By.Id("dojox_form__NewPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("12345");                                                              
+            driver.FindElement(By.Id("dojox_form__NewPWBox_0")).SendKeys("12345");      //поле ввода нового пороля                                                          
             driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).Clear();
-            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("1276");                                                            
+            driver.FindElement(By.Id("dojox_form__VerifyPWBox_0")).SendKeys("1276");         //поле ввода проверки нового пароля                                                        
             driver.FindElement(By.CssSelector("button[type=\"button\"]")).Click();                                                             
             Assert.AreEqual("Пароли не совпадают.", driver.FindElement(By.CssSelector(".dijitTooltipContainer")).Text); 
         }
