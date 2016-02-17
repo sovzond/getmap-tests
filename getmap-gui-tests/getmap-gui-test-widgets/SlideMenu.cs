@@ -19,6 +19,10 @@ namespace GetMapTest.GUI
         private const string locationGoogle = "#stdportal_LayerManagerBase_0 div.svzLayerManagerText";
         private const string locationLegenda = "#menuSlide div.svzSimpleButton.slidePanelLegendButton";
         private const string locationRadioButtons = "div.svzLayerManagerItem input";
+        private const string locationIncDNS = "#dojoUnique4 img";
+        private const string locationIncFakel = "#dojoUnique1 img";
+        private const string locationIncAmbar = "#dojoUnique2 img";
+        private const string locationIncPlaces = "#dojoUnique3 img";
         private IList<IWebElement> listLayersInBaseLayers;
 
         private SlideMenu(IWebDriver driver)
@@ -141,5 +145,49 @@ namespace GetMapTest.GUI
             return this;
         }
 
+        /// <summary>
+        /// Выполняет клик по кнопке 'Поднять наверх слой' слоя 'Факел'.
+        /// </summary>
+        /// <returns></returns>
+        public SlideMenu ButtonIncFakelClick()
+        {
+            Sleep();
+            driver.FindElement(By.CssSelector(locationIncFakel)).Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Выполняет клик по кнопке 'Поднять наверх слой' слоя 'Амбар'.
+        /// </summary>
+        /// <returns></returns>
+        public SlideMenu ButtonIncAmbarClick()
+        {
+            Sleep();
+            driver.FindElement(By.CssSelector(locationIncAmbar)).Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Выполняет клик по кнопке 'Поднять наверх слой' слоя 'Кустовые площадки'.
+        /// </summary>
+        /// <returns></returns>
+        public SlideMenu ButtonIncPlacesClick()
+        {
+            Sleep();
+            driver.FindElement(By.CssSelector(locationIncPlaces)).Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Выполняет клик по кнопке 'Поднять наверх слой' слоя 'ДНС'.
+        /// </summary>
+        /// <returns></returns>
+        public SlideMenu ButtonIncDNSClick()
+        {
+            Sleep();
+            driver.FindElement(By.CssSelector(locationIncDNS)).Click();
+            return this;
+        }
+   
     }
 }
