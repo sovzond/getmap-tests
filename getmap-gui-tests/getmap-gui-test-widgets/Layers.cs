@@ -8,20 +8,22 @@ using OpenQA.Selenium;
 namespace GetMapTest.GUI
 {
     /// <summary>
-    /// Дает доступ ко всем чек боксам выпадающего меню 'СЛОИ' в разделе 'СЛОИ'.
+    /// Открывает выпадающее меню раздела 'Слои'.
     /// </summary>
     public class Layers
     {
         private IWebDriver driver;
         private IWebElement elementTestLayer;
         private IWebElement elementNewGroup;
+        private IWebElement elementZoyaTest;
+        private IWebElement elementMoscowArea;
         private IWebElement elementGasStruct;
         private IWebElement elementEnergyStruct;
         private IWebElement elementNeftyStruct;
         private IWebElement elementTematicMap;
         private IWebElement elementCosmoPhoto;
         private IList<IWebElement> listCheckBoxs;
-        private const string locationCheckBoxs = "#stdportal_LayerManagerBase_1 div.dijit.dijitReset.dijitInline.dijitCheckBox input";
+        private const string locationCheckBoxs = "div.svzLayerManagerText";
 
         private Layers(IWebDriver driver)
         {
@@ -43,13 +45,27 @@ namespace GetMapTest.GUI
 
         private Layers SetValueElements()
         {
-            this.elementTestLayer = listCheckBoxs[0];
-            this.elementNewGroup = listCheckBoxs[4];
-            this.elementGasStruct = listCheckBoxs[6];
-            this.elementEnergyStruct = listCheckBoxs[10];
-            this.elementNeftyStruct = listCheckBoxs[16];
-            this.elementTematicMap = listCheckBoxs[21];
-            this.elementCosmoPhoto = listCheckBoxs[28];
+            foreach (var el in listCheckBoxs)
+            {
+                if (el.Text == "Тест")
+                    elementTestLayer = el;
+                if (el.Text == "Новая группа")
+                    elementNewGroup = el;
+                if (el.Text == "Зоя. Тест")
+                    elementZoyaTest = el;
+                if (el.Text == "Московская область")
+                    elementMoscowArea = el;
+                if (el.Text == "Газовая инфраструктура")
+                    elementGasStruct = el;
+                if (el.Text == "Энергетическая инфраструктура")
+                    elementEnergyStruct = el;
+                if (el.Text == "Нефтяная инфраструктура")
+                    elementNeftyStruct = el;
+                if (el.Text == "Тематические карты")
+                    elementTematicMap = el;
+                if (el.Text == "Космические снимки")
+                    elementCosmoPhoto = el;
+            }
             return this;
         }
 
@@ -64,8 +80,169 @@ namespace GetMapTest.GUI
 
         }
 
+        private bool getSelectedTest()
+        {
+            if (elementTestLayer.Selected)
+                return true;
+            return false;
+        }
+
         /// <summary>
-        /// Выполянет клик по чекбоксу выпадающего меню 'Тест'.
+        /// Возвращает значение 'true' если чекбокс слоя 'Тест' активен.
+        /// </summary>
+        public bool GetSelectedTest
+        {
+            get
+            {
+                return getSelectedTest();
+            }
+        }
+
+        private bool getSelectedNewGroup()
+        {
+            if (elementNewGroup.Selected)
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Возвращает значение 'true' если чекбокс слоя 'Новая группа' активен.
+        /// </summary>
+        public bool GetSelectedNewGroup
+        {
+            get
+            {
+                return getSelectedNewGroup();
+            }
+        }
+
+        private bool getSelectedZoyaTest()
+        {
+            if (elementZoyaTest.Selected)
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Возвращает значение 'true' если чекбокс слоя 'Зоя. Тест' активен.
+        /// </summary>
+        public bool GetSelectedZoyaTest
+        {
+            get
+            {
+                return getSelectedZoyaTest();
+            }
+        }
+
+        private bool getSelectedMoscowArea()
+        {
+            if (elementMoscowArea.Selected)
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Возвращает значение 'true' если чекбокс слоя 'Московская область' активен.
+        /// </summary>
+        public bool GetSelectedMoscowArea
+        {
+            get
+            {
+                return getSelectedMoscowArea();
+            }
+        }
+
+        private bool getSelectedGasStruct()
+        {
+            if (elementGasStruct.Selected)
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Возвращает значение 'true' если чекбокс слоя 'Газовая инфраструктура' активен.
+        /// </summary>
+        public bool GetSelectedGasStruct
+        {
+            get
+            {
+                return getSelectedGasStruct();
+            }
+        }
+
+        private bool getSelectedEnergyStruct()
+        {
+            if (elementEnergyStruct.Selected)
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Возвращает значение 'true' если чекбокс слоя 'Энергетическая инфраструктура' активен.
+        /// </summary>
+        public bool GetSelectedEnergyStruct
+        {
+            get
+            {
+                return getSelectedEnergyStruct();
+            }
+        }
+
+        private bool getSelectedNeftyStruct()
+        {
+            if (elementNeftyStruct.Selected)
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Возвращает значение 'true' если чекбокс слоя 'Нефтяная инфраструктура' активен.
+        /// </summary>
+        public bool GetSelectedNeftyStruct
+        {
+            get
+            {
+                return getSelectedNeftyStruct();
+            }
+        }
+        private bool getSelectedTimaticMap()
+        {
+            if (elementTematicMap.Selected)
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Возвращает значение 'true' если чекбокс слоя 'Тематические карты' активен.
+        /// </summary>
+        public bool GetSelectedTematicMap
+        {
+            get
+            {
+                return getSelectedTimaticMap();
+            }
+        }
+
+        private bool getSelectedCosmoPhoto()
+        {
+            if (elementCosmoPhoto.Selected)
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Возвращает значение 'true' если чекбокс слоя 'Космические снимки' активен.
+        /// </summary>
+        public bool GetSelectedCosmoPhoto
+        {
+            get
+            {
+                return getSelectedCosmoPhoto();
+            }
+        }
+
+        /// <summary>
+        /// Открывает раздел 'Тест'.
         /// </summary>
         /// <returns></returns>
         public Layers TestClick()
@@ -75,6 +252,7 @@ namespace GetMapTest.GUI
             return this;
         }
 
+        /*
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Тест.'
         /// </summary>
@@ -171,9 +349,11 @@ namespace GetMapTest.GUI
                 return this;
             }
         }
+        */
+
 
         /// <summary>
-        /// Выполняет клик по чекбоксу выпадающего меню 'Новая группа'.
+        /// Открывает раздел 'Новая группа'.
         /// </summary>
         /// <returns></returns>
         public Layers NewGroupClick()
@@ -183,6 +363,29 @@ namespace GetMapTest.GUI
             return this;
         }
 
+        /// <summary>
+        /// Открывает раздел 'Зоя. Тест'.
+        /// </summary>
+        /// <returns></returns>
+        public Layers ZoyaTestClick()
+        {
+            Sleep();
+            elementZoyaTest.Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Открывает раздел 'Московская область'.
+        /// </summary>
+        /// <returns></returns>
+        public Layers MoscowAreaClick()
+        {
+            Sleep();
+            elementMoscowArea.Click();
+            return this;
+        }
+
+        /*
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Новая группа'.
         /// </summary>
@@ -255,9 +458,10 @@ namespace GetMapTest.GUI
             }
 
         }
+        */
 
         /// <summary>
-        /// Выполняет клик по чекбоксу выпадающего меню 'Газовая инфраструктура'.
+        /// Открывает раздел 'Газовая инфраструктура'.
         /// </summary>
         /// <returns></returns>
         public Layers GasStructClick()
@@ -267,6 +471,7 @@ namespace GetMapTest.GUI
             return this;
         }
 
+        /*
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Газовая инфраструктура'.
         /// </summary>
@@ -365,9 +570,10 @@ namespace GetMapTest.GUI
             }
 
         }
+        */
 
         /// <summary>
-        /// Выполняет клик по чекбоксу выпадающего меню 'Энергетическая инфраструктура'.
+        /// Открывает раздел  'Энергетическая инфраструктура'.
         /// </summary>
         /// <returns></returns>
         public Layers EnergyStruckClick()
@@ -377,6 +583,7 @@ namespace GetMapTest.GUI
             return this;
         }
 
+        /*
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Энергетичская инфраструктура'.
         /// </summary>
@@ -500,9 +707,10 @@ namespace GetMapTest.GUI
             }
 
         }
+        */
 
         /// <summary>
-        /// Выполняет клик по чекбоксу выпадающего меню 'Нефтяная инфраструктура'.
+        /// Открывает раздел 'Нефтяная инфраструктура'.
         /// </summary>
         /// <returns></returns>
         public Layers NeftyStructClick()
@@ -512,6 +720,7 @@ namespace GetMapTest.GUI
             return this;
         }
 
+        /*
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Нефтяная инфраструктура'.
         /// </summary>
@@ -718,9 +927,10 @@ namespace GetMapTest.GUI
             }
 
         }
+        */
 
         /// <summary>
-        /// Выполняет клик по чекбоксу выпадающего меню 'Тематические карты'.
+        /// Открывает раздел  'Тематические карты'.
         /// </summary>
         /// <returns></returns>
         public Layers TematicMapClick()
@@ -730,6 +940,7 @@ namespace GetMapTest.GUI
             return this;
         }
 
+        /*
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Тематические карты'.
         /// </summary>
@@ -865,9 +1076,10 @@ namespace GetMapTest.GUI
                 return this;
             }
         }
+        */
 
         /// <summary>
-        /// Выполняет клик по чекбоксу выпадающего меню 'Космические снимки.'.
+        /// Открывает раздел  'Космические снимки.'.
         /// </summary>
         /// <returns></returns>
         public Layers CosmoPhotoClick()
@@ -877,6 +1089,7 @@ namespace GetMapTest.GUI
             return this;
         }
 
+        /*
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Космические снимки.'.
         /// </summary>
@@ -947,6 +1160,8 @@ namespace GetMapTest.GUI
                 return this;
             }
         }
+        */
+
 
         /// <summary>
         /// Выполняет клик по векторным кнопкам любого слоя.
@@ -1017,9 +1232,6 @@ namespace GetMapTest.GUI
                 return this;
             }
         }
-    
+
     }
 }
-
-
-
