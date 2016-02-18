@@ -24,6 +24,7 @@ namespace GetMapTest
         {
             driver = Settings.Instance.createDriver();
             GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
+            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
             GUI.SlideMenu.get(driver).OpenLayers().OpenBaseLayers();
             AssertGetElementByText();
             listTileA = driver.FindElements(By.CssSelector("div.olMap img[src*='http://a.tile.openstreetmap.org']"));
