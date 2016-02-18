@@ -40,20 +40,12 @@ namespace GetMapTest
         public void СheckIncrementLayers()
         {
             GUI.SlideMenu.get(driver).OpenLayers();
-            IList<IWebElement> list = driver.FindElements(By.CssSelector("div.svzLayerManagerItem.svzLayerManagerItemSection div"));
-            IWebElement test = null;
-            List<string> list2 = new List<string>();
-            foreach(var r in list)
-            {
-                list2.Add(r.Text);
-                if (r.Text == "Московская область")
-                    test = r;
-            }
-            test.Click();
-          //  IncrementLayerDNS();
-          //  IncrementLayerPlaces();
-          //  IncrementLayerAmbar();
-          //  IncrementLayerFakel();
+            if (!GUI.Layers.get(driver).GetSelectedNeftyStruct)
+                driver.FindElement(By.CssSelector("#dijit_form_CheckBox_23")).Click();
+              IncrementLayerDNS();
+              IncrementLayerPlaces();
+              IncrementLayerAmbar();
+              IncrementLayerFakel();
         }
         [TestCleanup]
         public void Clean()

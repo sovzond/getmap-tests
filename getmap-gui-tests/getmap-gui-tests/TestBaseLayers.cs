@@ -15,10 +15,9 @@ namespace GetMapTest
     public class TestBaseLayers
     {
         private IWebDriver driver;
-        private const string urlImageScheme = "http://maps.googleapis.com/maps/api/js/StaticMapService.GetMapImage?1m2&1i363301&2i149508&2e1&3u11&4m2&1u1426&2u595&5m5&1e0&5sru-RU&6sus&10b1&12b1&token=21311";
-                                           //    "http://maps.googleapis.com/maps/api/js/StaticMapService.GetMapImage?1m2&1i363301&2i149508&2e1&3u11&4m2&1u1426&2u595&5m5&1e0&5sru-RU&6sus&10b1&12b1&token=36791"
-        private const string urlImageSputnik = "http://maps.googleapis.com/maps/api/js/StaticMapService.GetMapImage?1m2&1i363301&2i149508&2e2&3u11&4m2&1u1426&2u595&5m5&1e2&5sru-RU&6sus&10b1&12b1&token=32241";
-        private const string urlImageGibrid = "http://maps.googleapis.com/maps/api/js/StaticMapService.GetMapImage?1m2&1i363301&2i149508&2e2&3u11&4m2&1u1426&2u595&5m5&1e3&5sru-RU&6sus&10b1&12b1&token=98410";
+        private IList<IWebElement> listGoogleImage;
+        List<string> srcGoogleImage;
+        private const string urlGoogleImage = "http://maps.googleapis.com/maps/api/js/StaticMapService.GetMapImage";
         private const string locationSlideMenu = "#menuSlide div.svzSimpleButton.slidePanelButton";
         private const string locationBaseLayers = "#layersCon div.svzSimpleButton.accordionButton";
         private const string locationBaseLayersChildContainer = "layerManagerBasemap";
@@ -30,6 +29,7 @@ namespace GetMapTest
             driver = Settings.Instance.createDriver();
             GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
+            listGoogleImage = null;
         }
 
         /// <summary>
@@ -41,9 +41,12 @@ namespace GetMapTest
             GUI.SlideMenu.get(driver).OpenLayers().OpenBaseLayers();
             CheckSelectedOSM();
             GUI.SlideMenu.get(driver).OpenGoogle();
-            CheckLayerScheme();
-            CheckLayerSputnik();
-            CheckLayerGibrid();
+            GUI.SlideMenu.get(driver).LayerSputnikClick();
+            GUI.SlideMenu.get(driver).LayerSchemeClick();
+         
+            // CheckLayerScheme();
+            //  CheckLayerSputnik();
+            //  CheckLayerGibrid();
         }
 
         [TestCleanup]
@@ -85,6 +88,16 @@ namespace GetMapTest
             GUI.SlideMenu.get(driver).LayerGibridClick();
             IList<IWebElement> elementGibrid = driver.FindElements(By.CssSelector("div.gm-style img[src*='google']"));
             Assert.AreEqual(urlImageGibrid, elementGibrid[0].GetAttribute("src"), "Слой гибрид отобразил не корректный слой");
+        }
+
+        private void CheckUrlLayers(string layer)
+        {
+            listGoogleImage = driver.FindElements(By.CssSelector("div.gm-style img[src*='google']"));
+            List<string> src = new List<string>();
+            foreach (var r in listGoogleImage)
+                src.Add(r.GetAttribute("src"));
+            if (!src[0].StartsWith(urlGoogleImage))
+                Assert.Fail("Слой" + layer + "имеет не верных путь изображения.");
         }
 
     }

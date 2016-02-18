@@ -43,8 +43,8 @@ namespace GetMapTest
         { 
             GUI.SlideMenu.get(driver).OpenLayers();
             System.Threading.Thread.Sleep(1000);
-            GUI.Layers.NeftyStructClass.get(driver).OpenCloseList();
-            GUI.Layers.NeftyStructClass.SettingsButtonsClass.get(driver).FakelSettingsButtonClick();
+          //  GUI.Layers.NeftyStructClass.get(driver).OpenCloseList();
+         //   GUI.Layers.NeftyStructClass.SettingsButtonsClass.get(driver).FakelSettingsButtonClick();
             try
             {
                 GUI.Layers.VectorButtonsClass.get(driver).StatisticsLayerClick().ZoomToLayerExtent();

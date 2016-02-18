@@ -15,6 +15,8 @@ namespace GetMapTest
     {
         private IWebDriver driver;
         private const string locationImageForCheck = "#OpenLayers_Layer_OSM_2 img[src*='/10/711/292.png']";
+        private const string locationGasStruct = "#dijit_form_CheckBox_13";
+        private const string locationGPZPoint = "#dijit_form_CheckBox_14";
 
         [TestInitialize]
         public void Setup()
@@ -35,7 +37,7 @@ namespace GetMapTest
             CheckDisableGasStructAndEnableGPZPoint();
             CheckDisableGasStructAndDisableGPZPoint();
         }
-                
+
         [TestCleanup]
         public void Clean()
         {
@@ -45,21 +47,25 @@ namespace GetMapTest
         private void CheckEnableGasStructAndEnableGPZPoint()
         {
             GUI.ScaleMenu.get(driver).DecrementButton();
+            driver.FindElement(By.CssSelector(locationGasStruct)).Click();
             GUI.Layers.get(driver).GasStructClick();
-            GUI.Layers.GasStructClass.get(driver).OpenCloseList().GPZPointClick();
+            IWebElement elementGPZPoint = driver.FindElement(By.CssSelector(locationGPZPoint));
+            if (!elementGPZPoint.Selected)
+                driver.FindElement(By.CssSelector(locationGPZPoint)).Click();
             Bitmap imageGPZDisable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationImageForCheck);
-            GUI.Layers.GasStructClass.get(driver).GPZPointClick();
+            if(elementGPZPoint.Selected)
+                driver.FindElement(By.CssSelector(locationGPZPoint)).Click();
             Bitmap imageGPZEnable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationImageForCheck);
             Utils.ImageComparer comp = new Utils.ImageComparer(imageGPZDisable, imageGPZEnable);
             bool equal = comp.IsEqual();
             if (equal)
-                Assert.Fail("Чекбоксы 'Газованя инфраструктура' и  'ГПЗ (точка)' активны, но слой на карте не отображается. ");         
+                Assert.Fail("Чекбоксы 'Газованя инфраструктура' и  'ГПЗ (точка)' активны, но слой на карте не отображается. ");
         }
 
         private void CheckEnableGasStruckAndDisableGPZPoint()
         {
-            Bitmap imageFullCBEnable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver,locationImageForCheck);
-            GUI.Layers.GasStructClass.get(driver).GPZPointClick();
+            Bitmap imageFullCBEnable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationImageForCheck);
+            driver.FindElement(By.CssSelector(locationGPZPoint)).Click();
             Bitmap imageGPZDisable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationImageForCheck);
             Utils.ImageComparer comp = new Utils.ImageComparer(imageFullCBEnable, imageGPZDisable);
             bool equal = comp.IsEqual();
@@ -69,9 +75,9 @@ namespace GetMapTest
 
         private void CheckDisableGasStructAndEnableGPZPoint()
         {
-            GUI.Layers.GasStructClass.get(driver).GPZPointClick();
+            driver.FindElement(By.CssSelector(locationGPZPoint)).Click();
             Bitmap imageFullCBEnable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationImageForCheck);
-            GUI.Layers.get(driver).GasStructClick();
+            driver.FindElement(By.CssSelector(locationGasStruct)).Click();
             Bitmap imageGasStruckDisable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationImageForCheck);
             Utils.ImageComparer comp = new Utils.ImageComparer(imageFullCBEnable, imageGasStruckDisable);
             bool equal = comp.IsEqual();
@@ -81,10 +87,10 @@ namespace GetMapTest
 
         private void CheckDisableGasStructAndDisableGPZPoint()
         {
-            GUI.Layers.GasStructClass.get(driver).GPZPointClick();
+            driver.FindElement(By.CssSelector(locationGPZPoint)).Click();
             Bitmap imageFullCBEnable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationImageForCheck);
-            GUI.Layers.get(driver).GasStructClick();
-            GUI.Layers.GasStructClass.get(driver).GPZPointClick();
+            driver.FindElement(By.CssSelector(locationGasStruct)).Click();
+            driver.FindElement(By.CssSelector(locationGPZPoint)).Click();
             Bitmap imageFullCBDisable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationImageForCheck);
             Utils.ImageComparer comp = new Utils.ImageComparer(imageFullCBEnable, imageFullCBDisable);
             bool equal = comp.IsEqual();
@@ -92,5 +98,5 @@ namespace GetMapTest
                 Assert.Fail("После снятия активности чекбоксов 'Газовая инфраструктура' и 'ГПЗ (точка)' слой на карте остался отображенным. ");
         }
     }
-     
+
 }
