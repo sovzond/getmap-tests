@@ -41,7 +41,7 @@ namespace GetMapTest
         {
             GUI.SlideMenu.get(driver).OpenLayers();
             if (!GUI.Layers.get(driver).GetSelectedNeftyStruct)
-                driver.FindElement(By.CssSelector("#dijit_form_CheckBox_23")).Click();
+                GUI.Layers.get(driver).NeftyStructCheckBoxClick();
               IncrementLayerDNS();
               IncrementLayerPlaces();
               IncrementLayerAmbar();
