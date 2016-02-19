@@ -16,11 +16,10 @@ namespace GetMapTest
     {
         private IWebDriver driver;
         private IList<IWebElement> listGoogleImage;
-        List<string> srcGoogleImage;
+        private List<string> srcGoogleImage;
         private const string urlGoogleImage = "http://maps.googleapis.com/maps/api/js/StaticMapService.GetMapImage";
-        private const string locationSlideMenu = "#menuSlide div.svzSimpleButton.slidePanelButton";
-        private const string locationBaseLayers = "#layersCon div.svzSimpleButton.accordionButton";
         private const string locationBaseLayersChildContainer = "layerManagerBasemap";
+        private const string locationLayersInBaseLayers = "svzLayerManagerItem";
         private const string locationRadioButtonOSM = "#layerManagerBasemap div.dijit.dijitReset.dijitInline.dijitRadio.dijitRadioChecked.dijitChecked input";
 
         [TestInitialize]
@@ -30,6 +29,7 @@ namespace GetMapTest
             GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
             listGoogleImage = null;
+            srcGoogleImage = new List<string>();
         }
 
         /// <summary>
@@ -40,20 +40,17 @@ namespace GetMapTest
         {
             GUI.SlideMenu.get(driver).OpenLayers().OpenBaseLayers();
             CheckSelectedOSM();
+            AssertGetElementByText();
             GUI.SlideMenu.get(driver).OpenGoogle();
-            GUI.SlideMenu.get(driver).LayerSputnikClick();
-            GUI.SlideMenu.get(driver).LayerSchemeClick();
-         
-            // CheckLayerScheme();
-            //  CheckLayerSputnik();
-            //  CheckLayerGibrid();
+            CheckLayerScheme();
+            CheckLayerSputnik();
+            CheckLayerGibrid();
         }
 
         [TestCleanup]
         public void Clean()
         {
-            System.Threading.Thread.Sleep(2000);
-            driver.Quit();
+            GUI.Cleanup.get(driver).Quit();
         }
 
         private void CheckSelectedOSM()
@@ -69,25 +66,19 @@ namespace GetMapTest
         {
             GUI.SlideMenu.get(driver).LayerSputnikClick();
             GUI.SlideMenu.get(driver).LayerSchemeClick();
-            IList<IWebElement> elementScheme = driver.FindElements(By.CssSelector("div.gm-style img[src*='google']"));
-            List<string> src = new List<string>();
-            foreach (var r in elementScheme)
-                src.Add(r.GetAttribute("src"));
-            Assert.AreEqual(urlImageScheme, elementScheme[0].GetAttribute("src"), "Слой схема отобразил не корректный слой.");
+            CheckUrlLayers("Схема");
         }
 
         private void CheckLayerSputnik()
         {
             GUI.SlideMenu.get(driver).LayerSputnikClick();
-            IList<IWebElement> elementSputnik = driver.FindElements(By.CssSelector("div.gm-style img[src*='google']"));
-            Assert.AreEqual(urlImageSputnik, elementSputnik[0].GetAttribute("src"), "Слой спутник отобразил не корректный слой");
+            CheckUrlLayers("Спутник");
         }
 
         private void CheckLayerGibrid()
         {
             GUI.SlideMenu.get(driver).LayerGibridClick();
-            IList<IWebElement> elementGibrid = driver.FindElements(By.CssSelector("div.gm-style img[src*='google']"));
-            Assert.AreEqual(urlImageGibrid, elementGibrid[0].GetAttribute("src"), "Слой гибрид отобразил не корректный слой");
+            CheckUrlLayers("Гибрид");
         }
 
         private void CheckUrlLayers(string layer)
@@ -97,8 +88,25 @@ namespace GetMapTest
             foreach (var r in listGoogleImage)
                 src.Add(r.GetAttribute("src"));
             if (!src[0].StartsWith(urlGoogleImage))
-                Assert.Fail("Слой" + layer + "имеет не верных путь изображения.");
+                Assert.Fail("Слой" + layer + "имеет не верный путь изображения.");
         }
 
+        private bool getElementByText(IWebElement el, string text)
+        {
+            if (el.Text == text)
+                return true;
+            return false;
+        }
+
+        private void AssertGetElementByText()
+        {
+            IList<IWebElement> listLayersInBaseLayers = driver.FindElements(By.ClassName(locationLayersInBaseLayers));
+            if (listLayersInBaseLayers != null)
+            {
+                Assert.IsFalse(!getElementByText(listLayersInBaseLayers[0], "Google"), "Не найден Google.");
+                Assert.IsFalse(!getElementByText(listLayersInBaseLayers[4], "Росреестр"), "Не найден Росреестр.");
+                Assert.IsFalse(!getElementByText(listLayersInBaseLayers[5], "OpenStreetMap"), "Не найден OpenStreetMap.");
+            }
+        }
     }
 }
