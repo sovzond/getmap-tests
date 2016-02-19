@@ -16,17 +16,15 @@ namespace GetMapTest
     public class TestTransparencyLayer
     {
         private IWebDriver driver;
-        private const string locationLegenda = "#menuSlide div.svzSimpleButton.slidePanelLegendButton";
-        private const string locationFakelDecTransButton = "#dojoUnique1 div.dijitSliderDecrementIconH";
-        private const string locationAmbarDecTransButton = "#dojoUnique2 div.dijitSliderDecrementIconH";
-        private const string locationPlacesDecTransButton = "#dojoUnique3 div.dijitSliderDecrementIconH";
-        private const string locationDNSDecTransButton = "#dojoUnique4 div.dijitSliderDecrementIconH";
         private const string locationMap = "#OpenLayers_Layer_OSM_2 img[src*='/11/1422/584.png']";
+        private const string locationDecButtons = "div.dijitSliderDecrementIconH";
 
         [TestInitialize]
         public void Setup()
         {
             driver = Settings.Instance.createDriver();
+            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
+            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
         }
 
         /// <summary>
@@ -36,12 +34,11 @@ namespace GetMapTest
         [TestMethod]
         public void CheckTransparency()
         {
-            LogOn();
-            driver.FindElement(By.CssSelector(locationLegenda)).Click();
-            DecTransparency(locationFakelDecTransButton);
-            DecTransparency(locationAmbarDecTransButton);
-            DecTransparency(locationPlacesDecTransButton);
-            DecTransparency(locationDNSDecTransButton);
+            GUI.SlideMenu.get(driver).OpenLegenda();        
+            DecTransparency("Факел");
+            DecTransparency("Амбар");
+            DecTransparency("Кустовые площадки");
+            DecTransparency("ДНС");
         }
 
         [TestCleanup]
@@ -50,44 +47,40 @@ namespace GetMapTest
             GUI.Cleanup.get(driver).Quit();
         }
 
-        private void LogOn()
+        private void DecTransparency(string nameLayer)
         {
-            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
-            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
-        }
- 
-        private void DecTransparency(string locationDecTransButton)
-        {
-            string nameLayer = "";
-            if (locationFakelDecTransButton == locationDecTransButton)
-                nameLayer = " 'Факел' ";
-            if (locationAmbarDecTransButton == locationDecTransButton)
-                nameLayer = " 'Амбар' ";
-            if (locationPlacesDecTransButton == locationDecTransButton)
-                nameLayer = " 'Кустовые площадки' ";
-            if (locationDNSDecTransButton == locationDecTransButton)
-                nameLayer = " 'ДНС' ";
             Bitmap imagelVisible = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationMap);
             Utils.ImageComparer compVisible = new Utils.ImageComparer(imagelVisible, imagelVisible);
             int nPixelsVisible = compVisible.nDifferentPixels;
-            for (int i = 0; i < 25; i++)
-                driver.FindElement(By.CssSelector(locationDecTransButton)).Click();
+            if (nameLayer == "Факел")
+                GUI.SlideMenu.get(driver).ButtonDecTransparencyFakelClick(25);
+            if (nameLayer == "Амбар")
+                GUI.SlideMenu.get(driver).ButtonDecTransparencyAmbarClick(25);
+            if (nameLayer == "Кустовые площадки")
+                GUI.SlideMenu.get(driver).ButtonDecTransparencyPlacesClick(25);
+            if (nameLayer == "ДНС")
+                GUI.SlideMenu.get(driver).ButtonDecTransparencyDNSClick(25);
             Bitmap imageHalfVisible = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationMap);
             Utils.ImageComparer compHalfVisible = new Utils.ImageComparer(imagelVisible, imageHalfVisible);
             bool equalHalfVisible = compHalfVisible.IsEqual();
             int nPixelsHalfVisible = compHalfVisible.nDifferentPixels;
             if (nPixelsVisible == nPixelsHalfVisible && equalHalfVisible == true)
-                Assert.Fail("Слой" + nameLayer + "не стал прозрачным на половину, после сдвига ползунка.");
-            for (int i = 0; i < 30; i++)
-                driver.FindElement(By.CssSelector(locationDecTransButton)).Click();
+                Assert.Fail("Слой " + nameLayer + " не стал прозрачным на половину, после сдвига ползунка.");
+            if (nameLayer == "Факел")
+                GUI.SlideMenu.get(driver).ButtonDecTransparencyFakelClick(30);
+            if (nameLayer == "Амбар")
+                GUI.SlideMenu.get(driver).ButtonDecTransparencyAmbarClick(30);
+            if (nameLayer == "Кустовые площадки")
+                GUI.SlideMenu.get(driver).ButtonDecTransparencyPlacesClick(30);
+            if (nameLayer == "ДНС")
+                GUI.SlideMenu.get(driver).ButtonDecTransparencyDNSClick(30);
             Bitmap imageNotVisible = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationMap);
             Utils.ImageComparer compNotVisible = new Utils.ImageComparer(imageHalfVisible, imageNotVisible);
             bool equalNotVisible = compNotVisible.IsEqual();
             int nPixelsNotVisible = compNotVisible.nDifferentPixels;
             if (nPixelsHalfVisible == nPixelsNotVisible && equalNotVisible == true)
-                Assert.Fail("Слой" + nameLayer + " не стал полностью прозрачным после сдвига ползунка.");
+                Assert.Fail("Слой " + nameLayer + " не стал полностью прозрачным после сдвига ползунка.");
         }
 
-    
     }
 }
