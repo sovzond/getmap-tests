@@ -8,18 +8,20 @@ using OpenQA.Selenium;
 namespace GetMapTest.GUI
 {
     /// <summary>
-    /// 
+    /// Открывает доступ ко всем элементам шапки.
     /// </summary>
    public class HeaderLinks
     {
         private IWebDriver driver;
         private const string locationHeaderLinks = "td.headerLinks a";
-        IList<IWebElement> list;
-
+        private const string locationSearchArea = "input.searchPanel";
+        private const string locationSearchButton = "#textSearch2";
+        IList<IWebElement> listHeaderLinks;
+            
         private HeaderLinks(IWebDriver driver)
         {
             this.driver = driver;
-            list = driver.FindElements(By.CssSelector(locationHeaderLinks));
+            listHeaderLinks = driver.FindElements(By.CssSelector(locationHeaderLinks));
         }
         private void Sleep()
         {
@@ -34,6 +36,19 @@ namespace GetMapTest.GUI
         {
             return new HeaderLinks(driver);
         }
+        
+        /// <summary>
+        /// Выполняет поиск по геопорталу.
+        /// </summary>
+        /// <param name="attributeSearch">Искомый элемент</param>
+        /// <returns></returns>
+        public HeaderLinks MakeSearch(string attributeSearch)
+        {
+            driver.FindElement(By.CssSelector(locationSearchArea)).Click();
+            driver.FindElement(By.CssSelector(locationSearchArea)).SendKeys(attributeSearch);
+            driver.FindElement(By.CssSelector(locationSearchButton)).Click();
+            return this;
+        }
 
         /// <summary>
         /// Выполянет клик по кнопке 'Справка'.
@@ -42,7 +57,7 @@ namespace GetMapTest.GUI
         public HeaderLinks HelpClick()
         {
             Sleep();
-            list[0].Click();
+            listHeaderLinks[0].Click();
             return this;
         }
 
@@ -53,7 +68,7 @@ namespace GetMapTest.GUI
         public HeaderLinks ChangePasswordClick()
         {
             Sleep();
-            list[1].Click();
+            listHeaderLinks[1].Click();
             return this;
         }
 
@@ -64,7 +79,7 @@ namespace GetMapTest.GUI
         public HeaderLinks ExitClick()
         {
             Sleep();
-            list[2].Click();
+            listHeaderLinks[2].Click();
             return this;
         }
 

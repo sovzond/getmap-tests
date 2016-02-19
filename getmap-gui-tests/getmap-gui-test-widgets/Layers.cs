@@ -8,23 +8,33 @@ using OpenQA.Selenium;
 namespace GetMapTest.GUI
 {
     /// <summary>
-    /// Открывает выпадающее меню раздела 'Слои'.
+    /// Открывает выпадающее меню и активирует чекбоксы раздела 'Слои' .
     /// </summary>
     public class Layers
     {
         private IWebDriver driver;
-        private IWebElement elementTestLayer;
-        private IWebElement elementNewGroup;
-        private IWebElement elementZoyaTest;
-        private IWebElement elementMoscowArea;
-        private IWebElement elementGasStruct;
-        private IWebElement elementEnergyStruct;
-        private IWebElement elementNeftyStruct;
-        private IWebElement elementTematicMap;
-        private IWebElement elementCosmoPhoto;
-        private IList<IWebElement> listCheckBoxs;
-        private const string locationCheckBoxs = "div.svzLayerManagerText";
-
+        private IWebElement elementTestLayerDDM;
+        private IWebElement elementNewGroupDDM;
+        private IWebElement elementZoyaTestDDM;
+        private IWebElement elementMoscowAreaDDM;
+        private IWebElement elementGasStructDDM;
+        private IWebElement elementEnergyStructDDM;
+        private IWebElement elementNeftyStructDDM;
+        private IWebElement elementTematicMapDDM;
+        private IWebElement elementCosmoPhotoDDM;
+        private IWebElement elementTestLayerCB;
+        private IWebElement elementNewGroupCB;
+        private IWebElement elementZoyaTestCB;
+        private IWebElement elementMoscowAreaCB;
+        private IWebElement elementGasStructCB;
+        private IWebElement elementEnergyStructCB;
+        private IWebElement elementNeftyStructCB;
+        private IWebElement elementTematicMapCB;
+        private IWebElement elementCosmoPhotoCB;
+        private IList<IWebElement> listDropDowmMenu;
+        private IList<IWebElement> listCheckBoxes;
+        private const string locationDropDownMenu = "div.svzLayerManagerText";
+        private const string locationCheckBoxes = "div.svzLayerManagerItem.svzLayerManagerItemSection div";
         private Layers(IWebDriver driver)
         {
             this.driver = driver;
@@ -39,32 +49,81 @@ namespace GetMapTest.GUI
 
         private Layers SetValueList()
         {
-            listCheckBoxs = driver.FindElements(By.CssSelector(locationCheckBoxs));
+            listDropDowmMenu = driver.FindElements(By.CssSelector(locationDropDownMenu));
+            listCheckBoxes = driver.FindElements(By.CssSelector(locationCheckBoxes));
             return this;
         }
 
         private Layers SetValueElements()
         {
-            foreach (var el in listCheckBoxs)
+            foreach (var el in listDropDowmMenu)
             {
                 if (el.Text == "Тест")
-                    elementTestLayer = el;
+                    elementTestLayerDDM = el;
                 if (el.Text == "Новая группа")
-                    elementNewGroup = el;
+                    elementNewGroupDDM = el;
                 if (el.Text == "Зоя. Тест")
-                    elementZoyaTest = el;
+                    elementZoyaTestDDM = el;
                 if (el.Text == "Московская область")
-                    elementMoscowArea = el;
+                    elementMoscowAreaDDM = el;
                 if (el.Text == "Газовая инфраструктура")
-                    elementGasStruct = el;
+                    elementGasStructDDM = el;
                 if (el.Text == "Энергетическая инфраструктура")
-                    elementEnergyStruct = el;
+                    elementEnergyStructDDM = el;
                 if (el.Text == "Нефтяная инфраструктура")
-                    elementNeftyStruct = el;
+                    elementNeftyStructDDM = el;
                 if (el.Text == "Тематические карты")
-                    elementTematicMap = el;
+                    elementTematicMapDDM = el;
                 if (el.Text == "Космические снимки")
-                    elementCosmoPhoto = el;
+                    elementCosmoPhotoDDM = el;
+            }
+            for (int i = 0; i < listCheckBoxes.Count; i++)
+            {
+                if (listCheckBoxes[i].Text == "Тест")
+                {
+                    Thread.Sleep(500);
+                    elementTestLayerCB = listCheckBoxes[i - 1];
+                }
+                if (listCheckBoxes[i].Text == "Новая группа")
+                {
+                    Thread.Sleep(500);
+                    elementNewGroupCB = listCheckBoxes[i - 1];
+                }
+                if (listCheckBoxes[i].Text == "Зоя. Тест")
+                {
+                    Thread.Sleep(500);
+                    elementZoyaTestCB = listCheckBoxes[i - 1];
+                }
+                if (listCheckBoxes[i].Text == "Московская область")
+                {
+                    Thread.Sleep(500);
+                    elementMoscowAreaCB = listCheckBoxes[i - 1];
+                }
+                if (listCheckBoxes[i].Text == "Газовая инфраструктура")
+                {
+                    Thread.Sleep(500);
+                    elementGasStructCB = listCheckBoxes[i - 1];
+                }
+                if (listCheckBoxes[i].Text == "Энергетическая инфраструктура")
+                {
+                    Thread.Sleep(500);
+                    elementEnergyStructCB = listCheckBoxes[i - 1];
+                }
+                if (listCheckBoxes[i].Text == "Нефтяная инфраструктура")
+                {
+                    Thread.Sleep(500);
+                    elementNeftyStructCB = listCheckBoxes[i - 1];
+                }
+                if (listCheckBoxes[i].Text == "Тематические карты")
+                {
+                    Thread.Sleep(500);
+                    elementTematicMapCB = listCheckBoxes[i - 1];
+                }
+                if (listCheckBoxes[i].Text == "Космические снимки")
+                {
+                    Thread.Sleep(500);
+                    elementCosmoPhotoCB = listCheckBoxes[i - 1];
+                }
             }
             return this;
         }
@@ -82,7 +141,7 @@ namespace GetMapTest.GUI
 
         private bool getSelectedTest()
         {
-            if (elementTestLayer.Selected)
+            if (elementTestLayerDDM.Selected)
                 return true;
             return false;
         }
@@ -100,7 +159,7 @@ namespace GetMapTest.GUI
 
         private bool getSelectedNewGroup()
         {
-            if (elementNewGroup.Selected)
+            if (elementNewGroupDDM.Selected)
                 return true;
             return false;
         }
@@ -118,7 +177,7 @@ namespace GetMapTest.GUI
 
         private bool getSelectedZoyaTest()
         {
-            if (elementZoyaTest.Selected)
+            if (elementZoyaTestDDM.Selected)
                 return true;
             return false;
         }
@@ -136,7 +195,7 @@ namespace GetMapTest.GUI
 
         private bool getSelectedMoscowArea()
         {
-            if (elementMoscowArea.Selected)
+            if (elementMoscowAreaDDM.Selected)
                 return true;
             return false;
         }
@@ -154,7 +213,7 @@ namespace GetMapTest.GUI
 
         private bool getSelectedGasStruct()
         {
-            if (elementGasStruct.Selected)
+            if (elementGasStructDDM.Selected)
                 return true;
             return false;
         }
@@ -172,7 +231,7 @@ namespace GetMapTest.GUI
 
         private bool getSelectedEnergyStruct()
         {
-            if (elementEnergyStruct.Selected)
+            if (elementEnergyStructDDM.Selected)
                 return true;
             return false;
         }
@@ -190,7 +249,7 @@ namespace GetMapTest.GUI
 
         private bool getSelectedNeftyStruct()
         {
-            if (elementNeftyStruct.Selected)
+            if (elementNeftyStructDDM.Selected)
                 return true;
             return false;
         }
@@ -207,7 +266,7 @@ namespace GetMapTest.GUI
         }
         private bool getSelectedTimaticMap()
         {
-            if (elementTematicMap.Selected)
+            if (elementTematicMapDDM.Selected)
                 return true;
             return false;
         }
@@ -225,7 +284,7 @@ namespace GetMapTest.GUI
 
         private bool getSelectedCosmoPhoto()
         {
-            if (elementCosmoPhoto.Selected)
+            if (elementCosmoPhotoDDM.Selected)
                 return true;
             return false;
         }
@@ -242,17 +301,28 @@ namespace GetMapTest.GUI
         }
 
         /// <summary>
-        /// Открывает раздел 'Тест'.
+        /// Выполняет клик по чекбоксу  слоя 'Тест'.
         /// </summary>
         /// <returns></returns>
-        public Layers TestClick()
+        public Layers TestCheckBoxClick()
         {
             Sleep();
-            elementTestLayer.Click();
+            elementTestLayerCB.Click();
             return this;
         }
 
-        /*
+        /// <summary>
+        /// Открывает раздел 'Тест'.
+        /// </summary>
+        /// <returns></returns>
+        public Layers TestOpenCloseList()
+        {
+            Sleep();
+            elementTestLayerDDM.Click();
+            return this;
+        }
+
+       
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Тест.'
         /// </summary>
@@ -262,11 +332,9 @@ namespace GetMapTest.GUI
             private IWebElement elementAmerica;
             private IWebElement elementBase_raster;
             private IWebElement elementAmbar;
-            private IWebElement elementButtonForOpenList;
+            private IWebElement elementaa_states_4326;
             private IList<IWebElement> listCheckBoxs;
-            private IList<IWebElement> listButtonsLayers;
-            private const string locationButtonsLayers = "#stdportal_LayerManagerBase_1 div.svzLayerManagerText";
-            private const string locationCheckBoxs = "#stdportal_LayerManagerBase_1 div.dijit.dijitReset.dijitInline.dijitCheckBox input";
+            private const string locationCheckBoxs = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
 
             private TestLayerClass(IWebDriver driver)
             {
@@ -293,26 +361,45 @@ namespace GetMapTest.GUI
             private TestLayerClass SetValueList()
             {
                 listCheckBoxs = driver.FindElements(By.CssSelector(locationCheckBoxs));
-                listButtonsLayers = driver.FindElements(By.CssSelector(locationButtonsLayers));
                 return this;
             }
 
             private TestLayerClass SetValueElements()
             {
-                elementAmerica = listCheckBoxs[1];
-                elementBase_raster = listCheckBoxs[2];
-                elementAmbar = listCheckBoxs[3];
-                elementButtonForOpenList = listButtonsLayers[0];
+                for (int i = 0; i < listCheckBoxs.Count; i++)
+                {
+                    if (listCheckBoxs[i].Text == "aa_states_4326")
+                    {
+                        Thread.Sleep(500);
+                        elementaa_states_4326 = listCheckBoxs[i - 1];
+                    }
+                    if(listCheckBoxs[i].Text =="США")
+                    {
+                        Thread.Sleep(500);
+                        elementAmerica = listCheckBoxs[i - 1];
+                    }
+                    if (listCheckBoxs[i].Text == "rtk:base_raster")
+                    {
+                        Thread.Sleep(500);
+                        elementBase_raster = listCheckBoxs[i - 1];
+                    }
+                    if(listCheckBoxs[i].Text == "ambar")
+                    {
+                        Thread.Sleep(500);
+                        elementAmbar = listCheckBoxs[i - 1];
+                    }
+                }
                 return this;
             }
 
             /// <summary>
-            /// Открывает или же закрывает выпадающее меню 'Тест' в зависимости от того, в каком состоянии оно было до вызова данного метода.
+            /// Выполняет клик по чекбоксу 'aa_states_4326'.
             /// </summary>
             /// <returns></returns>
-            public TestLayerClass OpenCloseList()
+            public TestLayerClass aa_states_4326Click()
             {
-                elementButtonForOpenList.Click();
+                Sleep();
+                elementaa_states_4326.Click();
                 return this;
             }
 
@@ -349,55 +436,42 @@ namespace GetMapTest.GUI
                 return this;
             }
         }
-        */
 
+
+        /// <summary>
+        /// Выполняет клик по чекбоксу  слоя 'Новая группа'.
+        /// </summary>
+        /// <returns></returns>
+        public Layers NewGroupCheckBoxClick()
+        {
+            Sleep();
+            elementNewGroupCB.Click();
+            return this;
+        }
 
         /// <summary>
         /// Открывает раздел 'Новая группа'.
         /// </summary>
         /// <returns></returns>
-        public Layers NewGroupClick()
+        public Layers NewGroupOpenCloseList()
         {
             Sleep();
-            elementNewGroup.Click();
+            elementNewGroupDDM.Click();
             return this;
         }
 
-        /// <summary>
-        /// Открывает раздел 'Зоя. Тест'.
-        /// </summary>
-        /// <returns></returns>
-        public Layers ZoyaTestClick()
-        {
-            Sleep();
-            elementZoyaTest.Click();
-            return this;
-        }
-
-        /// <summary>
-        /// Открывает раздел 'Московская область'.
-        /// </summary>
-        /// <returns></returns>
-        public Layers MoscowAreaClick()
-        {
-            Sleep();
-            elementMoscowArea.Click();
-            return this;
-        }
-
-        /*
+       
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Новая группа'.
         /// </summary>
         public class NewGroupClass
         {
             private IWebDriver driver;
-            private IList<IWebElement> listCheckBoxs;
             private IWebElement elementTsp_25;
             private IWebElement elementButtonForOpenList;
             private IList<IWebElement> listButtonsLayers;
-            private const string locationButtonsLayers = "#stdportal_LayerManagerBase_1 div.svzLayerManagerText";
-            private const string locationCheckBoxs = "#stdportal_LayerManagerBase_1 div.dijit.dijitReset.dijitInline.dijitCheckBox input";
+            private IList<IWebElement> listCheckBoxs;
+            private const string locationCheckBoxs = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
 
             private NewGroupClass(IWebDriver driver)
             {
@@ -419,14 +493,20 @@ namespace GetMapTest.GUI
             private NewGroupClass SetValueList()
             {
                 listCheckBoxs = driver.FindElements(By.CssSelector(locationCheckBoxs));
-                listButtonsLayers = driver.FindElements(By.CssSelector(locationButtonsLayers));
                 return this;
             }
 
             private NewGroupClass SetValueElements()
             {
-                elementTsp_25 = listCheckBoxs[5];
-                elementButtonForOpenList = listButtonsLayers[4];
+                for(int i=0;i<listCheckBoxs.Count;i++)
+                {
+                    if(listCheckBoxs[i].Text == "tsp_25")
+                    {
+                        Thread.Sleep(500);
+                        elementTsp_25 = listCheckBoxs[i - 1];
+                    }
+                }
+
                 return this;
             }
 
@@ -434,17 +514,6 @@ namespace GetMapTest.GUI
             {
                 Thread.Sleep(2000);
             }
-
-            /// <summary>
-            /// Открывает или же закрывает выпадающее меню 'Новая группа' в зависимости от того, в каком состоянии оно было до вызова данного метода.
-            /// </summary>
-            /// <returns></returns>
-            public NewGroupClass OpenCloseList()
-            {
-                elementButtonForOpenList.Click();
-                return this;
-            }
-
 
             /// <summary>
             /// Выполняет клик по чекбоксу 'tsp_25'.
@@ -458,20 +527,233 @@ namespace GetMapTest.GUI
             }
 
         }
-        */
+
+        /// <summary>
+        /// Выполняет клик по чекбоксу  слоя 'Зоя. Тест'.
+        /// </summary>
+        /// <returns></returns>
+        public Layers ZoyaTestCheckBoxClick()
+        {
+            Sleep();
+            elementZoyaTestCB.Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Открывает раздел 'Зоя. Тест'.
+        /// </summary>
+        /// <returns></returns>
+        public Layers ZoyaTestOpenCloseList()
+        {
+            Sleep();
+            elementZoyaTestDDM.Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Дает доступ ко всем чекбоксам выпадающего меню 'Зоя. Тест'.
+        /// </summary>
+        public class ZoyaTestClass
+        {
+            private IWebDriver driver;
+            private IWebElement elementMO_RE;
+            private IWebElement elementL8_MO;
+            private const string locationCheckBoxes = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
+            private IList<IWebElement> listCheckBoxes;
+
+            private ZoyaTestClass(IWebDriver driver)
+            {
+                this.driver = driver;
+                SetValueList();
+                SetValueElements();
+            }
+
+            private void Sleep()
+            {
+                Thread.Sleep(2000);
+            }
+
+            private ZoyaTestClass SetValueList()
+            {
+                listCheckBoxes = driver.FindElements(By.CssSelector(locationCheckBoxes));
+                return this;
+            }
+
+            private ZoyaTestClass SetValueElements()
+            {
+                for(int i=0;i<listCheckBoxes.Count;i++)
+                {
+                    if(listCheckBoxes[i].Text == "GetMap_MO_RE")
+                    {
+                        Thread.Sleep(500);
+                        elementMO_RE = listCheckBoxes[i - 1];
+                    }
+                    if(listCheckBoxes[i].Text == "GetMap_L8_MO")
+                    {
+                        Thread.Sleep(500);
+                        elementL8_MO = listCheckBoxes[i - 1];
+                    }
+                }
+                return this;
+            }
+
+            /// <summary>
+            /// Принимает параметр типа IWebDriver для дальнейшей навигации по сайту.
+            /// </summary>
+            /// <param name="driver">Передает аргумент для закрытого конструктора</param>
+            /// <returns></returns>
+            public static ZoyaTestClass get(IWebDriver driver)
+            {
+                return new ZoyaTestClass(driver);
+            }
+
+            /// <summary>
+            /// Выполянет клик по чекбоксу 'GetMap_MO_RE'.
+            /// </summary>
+            /// <returns></returns>
+            public ZoyaTestClass MO_REClick()
+            {
+                Sleep();
+                elementMO_RE.Click();
+                return this;
+            }
+
+            /// <summary>
+            /// Выполянет клик по чекбоксу 'GetMap_L8_MO'.
+            /// </summary>
+            /// <returns></returns>
+            public ZoyaTestClass L8_MO()
+            {
+                Sleep();
+                elementL8_MO.Click();
+                return this;
+            }
+
+        }
+        
+        /// <summary>
+        /// Выполняет клик по чекбоксу  слоя 'Московская область'.
+        /// </summary>
+        /// <returns></returns>
+        public Layers MoscowAreaCheckBoxClick()
+        {
+            Sleep();
+            elementMoscowAreaCB.Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Открывает раздел 'Московская область'.
+        /// </summary>
+        /// <returns></returns>
+        public Layers MoscowAreaOpenCloseList()
+        {
+            Sleep();
+            elementMoscowAreaDDM.Click();
+            return this;
+        }
+
+        public class MoscowAreaClass
+        {
+            private IWebDriver driver;
+            private IWebElement elementLandsat;
+            private IWebElement elementRapidEye;
+            private const string locationCheckBoxes = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
+            private IList<IWebElement> listCheckBoxes;
+
+            private MoscowAreaClass(IWebDriver driver)
+            {
+                this.driver = driver;
+                SetValueList();
+                SetValueElements();
+            }
+
+             private void Sleep()
+            {
+                Thread.Sleep(2000);
+            }
+
+            private MoscowAreaClass SetValueList()
+            {
+                listCheckBoxes = driver.FindElements(By.CssSelector(locationCheckBoxes));
+                return this;
+            }
+
+            private MoscowAreaClass SetValueElements()
+            {
+                for(int i=0;i<listCheckBoxes.Count;i++)
+                {
+                    if(listCheckBoxes[i].Text == "Мозаика Landsat")
+                    {
+                        Thread.Sleep(500);
+                        elementLandsat = listCheckBoxes[i - 1];
+                    }
+                    if(listCheckBoxes[i].Text == "Мозаика RapidEye")
+                    {
+                        Thread.Sleep(500);
+                        elementRapidEye = listCheckBoxes[i - 1];
+                    }
+                }
+                return this;
+            }
+
+            /// <summary>
+            /// Принимает параметр типа IWebDriver для дальнейшей навигации по сайту.
+            /// </summary>
+            /// <param name="driver">Передает аргумент для закрытого конструктора</param>
+            /// <returns></returns>
+            public static MoscowAreaClass get(IWebDriver driver)
+            {
+                return new MoscowAreaClass(driver);
+            }
+
+            /// <summary>
+            /// Выполняет клик по чекбоксу 'Мозаика Landsat'.
+            /// </summary>
+            /// <returns></returns>
+            public MoscowAreaClass LandsatClick()
+            {
+                Sleep();
+                elementLandsat.Click();
+                return this;
+            }
+
+            /// <summary>
+            /// Выполняет клик по чекбоксу 'Мозаика RapidEye'.
+            /// </summary>
+            /// <returns></returns>
+            public MoscowAreaClass RapidEyeClick()
+            {
+                Sleep();
+                elementRapidEye.Click();
+                return this;
+            }
+
+        }
+
+        /// <summary>
+        /// Выполняет клик по чекбоксу  слоя 'Газовая инфраструктура'.
+        /// </summary>
+        /// <returns></returns>
+        public Layers GasStructCheckBoxClick()
+        {
+            Sleep();
+            elementGasStructCB.Click();
+            return this;
+        }
 
         /// <summary>
         /// Открывает раздел 'Газовая инфраструктура'.
         /// </summary>
         /// <returns></returns>
-        public Layers GasStructClick()
+        public Layers GasStructOpenCloseList()
         {
             Sleep();
-            elementGasStruct.Click();
+            elementGasStructDDM.Click();
             return this;
         }
 
-        /*
+        
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Газовая инфраструктура'.
         /// </summary>
@@ -481,18 +763,14 @@ namespace GetMapTest.GUI
             private IWebElement elemenGPZPoint;
             private IWebElement elementGazoprovod;
             private IWebElement elementGPZPoligon;
-            private IWebElement elementButtonForOpenList;
             private IList<IWebElement> listCheckBoxs;
-            private IList<IWebElement> listButtonsLayers;
-            private const string locationButtonsLayers = "#stdportal_LayerManagerBase_1 div.svzLayerManagerText";
-            private const string locationCheckBoxs = "#stdportal_LayerManagerBase_1 div.dijit.dijitReset.dijitInline.dijitCheckBox input";
+            private const string locationCheckBoxs = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
 
             private GasStructClass(IWebDriver driver)
             {
                 this.driver = driver;
                 SetValueList();
                 SetValueElements();
-
             }
 
             private void Sleep()
@@ -503,26 +781,29 @@ namespace GetMapTest.GUI
             private GasStructClass SetValueList()
             {
                 listCheckBoxs = driver.FindElements(By.CssSelector(locationCheckBoxs));
-                listButtonsLayers = driver.FindElements(By.CssSelector(locationButtonsLayers));
                 return this;
             }
 
             private GasStructClass SetValueElements()
             {
-                elemenGPZPoint = listCheckBoxs[7];
-                elementGazoprovod = listCheckBoxs[8];
-                elementGPZPoligon = listCheckBoxs[9];
-                elementButtonForOpenList = listButtonsLayers[6];
-                return this;
-            }
-
-            /// <summary>
-            /// Открывает или же закрывает выпадающее меню 'Газовая инфраструктура' в зависимости от того, в каком состоянии оно было до вызова данного метода.
-            /// </summary>
-            /// <returns></returns>
-            public GasStructClass OpenCloseList()
-            {
-                elementButtonForOpenList.Click();
+                for(int i=0;i<listCheckBoxs.Count;i++)
+                {
+                    if(listCheckBoxs[i].Text == "ГПЗ (точка)")
+                    {
+                        Thread.Sleep(500);
+                        elemenGPZPoint = listCheckBoxs[i - 1];
+                    }
+                    if(listCheckBoxs[i].Text == "Газопровод")
+                    {
+                        Thread.Sleep(500);
+                        elementGazoprovod = listCheckBoxs[i - 1];
+                    }
+                    if(listCheckBoxs[i].Text == "ГПЗ (полигон)")
+                    {
+                        Thread.Sleep(500);
+                        elementGPZPoligon = listCheckBoxs[i - 1];
+                    }
+                }
                 return this;
             }
 
@@ -570,20 +851,31 @@ namespace GetMapTest.GUI
             }
 
         }
-        */
+        
+
+        /// <summary>
+        /// Выполняет клик по чекбоксу  слоя 'Энергетическая инфраструктура'.
+        /// </summary>
+        /// <returns></returns>
+        public Layers EnergyStructCheckBoxClick()
+        {
+            Sleep();
+            elementEnergyStructCB.Click();
+            return this;
+        }
 
         /// <summary>
         /// Открывает раздел  'Энергетическая инфраструктура'.
         /// </summary>
         /// <returns></returns>
-        public Layers EnergyStruckClick()
+        public Layers EnergyStructOpenCloseList()
         {
             Sleep();
-            elementEnergyStruct.Click();
+            elementEnergyStructDDM.Click();
             return this;
         }
 
-        /*
+  
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Энергетичская инфраструктура'.
         /// </summary>
@@ -595,11 +887,8 @@ namespace GetMapTest.GUI
             private IWebElement elementLEP;
             private IWebElement elementElectroStationPoligon;
             private IWebElement elementPodstationPoligon;
-            private IWebElement elementButtonForOpenList;
             private IList<IWebElement> listCheckBoxs;
-            private IList<IWebElement> listButtonsLayers;
-            private const string locationButtonsLayers = "#stdportal_LayerManagerBase_1 div.svzLayerManagerText";
-            private const string locationCheckBoxs = "#stdportal_LayerManagerBase_1 div.dijit.dijitReset.dijitInline.dijitCheckBox input";
+            private const string locationCheckBoxs = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
 
             private EnergyStructClass(IWebDriver driver)
             {
@@ -616,28 +905,39 @@ namespace GetMapTest.GUI
             private EnergyStructClass SetValueList()
             {
                 listCheckBoxs = driver.FindElements(By.CssSelector(locationCheckBoxs));
-                listButtonsLayers = driver.FindElements(By.CssSelector(locationButtonsLayers));
                 return this;
             }
 
             private EnergyStructClass SetValueElements()
             {
-                elementElectroStationPoint = listCheckBoxs[11];
-                elementPodstationPoint = listCheckBoxs[12];
-                elementLEP = listCheckBoxs[13];
-                elementElectroStationPoligon = listCheckBoxs[14];
-                elementPodstationPoligon = listCheckBoxs[15];
-                elementButtonForOpenList = listButtonsLayers[10];
-                return this;
-            }
-
-            /// <summary>
-            /// Открывает или же закрывает выпадающее меню 'Энергетическая инфраструктура' в зависимости от того, в каком состоянии оно было до вызова данного метода.
-            /// </summary>
-            /// <returns></returns>
-            public EnergyStructClass OpenCloseList()
-            {
-                elementButtonForOpenList.Click();
+               for(int i=0;i<listCheckBoxs.Count;i++)
+                {
+                    if(listCheckBoxs[i].Text == "Электростанции (точка)")
+                    {
+                        Thread.Sleep(500);
+                        elementElectroStationPoint = listCheckBoxs[i - 1];
+                    }
+                    if(listCheckBoxs[i].Text == "Подстанции (точка)")
+                    {
+                        Thread.Sleep(500);
+                        elementPodstationPoint = listCheckBoxs[i - 1];
+                    }
+                    if (listCheckBoxs[i].Text == "ЛЭП")
+                    {
+                        Thread.Sleep(500);
+                        elementLEP = listCheckBoxs[i - 1];
+                    }
+                    if(listCheckBoxs[i].Text == "Электростанции (полигон)")
+                    {
+                        Thread.Sleep(500);
+                        elementElectroStationPoligon = listCheckBoxs[i - 1];
+                    }
+                    if(listCheckBoxs[i].Text == "Подстанции (полигон)")
+                    {
+                        Thread.Sleep(500);
+                        elementPodstationPoligon = listCheckBoxs[i - 1];
+                    }
+                }
                 return this;
             }
 
@@ -707,20 +1007,31 @@ namespace GetMapTest.GUI
             }
 
         }
-        */
+    
+
+        /// <summary>
+        /// Выполняет клик по чекбоксу  слоя 'Нефтяная инфраструктура'.
+        /// </summary>
+        /// <returns></returns>
+        public Layers NeftyStructCheckBoxClick()
+        {
+            Sleep();
+            elementNeftyStructCB.Click();
+            return this;
+        }
 
         /// <summary>
         /// Открывает раздел 'Нефтяная инфраструктура'.
         /// </summary>
         /// <returns></returns>
-        public Layers NeftyStructClick()
+        public Layers NeftyStructOpenCloseList()
         {
             Sleep();
-            elementNeftyStruct.Click();
+            elementNeftyStructDDM.Click();
             return this;
         }
 
-        /*
+        
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Нефтяная инфраструктура'.
         /// </summary>
@@ -731,11 +1042,8 @@ namespace GetMapTest.GUI
             private IWebElement elementAmbar;
             private IWebElement elementPlaces;
             private IWebElement elementDNS;
-            private IWebElement elementButtonForOpenList;
             private IList<IWebElement> listCheckBoxs;
-            private IList<IWebElement> listButtonsLayers;
-            private const string locationButtonsLayers = "#stdportal_LayerManagerBase_1 div.svzLayerManagerText";
-            private const string locationCheckBoxs = "#stdportal_LayerManagerBase_1 div.dijit.dijitReset.dijitInline.dijitCheckBox input";
+            private const string locationCheckBoxs = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
 
             private NeftyStructClass(IWebDriver driver)
             {
@@ -752,27 +1060,34 @@ namespace GetMapTest.GUI
             private NeftyStructClass SetValueList()
             {
                 listCheckBoxs = driver.FindElements(By.CssSelector(locationCheckBoxs));
-                listButtonsLayers = driver.FindElements(By.CssSelector(locationButtonsLayers));
                 return this;
             }
 
             private NeftyStructClass SetValueElements()
             {
-                elementFakel = listCheckBoxs[17];
-                elementAmbar = listCheckBoxs[18];
-                elementPlaces = listCheckBoxs[19];
-                elementDNS = listCheckBoxs[20];
-                elementButtonForOpenList = listButtonsLayers[16];
-                return this;
-            }
-
-            /// <summary>
-            /// Открывает или же закрывает выпадающее меню 'Нефтяная инфраструктура' в зависимости от того, в каком состоянии оно было до вызова данного метода.
-            /// </summary>
-            /// <returns></returns>
-            public NeftyStructClass OpenCloseList()
-            {
-                elementButtonForOpenList.Click();
+                for(int i=0;i<listCheckBoxs.Count;i++)
+                {
+                    if(listCheckBoxs[i].Text == "Факелы")
+                    {
+                        Thread.Sleep(500);
+                        elementFakel = listCheckBoxs[i - 1];
+                    }
+                    if(listCheckBoxs[i].Text == "Амбары")
+                    {
+                        Thread.Sleep(500);
+                        elementAmbar = listCheckBoxs[i - 1];
+                    }
+                    if(listCheckBoxs[i].Text == "Кустовые площадки")
+                    {
+                        Thread.Sleep(500);
+                        elementPlaces = listCheckBoxs[i - 1];
+                    }
+                    if(listCheckBoxs[i].Text == "ДНС")
+                    {
+                        Thread.Sleep(500);
+                        elementDNS = listCheckBoxs[i - 1];
+                    }
+                }
                 return this;
             }
 
@@ -927,20 +1242,31 @@ namespace GetMapTest.GUI
             }
 
         }
-        */
+        
+
+        /// <summary>
+        /// Выполняет клик по чекбоксу  слоя 'Тематические карты'.
+        /// </summary>
+        /// <returns></returns>
+        public Layers TematicMapCheckBoxClick()
+        {
+            Sleep();
+            elementTematicMapCB.Click();
+            return this;
+        }
 
         /// <summary>
         /// Открывает раздел  'Тематические карты'.
         /// </summary>
         /// <returns></returns>
-        public Layers TematicMapClick()
+        public Layers TematicMapOpenCloseList()
         {
             Sleep();
-            elementTematicMap.Click();
+            elementTematicMapDDM.Click();
             return this;
         }
 
-        /*
+        
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Тематические карты'.
         /// </summary>
@@ -953,11 +1279,8 @@ namespace GetMapTest.GUI
             private IWebElement elementCheckBox4;
             private IWebElement elementCheckBox5;
             private IWebElement elementCheckBox6;
-            private IWebElement elementButtonForOpenList;
             private IList<IWebElement> listCheckBoxs;
-            private IList<IWebElement> listButtonsLayers;
-            private const string locationButtonsLayers = "#stdportal_LayerManagerBase_1 div.svzLayerManagerText";
-            private const string locationCheckBoxs = "#stdportal_LayerManagerBase_1 div.dijit.dijitReset.dijitInline.dijitCheckBox input";
+            private const string locationCheckBoxs = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
 
             private TematicMapClass(IWebDriver driver)
             {
@@ -974,29 +1297,44 @@ namespace GetMapTest.GUI
             private TematicMapClass SetValueList()
             {
                 listCheckBoxs = driver.FindElements(By.CssSelector(locationCheckBoxs));
-                listButtonsLayers = driver.FindElements(By.CssSelector(locationButtonsLayers));
                 return this;
             }
 
             private TematicMapClass SetValueElements()
             {
-                elementCheckBox1 = listCheckBoxs[22];
-                elementCheckBox2 = listCheckBoxs[23];
-                elementCheckBox3 = listCheckBoxs[24];
-                elementCheckBox4 = listCheckBoxs[25];
-                elementCheckBox5 = listCheckBoxs[26];
-                elementCheckBox6 = listCheckBoxs[27];
-                elementButtonForOpenList = listButtonsLayers[21];
-                return this;
-            }
-
-            /// <summary>
-            /// Открывает или же закрывает выпадающее меню 'Тематические карты' в зависимости от того, в каком состоянии оно было до вызова данного метода.
-            /// </summary>
-            /// <returns></returns>
-            public TematicMapClass OpenCloseList()
-            {
-                elementButtonForOpenList.Click();
+                for(int i=0;i<listCheckBoxs.Count;i++)
+                {
+                    if(listCheckBoxs[i].Text == "Площадки разведочной скважины 2006 г.")
+                    {
+                        Thread.Sleep(500);
+                        elementCheckBox1 = listCheckBoxs[i - 1];
+                   }
+                    if(listCheckBoxs[i].Text == "Площадки разведочной скважины 2008 г.")
+                    {
+                        Thread.Sleep(500);
+                        elementCheckBox2 = listCheckBoxs[i - 1];
+                    }
+                    if(listCheckBoxs[i].Text == "Нефтяные разливы 2006 г.")
+                    {
+                        Thread.Sleep(500);
+                        elementCheckBox3 = listCheckBoxs[i - 1];
+                    }
+                    if(listCheckBoxs[i].Text == "Нефтяные разливы 2008 г.")
+                    {
+                        Thread.Sleep(500);
+                        elementCheckBox4 = listCheckBoxs[i - 1];
+                    }
+                    if(listCheckBoxs[i].Text == "Гидронамывные карьеры 2006 г.")
+                    {
+                        Thread.Sleep(500);
+                        elementCheckBox5 = listCheckBoxs[i - 1];
+                    }
+                    if(listCheckBoxs[i].Text == "Гидронамывные карьеры 2008 г.")
+                    {
+                        Thread.Sleep(500);
+                        elementCheckBox6 = listCheckBoxs[i - 1];
+                    }
+                }
                 return this;
             }
 
@@ -1076,20 +1414,31 @@ namespace GetMapTest.GUI
                 return this;
             }
         }
-        */
+        
+
+        /// <summary>
+        /// Выполняет клик по чекбоксу  слоя 'Космические снимки'.
+        /// </summary>
+        /// <returns></returns>
+        public Layers CosmoPhotoCheckBoxClick()
+        {
+            Sleep();
+            elementCosmoPhotoCB.Click();
+            return this;
+        }
 
         /// <summary>
         /// Открывает раздел  'Космические снимки.'.
         /// </summary>
         /// <returns></returns>
-        public Layers CosmoPhotoClick()
+        public Layers CosmoPhotoOpenCloseList()
         {
             Sleep();
-            elementCosmoPhoto.Click();
+            elementCosmoPhotoDDM.Click();
             return this;
         }
 
-        /*
+        
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Космические снимки.'.
         /// </summary>
@@ -1097,11 +1446,8 @@ namespace GetMapTest.GUI
         {
             private IWebDriver driver;
             private IWebElement elementGazprom;
-            private IWebElement elementButtonForOpenList;
             private IList<IWebElement> listCheckBoxs;
-            private IList<IWebElement> listButtonsLayers;
-            private const string locationButtonsLayers = "#stdportal_LayerManagerBase_1 div.svzLayerManagerText";
-            private const string locationCheckBoxs = "#stdportal_LayerManagerBase_1 div.dijit.dijitReset.dijitInline.dijitCheckBox input";
+            private const string locationCheckBoxs = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
 
             private CosmoPhotoClass(IWebDriver driver)
             {
@@ -1118,24 +1464,19 @@ namespace GetMapTest.GUI
             private CosmoPhotoClass SetValueList()
             {
                 listCheckBoxs = driver.FindElements(By.CssSelector(locationCheckBoxs));
-                listButtonsLayers = driver.FindElements(By.CssSelector(locationButtonsLayers));
                 return this;
             }
 
             private CosmoPhotoClass SetValueElements()
             {
-                elementGazprom = listCheckBoxs[29];
-                elementButtonForOpenList = listButtonsLayers[28];
-                return this;
-            }
-
-            /// <summary>
-            /// Открывает или же закрывает выпадающее меню 'Космические снимки' в зависимости от того, в каком состоянии оно было до вызова данного метода.
-            /// </summary>
-            /// <returns></returns>
-            public CosmoPhotoClass OpenCloseList()
-            {
-                elementButtonForOpenList.Click();
+                for(int i=0;i<listCheckBoxs.Count;i++)
+                {
+                    if(listCheckBoxs[i].Text == "Gazprom_Base_map_NNG")
+                    {
+                        Thread.Sleep(500);
+                        elementGazprom = listCheckBoxs[i - 1];
+                    }
+                }
                 return this;
             }
 
@@ -1160,7 +1501,7 @@ namespace GetMapTest.GUI
                 return this;
             }
         }
-        */
+        
 
 
         /// <summary>
