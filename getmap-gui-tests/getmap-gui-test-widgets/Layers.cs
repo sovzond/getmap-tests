@@ -322,7 +322,7 @@ namespace GetMapTest.GUI
             return this;
         }
 
-       
+
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Тест.'
         /// </summary>
@@ -333,6 +333,10 @@ namespace GetMapTest.GUI
             private IWebElement elementBase_raster;
             private IWebElement elementAmbar;
             private IWebElement elementaa_states_4326;
+            private IWebElement elementAmericaSB;
+            private IWebElement elementBase_rasterSB;
+            private IWebElement elementAmbarSB;
+            private IWebElement elementaa_states_4326SB;
             private IList<IWebElement> listCheckBoxs;
             private const string locationCheckBoxs = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
 
@@ -372,21 +376,25 @@ namespace GetMapTest.GUI
                     {
                         Thread.Sleep(500);
                         elementaa_states_4326 = listCheckBoxs[i - 1];
+                        elementaa_states_4326SB = listCheckBoxs[i + 1];
                     }
-                    if(listCheckBoxs[i].Text =="США")
+                    if (listCheckBoxs[i].Text == "США")
                     {
                         Thread.Sleep(500);
                         elementAmerica = listCheckBoxs[i - 1];
+                        elementAmericaSB = listCheckBoxs[i + 1];
                     }
                     if (listCheckBoxs[i].Text == "rtk:base_raster")
                     {
                         Thread.Sleep(500);
                         elementBase_raster = listCheckBoxs[i - 1];
+                        elementBase_rasterSB = listCheckBoxs[i + 1];
                     }
-                    if(listCheckBoxs[i].Text == "ambar")
+                    if (listCheckBoxs[i].Text == "ambar")
                     {
                         Thread.Sleep(500);
                         elementAmbar = listCheckBoxs[i - 1];
+                        elementAmbarSB = listCheckBoxs[i + 1];
                     }
                 }
                 return this;
@@ -404,6 +412,17 @@ namespace GetMapTest.GUI
             }
 
             /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'aa_states_4326'.
+            /// </summary>
+            /// <returns></returns>
+            public TestLayerClass aa_states_4326SBClick()
+            {
+                Sleep();
+                elementaa_states_4326SB.Click();
+                return this;
+            }
+
+            /// <summary>
             /// Выполняет клик по чекбоксу 'США'.
             /// </summary>
             /// <returns></returns>
@@ -411,6 +430,17 @@ namespace GetMapTest.GUI
             {
                 Sleep();
                 elementAmerica.Click();
+                return this;
+            }
+
+            /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'США'.
+            /// </summary>
+            /// <returns></returns>
+            public TestLayerClass AmericaSBClick()
+            {
+                Sleep();
+                elementAmericaSB.Click();
                 return this;
             }
 
@@ -424,7 +454,18 @@ namespace GetMapTest.GUI
                 elementBase_raster.Click();
                 return this;
             }
-
+/*
+            /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'rtk:base_raster'.
+            /// </summary>
+            /// <returns></returns>
+            public TestLayerClass Bse_RasterSBClick()
+            {
+                Sleep();
+                elementBase_rasterSB.Click();
+                return this;
+            }
+*/
             /// <summary>
             /// Выполняет клик по чекбоксу 'ambar'.
             /// </summary>
@@ -435,7 +476,20 @@ namespace GetMapTest.GUI
                 elementAmbar.Click();
                 return this;
             }
+
+            /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'ambar'.
+            /// </summary>
+            /// <returns></returns>
+            public TestLayerClass AmbarSBClick()
+            {
+                Sleep();
+                elementAmbarSB.Click();
+                return this;
+            }
         }
+
+
 
 
         /// <summary>
@@ -460,7 +514,7 @@ namespace GetMapTest.GUI
             return this;
         }
 
-       
+
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Новая группа'.
         /// </summary>
@@ -468,8 +522,7 @@ namespace GetMapTest.GUI
         {
             private IWebDriver driver;
             private IWebElement elementTsp_25;
-            private IWebElement elementButtonForOpenList;
-            private IList<IWebElement> listButtonsLayers;
+            private IWebElement elementTsp_25SB;
             private IList<IWebElement> listCheckBoxs;
             private const string locationCheckBoxs = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
 
@@ -498,12 +551,13 @@ namespace GetMapTest.GUI
 
             private NewGroupClass SetValueElements()
             {
-                for(int i=0;i<listCheckBoxs.Count;i++)
+                for (int i = 0; i < listCheckBoxs.Count; i++)
                 {
-                    if(listCheckBoxs[i].Text == "tsp_25")
+                    if (listCheckBoxs[i].Text == "tsp_25")
                     {
                         Thread.Sleep(500);
                         elementTsp_25 = listCheckBoxs[i - 1];
+                        elementTsp_25SB = listCheckBoxs[i + 1];
                     }
                 }
 
@@ -525,7 +579,18 @@ namespace GetMapTest.GUI
                 elementTsp_25.Click();
                 return this;
             }
-
+/*
+            /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'tsp_25'.
+            /// </summary>
+            /// <returns></returns>
+            public NewGroupClass Tsp_25SBClick()
+            {
+                Sleep();
+                elementTsp_25SB.Click();
+                return this;
+            }
+            */
         }
 
         /// <summary>
@@ -558,6 +623,8 @@ namespace GetMapTest.GUI
             private IWebDriver driver;
             private IWebElement elementMO_RE;
             private IWebElement elementL8_MO;
+            private IWebElement elementMO_RESB;
+            private IWebElement elementL8_MOSB;
             private const string locationCheckBoxes = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
             private IList<IWebElement> listCheckBoxes;
 
@@ -581,17 +648,19 @@ namespace GetMapTest.GUI
 
             private ZoyaTestClass SetValueElements()
             {
-                for(int i=0;i<listCheckBoxes.Count;i++)
+                for (int i = 0; i < listCheckBoxes.Count; i++)
                 {
-                    if(listCheckBoxes[i].Text == "GetMap_MO_RE")
+                    if (listCheckBoxes[i].Text == "GetMap_MO_RE")
                     {
                         Thread.Sleep(500);
                         elementMO_RE = listCheckBoxes[i - 1];
+                        elementMO_RESB = listCheckBoxes[i + 1];
                     }
-                    if(listCheckBoxes[i].Text == "GetMap_L8_MO")
+                    if (listCheckBoxes[i].Text == "GetMap_L8_MO")
                     {
                         Thread.Sleep(500);
                         elementL8_MO = listCheckBoxes[i - 1];
+                        elementL8_MOSB = listCheckBoxes[i + 1];
                     }
                 }
                 return this;
@@ -619,6 +688,17 @@ namespace GetMapTest.GUI
             }
 
             /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'GetMap_MO_RE'.
+            /// </summary>
+            /// <returns></returns>
+            public ZoyaTestClass MO_RESBClick()
+            {
+                Sleep();
+                elementMO_RESB.Click();
+                return this;
+            }
+
+            /// <summary>
             /// Выполянет клик по чекбоксу 'GetMap_L8_MO'.
             /// </summary>
             /// <returns></returns>
@@ -629,8 +709,19 @@ namespace GetMapTest.GUI
                 return this;
             }
 
+            /// <summary>
+            ///Выполняет клик по кнопке 'Настройка слоя' слоя 'GetMap_L8_MO'.
+            /// </summary>
+            /// <returns></returns>
+            public ZoyaTestClass L8_MOSBClick()
+            {
+                Sleep();
+                elementL8_MOSB.Click();
+                return this;
+            }
+
         }
-        
+
         /// <summary>
         /// Выполняет клик по чекбоксу  слоя 'Московская область'.
         /// </summary>
@@ -658,6 +749,8 @@ namespace GetMapTest.GUI
             private IWebDriver driver;
             private IWebElement elementLandsat;
             private IWebElement elementRapidEye;
+            private IWebElement elementLandsatSB;
+            private IWebElement elementRapidEyeSB;
             private const string locationCheckBoxes = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
             private IList<IWebElement> listCheckBoxes;
 
@@ -668,7 +761,7 @@ namespace GetMapTest.GUI
                 SetValueElements();
             }
 
-             private void Sleep()
+            private void Sleep()
             {
                 Thread.Sleep(2000);
             }
@@ -681,17 +774,20 @@ namespace GetMapTest.GUI
 
             private MoscowAreaClass SetValueElements()
             {
-                for(int i=0;i<listCheckBoxes.Count;i++)
+                for (int i = 0; i < listCheckBoxes.Count; i++)
                 {
-                    if(listCheckBoxes[i].Text == "Мозаика Landsat")
+                    if (listCheckBoxes[i].Text == "Мозаика Landsat")
                     {
                         Thread.Sleep(500);
                         elementLandsat = listCheckBoxes[i - 1];
+                        elementLandsatSB = listCheckBoxes[i + 1];
+
                     }
-                    if(listCheckBoxes[i].Text == "Мозаика RapidEye")
+                    if (listCheckBoxes[i].Text == "Мозаика RapidEye")
                     {
                         Thread.Sleep(500);
                         elementRapidEye = listCheckBoxes[i - 1];
+                        elementRapidEyeSB = listCheckBoxes[i + 1];
                     }
                 }
                 return this;
@@ -719,6 +815,17 @@ namespace GetMapTest.GUI
             }
 
             /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Мозаика Landsat'.
+            /// </summary>
+            /// <returns></returns>
+            public MoscowAreaClass LandsatSBClick()
+            {
+                Sleep();
+                elementLandsatSB.Click();
+                return this;
+            }
+
+            /// <summary>
             /// Выполняет клик по чекбоксу 'Мозаика RapidEye'.
             /// </summary>
             /// <returns></returns>
@@ -726,6 +833,17 @@ namespace GetMapTest.GUI
             {
                 Sleep();
                 elementRapidEye.Click();
+                return this;
+            }
+
+            /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Мозаика RapidEye'.
+            /// </summary>
+            /// <returns></returns>
+            public MoscowAreaClass RapidEyeSBClick()
+            {
+                Sleep();
+                elementRapidEyeSB.Click();
                 return this;
             }
 
@@ -753,7 +871,7 @@ namespace GetMapTest.GUI
             return this;
         }
 
-        
+
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Газовая инфраструктура'.
         /// </summary>
@@ -763,6 +881,9 @@ namespace GetMapTest.GUI
             private IWebElement elemenGPZPoint;
             private IWebElement elementGazoprovod;
             private IWebElement elementGPZPoligon;
+            private IWebElement elemenGPZPointSB;
+            private IWebElement elementGazoprovodSB;
+            private IWebElement elementGPZPoligonSB;
             private IList<IWebElement> listCheckBoxs;
             private const string locationCheckBoxs = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
 
@@ -786,22 +907,25 @@ namespace GetMapTest.GUI
 
             private GasStructClass SetValueElements()
             {
-                for(int i=0;i<listCheckBoxs.Count;i++)
+                for (int i = 0; i < listCheckBoxs.Count; i++)
                 {
-                    if(listCheckBoxs[i].Text == "ГПЗ (точка)")
+                    if (listCheckBoxs[i].Text == "ГПЗ (точка)")
                     {
                         Thread.Sleep(500);
                         elemenGPZPoint = listCheckBoxs[i - 1];
+                        elemenGPZPointSB = listCheckBoxs[i + 1];
                     }
-                    if(listCheckBoxs[i].Text == "Газопровод")
+                    if (listCheckBoxs[i].Text == "Газопровод")
                     {
                         Thread.Sleep(500);
                         elementGazoprovod = listCheckBoxs[i - 1];
+                        elementGazoprovodSB = listCheckBoxs[i + 1];
                     }
-                    if(listCheckBoxs[i].Text == "ГПЗ (полигон)")
+                    if (listCheckBoxs[i].Text == "ГПЗ (полигон)")
                     {
                         Thread.Sleep(500);
                         elementGPZPoligon = listCheckBoxs[i - 1];
+                        elementGPZPoligonSB = listCheckBoxs[i + 1];
                     }
                 }
                 return this;
@@ -829,6 +953,17 @@ namespace GetMapTest.GUI
             }
 
             /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'ГПЗ (точка)'.
+            /// </summary>
+            /// <returns></returns>
+            public GasStructClass GPZPointSBClick()
+            {
+                Sleep();
+                elemenGPZPointSB.Click();
+                return this;
+            }
+
+            /// <summary>
             /// Выполняет клик по чекбоксу 'Газопровод'.
             /// </summary>
             /// <returns></returns>
@@ -836,6 +971,16 @@ namespace GetMapTest.GUI
             {
                 Sleep();
                 elementGazoprovod.Click();
+                return this;
+            }
+            /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Газопровод'.
+            /// </summary>
+            /// <returns></returns>
+            public GasStructClass GazoprovodSBClick()
+            {
+                Sleep();
+                elementGazoprovodSB.Click();
                 return this;
             }
 
@@ -850,8 +995,18 @@ namespace GetMapTest.GUI
                 return this;
             }
 
+            /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'ГПЗ (полигон)'.
+            /// </summary>
+            /// <returns></returns>
+            public GasStructClass GPZPoligonSBClick()
+            {
+                Sleep();
+                elementGPZPoligonSB.Click();
+                return this;
+            }
         }
-        
+
 
         /// <summary>
         /// Выполняет клик по чекбоксу  слоя 'Энергетическая инфраструктура'.
@@ -875,7 +1030,7 @@ namespace GetMapTest.GUI
             return this;
         }
 
-  
+
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Энергетичская инфраструктура'.
         /// </summary>
@@ -887,6 +1042,11 @@ namespace GetMapTest.GUI
             private IWebElement elementLEP;
             private IWebElement elementElectroStationPoligon;
             private IWebElement elementPodstationPoligon;
+            private IWebElement elementElectroStationPointSB;
+            private IWebElement elementPodstationPointSB;
+            private IWebElement elementLEPSB;
+            private IWebElement elementElectroStationPoligonSB;
+            private IWebElement elementPodstationPoligonSB;
             private IList<IWebElement> listCheckBoxs;
             private const string locationCheckBoxs = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
 
@@ -910,32 +1070,38 @@ namespace GetMapTest.GUI
 
             private EnergyStructClass SetValueElements()
             {
-               for(int i=0;i<listCheckBoxs.Count;i++)
+                for (int i = 0; i < listCheckBoxs.Count; i++)
                 {
-                    if(listCheckBoxs[i].Text == "Электростанции (точка)")
+                    if (listCheckBoxs[i].Text == "Электростанции (точка)")
                     {
                         Thread.Sleep(500);
                         elementElectroStationPoint = listCheckBoxs[i - 1];
+                        elementElectroStationPointSB = listCheckBoxs[i + 1];
                     }
-                    if(listCheckBoxs[i].Text == "Подстанции (точка)")
+                    if (listCheckBoxs[i].Text == "Подстанции (точка)")
                     {
                         Thread.Sleep(500);
                         elementPodstationPoint = listCheckBoxs[i - 1];
+                        elementPodstationPointSB = listCheckBoxs[i + 1];
                     }
                     if (listCheckBoxs[i].Text == "ЛЭП")
                     {
                         Thread.Sleep(500);
                         elementLEP = listCheckBoxs[i - 1];
+                        elementLEPSB = listCheckBoxs[i + 1];
                     }
-                    if(listCheckBoxs[i].Text == "Электростанции (полигон)")
+                    if (listCheckBoxs[i].Text == "Электростанции (полигон)")
                     {
                         Thread.Sleep(500);
                         elementElectroStationPoligon = listCheckBoxs[i - 1];
+                        elementElectroStationPoligonSB = listCheckBoxs[i + 1];
+
                     }
-                    if(listCheckBoxs[i].Text == "Подстанции (полигон)")
+                    if (listCheckBoxs[i].Text == "Подстанции (полигон)")
                     {
                         Thread.Sleep(500);
                         elementPodstationPoligon = listCheckBoxs[i - 1];
+                        elementPodstationPoligonSB = listCheckBoxs[i + 1];
                     }
                 }
                 return this;
@@ -963,6 +1129,17 @@ namespace GetMapTest.GUI
             }
 
             /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Электростанция (точка)'.
+            /// </summary>
+            /// <returns></returns>
+            public EnergyStructClass ElectroStationPointSBClick()
+            {
+                Sleep();
+                elementElectroStationPointSB.Click();
+                return this;
+            }
+
+            /// <summary>
             /// Выполняет клик по чекбоксу 'Подстанция (точка)'.
             /// </summary>
             /// <returns></returns>
@@ -970,6 +1147,17 @@ namespace GetMapTest.GUI
             {
                 Sleep();
                 elementPodstationPoint.Click();
+                return this;
+            }
+
+            /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Подстанция (точка)'.
+            /// </summary>
+            /// <returns></returns>
+            public EnergyStructClass PodstationPointSBClick()
+            {
+                Sleep();
+                elementPodstationPointSB.Click();
                 return this;
             }
 
@@ -985,16 +1173,38 @@ namespace GetMapTest.GUI
             }
 
             /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'ЛЭЫ'.
+            /// </summary>
+            /// <returns></returns>
+            public EnergyStructClass LEPSBClick()
+            {
+                Sleep();
+                elementLEPSB.Click();
+                return this;
+            }
+
+            /// <summary>
             /// Выполняет клик по чекбоксу 'Электростанция (полигон)'.
             /// </summary>
             /// <returns></returns>
-            public EnergyStructClass ElectroStationPoligon()
+            public EnergyStructClass ElectroStationPoligonClick()
             {
                 Sleep();
                 elementElectroStationPoligon.Click();
                 return this;
             }
 
+            /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Электростанция (полигон)'.
+            /// </summary>
+            /// <returns></returns>
+            public EnergyStructClass ElectroStationPoligonSBClick()
+            {
+                Sleep();
+                elementElectroStationPoligonSB.Click();
+                return this;
+            }
+        
             /// <summary>
             /// Выполняет клик по чекбоксу 'Подстанции (полигон)'.
             /// </summary>
@@ -1006,8 +1216,19 @@ namespace GetMapTest.GUI
                 return this;
             }
 
+            /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Полстанции (полигон)'.
+            /// </summary>
+            /// <returns></returns>
+            public EnergyStructClass PodstationPoligonSBClick()
+            {
+                Sleep();
+                elementPodstationPoligonSB.Click();
+                return this;
+            }
+
         }
-    
+
 
         /// <summary>
         /// Выполняет клик по чекбоксу  слоя 'Нефтяная инфраструктура'.
@@ -1031,7 +1252,7 @@ namespace GetMapTest.GUI
             return this;
         }
 
-        
+
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Нефтяная инфраструктура'.
         /// </summary>
@@ -1042,6 +1263,10 @@ namespace GetMapTest.GUI
             private IWebElement elementAmbar;
             private IWebElement elementPlaces;
             private IWebElement elementDNS;
+            private IWebElement elementFakelSB;
+            private IWebElement elementAmbarSB;
+            private IWebElement elementPlacesSB;
+            private IWebElement elementDNSSB;
             private IList<IWebElement> listCheckBoxs;
             private const string locationCheckBoxs = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
 
@@ -1065,27 +1290,31 @@ namespace GetMapTest.GUI
 
             private NeftyStructClass SetValueElements()
             {
-                for(int i=0;i<listCheckBoxs.Count;i++)
+                for (int i = 0; i < listCheckBoxs.Count; i++)
                 {
-                    if(listCheckBoxs[i].Text == "Факелы")
+                    if (listCheckBoxs[i].Text == "Факелы")
                     {
                         Thread.Sleep(500);
                         elementFakel = listCheckBoxs[i - 1];
+                        elementFakelSB = listCheckBoxs[i + 1];
                     }
-                    if(listCheckBoxs[i].Text == "Амбары")
+                    if (listCheckBoxs[i].Text == "Амбары")
                     {
                         Thread.Sleep(500);
                         elementAmbar = listCheckBoxs[i - 1];
+                        elementAmbarSB = listCheckBoxs[i + 1];
                     }
-                    if(listCheckBoxs[i].Text == "Кустовые площадки")
+                    if (listCheckBoxs[i].Text == "Кустовые площадки")
                     {
                         Thread.Sleep(500);
                         elementPlaces = listCheckBoxs[i - 1];
+                        elementPlacesSB = listCheckBoxs[i + 1];
                     }
-                    if(listCheckBoxs[i].Text == "ДНС")
+                    if (listCheckBoxs[i].Text == "ДНС")
                     {
                         Thread.Sleep(500);
                         elementDNS = listCheckBoxs[i - 1];
+                        elementDNSSB = listCheckBoxs[i + 1];
                     }
                 }
                 return this;
@@ -1113,6 +1342,18 @@ namespace GetMapTest.GUI
             }
 
             /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Факелы'.
+            /// </summary>
+            /// <returns></returns>
+            public NeftyStructClass FakelSBClick()
+            {
+                Sleep();
+                elementFakelSB.Click();
+                return this;
+            }
+
+
+            /// <summary>
             /// Выполняет клик по чекбоксу 'Амбары'.
             /// </summary>
             /// <returns></returns>
@@ -1120,6 +1361,17 @@ namespace GetMapTest.GUI
             {
                 Sleep();
                 elementAmbar.Click();
+                return this;
+            }
+
+            /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Амбары'.
+            /// </summary>
+            /// <returns></returns>
+            public NeftyStructClass AmbarSBClick()
+            {
+                Sleep();
+                elementAmbarSB.Click();
                 return this;
             }
 
@@ -1135,6 +1387,17 @@ namespace GetMapTest.GUI
             }
 
             /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Кустовые площадки'.
+            /// </summary>
+            /// <returns></returns>
+            public NeftyStructClass PlacesSBClick()
+            {
+                Sleep();
+                elementPlacesSB.Click();
+                return this;
+            }
+
+            /// <summary>
             /// Выполняет клик по чекбоксу 'ДНС'.
             /// </summary>
             /// <returns></returns>
@@ -1146,103 +1409,18 @@ namespace GetMapTest.GUI
             }
 
             /// <summary>
-            /// Выполняет клик по кнопкам 'Настройка слоя' всех слоев данного раздела.
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'ДНС'.
             /// </summary>
-            public class SettingsButtonsClass
+            /// <returns></returns>
+            public NeftyStructClass DNSSBClick()
             {
-                private IWebDriver driver;
-                private IWebElement elementFakelSettings;
-                private IWebElement elementAmbatSettings;
-                private IWebElement elementPlacesSettings;
-                private IWebElement elementDNSSettings;
-                private IList<IWebElement> listButtonsLayer;
-                private const string locationButtonsLayer = "div.svzLayerManagerItem.svzLayerManagerItem1 > div.svzSimpleButton.layerContextMenu";
-
-                private SettingsButtonsClass(IWebDriver driver)
-                {
-                    this.driver = driver;
-                    SetValueList();
-                    SetValueElements();
-                }
-
-                private SettingsButtonsClass SetValueList()
-                {
-                    listButtonsLayer = driver.FindElements(By.CssSelector(locationButtonsLayer));
-                    return this;
-                }
-
-                private SettingsButtonsClass SetValueElements()
-                {
-                    elementFakelSettings = listButtonsLayer[10];
-                    elementAmbatSettings = listButtonsLayer[11];
-                    elementPlacesSettings = listButtonsLayer[12];
-                    elementDNSSettings = listButtonsLayer[13];
-                    return this;
-                }
-
-                private void Sleep()
-                {
-                    Thread.Sleep(2000);
-                }
-
-                /// <summary>
-                /// Принимает параметр типа IWebDriver для дальнейшей навигации по сайту.
-                /// </summary>
-                /// <param name="driver">Передает аргумент для закрытого конструктора</param>
-                /// <returns></returns>
-                public static SettingsButtonsClass get(IWebDriver driver)
-                {
-                    return new SettingsButtonsClass(driver);
-                }
-
-                /// <summary>
-                /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Факел'.
-                /// </summary>
-                /// <returns></returns>
-                public SettingsButtonsClass FakelSettingsButtonClick()
-                {
-                    Sleep();
-                    elementFakelSettings.Click();
-                    return this;
-                }
-
-                /// <summary>
-                /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Амбар'.
-                /// </summary>
-                /// <returns></returns>
-                public SettingsButtonsClass AmbarSettingsButtonClick()
-                {
-                    Sleep();
-                    elementAmbatSettings.Click();
-                    return this;
-                }
-
-                /// <summary>
-                /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Кустовые площадки'.
-                /// </summary>
-                /// <returns></returns>
-                public SettingsButtonsClass PlacesSettingsClick()
-                {
-                    Sleep();
-                    elementPlacesSettings.Click();
-                    return this;
-                }
-
-                /// <summary>
-                /// Выполняет клик по кнопке 'Настройка слоя' слоя 'ДНС'.
-                /// </summary>
-                /// <returns></returns>
-                public SettingsButtonsClass DNSSettingsClick()
-                {
-                    Sleep();
-                    elementDNSSettings.Click();
-                    return this;
-                }
-
+                Sleep();
+                elementDNSSB.Click();
+                return this;
             }
 
         }
-        
+
 
         /// <summary>
         /// Выполняет клик по чекбоксу  слоя 'Тематические карты'.
@@ -1266,7 +1444,7 @@ namespace GetMapTest.GUI
             return this;
         }
 
-        
+
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Тематические карты'.
         /// </summary>
@@ -1279,6 +1457,12 @@ namespace GetMapTest.GUI
             private IWebElement elementCheckBox4;
             private IWebElement elementCheckBox5;
             private IWebElement elementCheckBox6;
+            private IWebElement elementCheckBox1SB;
+            private IWebElement elementCheckBox2SB;
+            private IWebElement elementCheckBox3SB;
+            private IWebElement elementCheckBox4SB;
+            private IWebElement elementCheckBox5SB;
+            private IWebElement elementCheckBox6SB;
             private IList<IWebElement> listCheckBoxs;
             private const string locationCheckBoxs = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
 
@@ -1302,37 +1486,43 @@ namespace GetMapTest.GUI
 
             private TematicMapClass SetValueElements()
             {
-                for(int i=0;i<listCheckBoxs.Count;i++)
+                for (int i = 0; i < listCheckBoxs.Count; i++)
                 {
-                    if(listCheckBoxs[i].Text == "Площадки разведочной скважины 2006 г.")
+                    if (listCheckBoxs[i].Text == "Площадки разведочной скважины 2006 г.")
                     {
                         Thread.Sleep(500);
                         elementCheckBox1 = listCheckBoxs[i - 1];
-                   }
-                    if(listCheckBoxs[i].Text == "Площадки разведочной скважины 2008 г.")
+                        elementCheckBox1SB = listCheckBoxs[i + 1];
+                    }
+                    if (listCheckBoxs[i].Text == "Площадки разведочной скважины 2008 г.")
                     {
                         Thread.Sleep(500);
                         elementCheckBox2 = listCheckBoxs[i - 1];
+                        elementCheckBox2SB = listCheckBoxs[i + 1];
                     }
-                    if(listCheckBoxs[i].Text == "Нефтяные разливы 2006 г.")
+                    if (listCheckBoxs[i].Text == "Нефтяные разливы 2006 г.")
                     {
                         Thread.Sleep(500);
                         elementCheckBox3 = listCheckBoxs[i - 1];
+                        elementCheckBox3SB = listCheckBoxs[i + 1];
                     }
-                    if(listCheckBoxs[i].Text == "Нефтяные разливы 2008 г.")
+                    if (listCheckBoxs[i].Text == "Нефтяные разливы 2008 г.")
                     {
                         Thread.Sleep(500);
                         elementCheckBox4 = listCheckBoxs[i - 1];
+                        elementCheckBox4SB = listCheckBoxs[i + 1];
                     }
-                    if(listCheckBoxs[i].Text == "Гидронамывные карьеры 2006 г.")
+                    if (listCheckBoxs[i].Text == "Гидронамывные карьеры 2006 г.")
                     {
                         Thread.Sleep(500);
                         elementCheckBox5 = listCheckBoxs[i - 1];
+                        elementCheckBox5SB = listCheckBoxs[i + 1];
                     }
-                    if(listCheckBoxs[i].Text == "Гидронамывные карьеры 2008 г.")
+                    if (listCheckBoxs[i].Text == "Гидронамывные карьеры 2008 г.")
                     {
                         Thread.Sleep(500);
                         elementCheckBox6 = listCheckBoxs[i - 1];
+                        elementCheckBox6SB = listCheckBoxs[i + 1];
                     }
                 }
                 return this;
@@ -1352,7 +1542,7 @@ namespace GetMapTest.GUI
             /// Выполняет клик по чекбоксу 'Площадки разведочной скважины 2006 г.'.
             /// </summary>
             /// <returns></returns>
-            public TematicMapClass CheckBox1()
+            public TematicMapClass CheckBox1Click()
             {
                 Sleep();
                 elementCheckBox1.Click();
@@ -1360,10 +1550,20 @@ namespace GetMapTest.GUI
             }
 
             /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Площадки разведочной скважины 2006 г.'.
+            /// </summary>
+            /// <returns></returns>
+            public TematicMapClass CheckBox1SBClick()
+            {
+                Sleep();
+                elementCheckBox1SB.Click();
+                return this;
+            }
+            /// <summary>
             /// Выполняет клик по чекбоксу 'Площадки разведочной скважины 2008 г.'.
             /// </summary>
             /// <returns></returns>
-            public TematicMapClass CheckBox2()
+            public TematicMapClass CheckBox2Click()
             {
                 Sleep();
                 elementCheckBox2.Click();
@@ -1371,10 +1571,21 @@ namespace GetMapTest.GUI
             }
 
             /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Площадки разведочной скважины 2008 г.'
+            /// </summary>
+            /// <returns></returns>
+            public TematicMapClass CheckBox2SBClick()
+            {
+                Sleep();
+                elementCheckBox2SB.Click();
+                return this;
+            }
+
+            /// <summary>
             /// Выполняет клик по чекбоксу 'Нефтяные разливы 2006 г.'.
             /// </summary>
             /// <returns></returns>
-            public TematicMapClass CheckBox3()
+            public TematicMapClass CheckBox3Click()
             {
                 Sleep();
                 elementCheckBox3.Click();
@@ -1382,10 +1593,21 @@ namespace GetMapTest.GUI
             }
 
             /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Нефтяные разливы 2006 г.'.
+            /// </summary>
+            /// <returns></returns>
+            public TematicMapClass CheckBox3SBClick()
+            {
+                Sleep();
+                elementCheckBox3SB.Click();
+                return this;
+            }
+
+            /// <summary>
             /// Выполняет клик по чекбоксу 'Нефтяные разливы 2008 г.'.
             /// </summary>
             /// <returns></returns>
-            public TematicMapClass CheckBox4()
+            public TematicMapClass CheckBox4Click()
             {
                 Sleep();
                 elementCheckBox4.Click();
@@ -1393,10 +1615,21 @@ namespace GetMapTest.GUI
             }
 
             /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Нефтяные разливы 2008 г.'.
+            /// </summary>
+            /// <returns></returns>
+            public TematicMapClass CheckBox4SBClick()
+            {
+                Sleep();
+                elementCheckBox4SB.Click();
+                return this;
+            }
+
+            /// <summary>
             /// Выполняет клик по чекбоксу 'Гидронамывные карьеры 2006 г.'.
             /// </summary>
             /// <returns></returns>
-            public TematicMapClass CheckBox5()
+            public TematicMapClass CheckBox5Click()
             {
                 Sleep();
                 elementCheckBox5.Click();
@@ -1404,17 +1637,39 @@ namespace GetMapTest.GUI
             }
 
             /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Гидронамывные карьеры 2006 г.'.
+            /// </summary>
+            /// <returns></returns>
+            public TematicMapClass CheckBox5SBClick()
+            {
+                Sleep();
+                elementCheckBox5SB.Click();
+                return this;
+            }
+
+            /// <summary>
             /// Выполняет клик по чекбоксу 'Гидро намывные карьеры 2008 г.'.
             /// </summary>
             /// <returns></returns>
-            public TematicMapClass CheckBox6()
+            public TematicMapClass CheckBox6Click()
             {
                 Sleep();
                 elementCheckBox6.Click();
                 return this;
             }
+
+            /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Гидронамывные карьеры 2008 г.'
+            /// </summary>
+            /// <returns></returns>
+            public TematicMapClass CheckBox6SBClick()
+            {
+                Sleep();
+                elementCheckBox6SB.Click();
+                return this;
+            }
         }
-        
+
 
         /// <summary>
         /// Выполняет клик по чекбоксу  слоя 'Космические снимки'.
@@ -1438,7 +1693,7 @@ namespace GetMapTest.GUI
             return this;
         }
 
-        
+
         /// <summary>
         /// Дает доступ ко всем чекбоксам выпадающего меню 'Космические снимки.'.
         /// </summary>
@@ -1446,6 +1701,7 @@ namespace GetMapTest.GUI
         {
             private IWebDriver driver;
             private IWebElement elementGazprom;
+            private IWebElement elementGazpromSB;
             private IList<IWebElement> listCheckBoxs;
             private const string locationCheckBoxs = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
 
@@ -1469,12 +1725,13 @@ namespace GetMapTest.GUI
 
             private CosmoPhotoClass SetValueElements()
             {
-                for(int i=0;i<listCheckBoxs.Count;i++)
+                for (int i = 0; i < listCheckBoxs.Count; i++)
                 {
-                    if(listCheckBoxs[i].Text == "Gazprom_Base_map_NNG")
+                    if (listCheckBoxs[i].Text == "Gazprom_Base_map_NNG")
                     {
                         Thread.Sleep(500);
                         elementGazprom = listCheckBoxs[i - 1];
+                        elementGazpromSB = listCheckBoxs[i + 1];
                     }
                 }
                 return this;
@@ -1500,9 +1757,19 @@ namespace GetMapTest.GUI
                 elementGazprom.Click();
                 return this;
             }
+/*
+            /// <summary>
+            /// Выполняет клик по кнопке 'Настройка слоя' слоя 'Gazprom_Base_map_NNG'.
+            /// </summary>
+            /// <returns></returns>
+            public CosmoPhotoClass GazpromSBClick()
+            {
+                Sleep();
+                elementGazpromSB.Click();
+                return this;
+            }
+            */
         }
-        
-
 
         /// <summary>
         /// Выполняет клик по векторным кнопкам любого слоя.
