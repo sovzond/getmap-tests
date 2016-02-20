@@ -13,8 +13,6 @@ namespace GetMapTest.GUI
     public class GetExtents
     {
         private IWebDriver driver;
-        private const string locationFullExtentButton = "#menuNavigation div.svzSimpleButton.fullMap";
-        private const string baseExtent = "7713271.4528564,8560722.7548442,7860030.5471436,8612929.2451558";
 
         private GetExtents(IWebDriver driver)
         {
@@ -63,8 +61,8 @@ namespace GetMapTest.GUI
 
         private string[] getBaseExtent()
         {
-            string[] splitedBaseExtent = baseExtent.Split(',');
-            return splitedBaseExtent;
+            GUI.MenuNavigation.get(driver).FullExtentButton();
+            return getCurrentExtent();
         }
     }
 }

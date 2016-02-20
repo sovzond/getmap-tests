@@ -13,7 +13,7 @@ namespace GetMapTest.GUI
     {
         private IWebDriver driver;
         private const string locationBackButton = "#menuNavigationHistory div.svzSimpleButton.previousState";
-        private const string locationNextButton = "menuNavigationHistory div.svzSimpleButton.nextState";
+        private const string locationNextButton = "#menuNavigationHistory div.svzSimpleButton.nextState";
         private MenuNavigationHistory(IWebDriver driver)
         {
             this.driver = driver;

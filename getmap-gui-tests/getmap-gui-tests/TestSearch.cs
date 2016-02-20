@@ -14,8 +14,6 @@ namespace GetMapTest
     {
         private IWebDriver driver;
         private string[] arrayForSearch;
-        private const string locationSearchArea = "input.searchPanel";
-        private const string locationSearchButton = "#textSearch2";
         private const string locationResultSearchPanel = "#resultDiv";
         private const int idxForSplitText = 19;
 
@@ -23,6 +21,8 @@ namespace GetMapTest
         public void Setup()
         {
             driver = Settings.Instance.createDriver();
+            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
+            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
             arrayForSearch = new string[4];
             arrayForSearch[0] = "Факелы";
             arrayForSearch[1] = "Амбары";
@@ -36,26 +36,18 @@ namespace GetMapTest
         [TestMethod]
         public void CheckSearch()
         {
-            LogOn();
             CheckSearch("аМбаР");
         }
 
         [TestCleanup]
         public void Clean()
         {
-            System.Threading.Thread.Sleep(2000);
-            driver.Quit();
-        }
-
-        private void LogOn()
-        {
-            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
-            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
+            GUI.Cleanup.get(driver).Quit();
         }
 
         private void CheckSearch(string attributeSearch)
         {
-            MakeSearch(attributeSearch);
+            GUI.HeaderLinks.get(driver).MakeSearch(attributeSearch);
             System.Threading.Thread.Sleep(2000);
             IWebElement elementResultSearchPanel = driver.FindElement(By.CssSelector(locationResultSearchPanel));
             string fullTextResultSearch = elementResultSearchPanel.Text;
@@ -69,13 +61,5 @@ namespace GetMapTest
                     Assert.Fail("Искомый элемент отсутсвует на сайте.");
             }
         }
-
-        private void MakeSearch(string attributeSearch)
-        {
-            driver.FindElement(By.CssSelector(locationSearchArea)).Click();
-            driver.FindElement(By.CssSelector(locationSearchArea)).SendKeys(attributeSearch);
-            driver.FindElement(By.CssSelector(locationSearchButton)).Click();
-        }
-
     }
 }

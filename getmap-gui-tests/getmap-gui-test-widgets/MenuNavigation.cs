@@ -94,7 +94,7 @@ namespace GetMapTest.GUI
             return this;
         }
         /// <summary>
-        /// Выполняет клик по кнопке 'Линейка'.
+        /// Выполняет клик по кнопке 'Измерение'.
         /// </summary>
         /// <returns></returns>
         public MenuNavigation RuleButton()
