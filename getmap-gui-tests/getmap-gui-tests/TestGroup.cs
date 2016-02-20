@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
@@ -9,6 +8,8 @@ namespace GetMapTest
     [TestClass]
     public class UnitTest1
     {
+       private IJavaScriptExecutor js;
+        private Utils.TransformJS js1;
         public class XY
         {
             private int Y;
@@ -32,15 +33,35 @@ namespace GetMapTest
             public int getY()
             {
                 return Y;
-            }
+            }     
         }
-        [TestMethod]
-        public void TestMet1()
+            public string[] getExtent(IJavaScriptExecutor js)
         {
             
+            string obl = (string)js.ExecuteScript("return window.portal.stdmap.map.getExtent().toString()");
+            return obl.Split(new Char[] { ',' });
+        }
+        public Boolean AssertCenter(IJavaScriptExecutor js)
+        {
+            double k = Math.Round(((70 + 70.024) / 2), 2);//находим серидину по долготе
+            double k1 = Math.Round(((60.88 + 60.895) / 2), 2); //находим серидину по широте
+            Utils.LonLat startPoint = js1.getMapCenter();//находим центр карты
+            double lon = startPoint.getLon();
+            double lat = startPoint.getLat();
+            if (k != lon || k1 != lat)
+            {
+              return  false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+    [TestMethod]
+        public void TestMet1()
+        {      
             IWebDriver driver = Settings.Instance.createDriver();
-            var builder = new Actions(driver);
-            
+            var builder = new Actions(driver);            
             IJavaScriptExecutor js = driver as IJavaScriptExecutor;
             Utils.TransformJS js1 = new Utils.TransformJS(driver);
             GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
@@ -54,19 +75,21 @@ namespace GetMapTest
             int XR = R.getX(); ;
             int YR = R.getY(); ;
             IWebElement j = driver.FindElement(By.Id("map"));
-            builder.MoveToElement(j, XL, YL).ClickAndHold().MoveToElement(j, XR, YR).Release().Perform();
+            builder.MoveToElement(j, XL, YL).ClickAndHold().MoveToElement(j, XR, YR).Release().Perform();//рисуется квадрат
             Thread.Sleep(5000);
             double k= Math.Round(((70+ 70.024)/2),2);//находим серидину по долготе
             double k1 = Math.Round(((60.88 + 60.895) / 2),2); //находим серидину по широте
-            Utils.LonLat startPoint = js1.getMapCenter();
+            Utils.LonLat startPoint = js1.getMapCenter();//находим центр карты
             double lon = startPoint.getLon();
             double lat = startPoint.getLat();
             if (k != lon || k1!= lat)
             {
                 Assert.Fail("не правильный переход");
             }
-            
-            
+            String[] coord = getExtent(js);//находим экстент карты
+            Utils.LonLat lo = new Utils.LonLat(js1.transferFrom(double.Parse(coord[0]), double.Parse(coord[1]), 900913, 4326));//находим левый нижний угол
+            Utils.LonLat lo1 = new Utils.LonLat(js1.transferFrom(double.Parse(coord[2]), double.Parse(coord[3]), 900913, 4326));//находим правый верхний угол
+
 
         }
 
