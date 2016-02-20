@@ -36,7 +36,7 @@ namespace GetMapTest.Utils
         
         public LonLat getPixelFromLonLat(LonLat lonLat)
         {
-            return (LonLat) js.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(" + lonLat.getLon() + ", " + lonLat.getLat() + ")).toString()");
+            return (LonLat)js.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(" + lonLat.getLon() + ", " + lonLat.getLat() + ")).toString()");
         }
     }
 }
