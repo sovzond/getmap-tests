@@ -6,67 +6,77 @@ using OpenQA.Selenium.Firefox;
 
 namespace GetMapTest
 {
+    /// <summary>
+    /// Выполняет проверку на изменение масштаба после клика по кнопке 'Увеличить масштаб'  и 'Уменьшить масштаб'.
+    /// </summary>
     [TestClass]
     public class TestScale
     {
         private IWebDriver driver;
-        private const string baseURL = "http://91.143.44.249/sovzond/portal/login.aspx?ReturnUrl=%2fsovzond%2fportal";
+        private IJavaScriptExecutor js;
+
         [TestInitialize]
         public void SetupTest()
         {
-            driver = new FirefoxDriver();
+            driver = Settings.Instance.createDriver();
+            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
+            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
+            js = driver as IJavaScriptExecutor;
         }
-         [TestMethod]
-        public void TestMasshtabPlus()                                                                               //тест на увеличение масштаба
-        {
-            IJavaScriptExecutor js = driver as IJavaScriptExecutor;
-            driver.Navigate().GoToUrl(baseURL);
-            driver.FindElement(By.Id("txtUser")).SendKeys("student");                                                //логин
-            driver.FindElement(By.Id("txtPsw")).SendKeys("123");                                                     //пароль
-            driver.FindElement(By.Id("cmdLogin")).Click();                                                           //вход
-            Thread.Sleep(2000);           
-            string Z = (string)js.ExecuteScript("return window.portal.stdmap.map.getZoom().toString()");
-            long convertZ = Convert.ToInt64(Z);                                                                  //снятие данных масштаба 1
-            driver.FindElement(By.Id("sovzond_widget_SimpleButton_7")).Click();                                      //"увеличить масштаб"
-            Thread.Sleep(2000);
-            string Z1 = (string)js.ExecuteScript("return window.portal.stdmap.map.getZoom().toString()");
-            long convertZ1 = Convert.ToInt64(Z1);                                                                //снятие данных масштаба 2
-            if (convertZ >= convertZ1)                                                                           //проверка
-                Assert.Fail("после клика ");
-            double zoom2 = Convert.ToDouble(convertZ1);
-            if (zoom2 - 1 != convertZ)
-                Assert.Fail("уровень Zoom'а не увеличился на еденицу");                                                         //сообщение о неудачнй проверке
 
-
-        }
+        /// <summary>
+        /// Выполняет проверку на изменение масштаба после клика по кнопке 'Увеличить масштаб'.
+        /// </summary>
         [TestMethod]
-        public void TestMasshtabMinus()                                                                              //тест на уменьшение масштаба
+        public void TestScaleInc()
         {
-            IJavaScriptExecutor js = driver as IJavaScriptExecutor;
-            driver.Navigate().GoToUrl(baseURL);
-            driver.FindElement(By.Id("txtUser")).SendKeys("student");                                                //логин
-            driver.FindElement(By.Id("txtPsw")).SendKeys("123");                                                     //пароль
-            driver.FindElement(By.Id("cmdLogin")).Click();                                                           //вход
-            Thread.Sleep(2000);
-            string Z = (string)js.ExecuteScript("return window.portal.stdmap.map.getZoom().toString()");
-            long convertZ = Convert.ToInt64(Z);                                                                  //снятие данных масштаба 1
-            driver.FindElement(By.Id("sovzond_widget_SimpleButton_8")).Click();                                      //"уменьшить масштаб"
-            Thread.Sleep(2000);
-            string Z1 = (string)js.ExecuteScript("return window.portal.stdmap.map.getZoom().toString()");
-            long convertZ1 = Convert.ToInt64(Z1);                                                                //снятие данных масштаба 2
-            if (convertZ <= convertZ1)                                                                           //проверка
-                Assert.Fail("после клика ");
-            double zoom2 = Convert.ToDouble(convertZ1);
-            if (zoom2 + 1 != convertZ)
-                Assert.Fail("уровень Zoom'а не уменьшился на еденицу");                                                         //сообщение о неудачнй проверке
-
-
+            CheckScale('+');
         }
+
+        /// <summary>
+        /// Выполняет проверку на изменение масштаба после клика по кнопке 'Уменьшить масштаб'.
+        /// </summary>
+        [TestMethod]
+        public void TestScaleDec()
+        {
+            CheckScale('-');
+        }
+
         [TestCleanup]
         public void Clean()
         {
-            Thread.Sleep(2000);
-            driver.Quit();
+            GUI.Cleanup.get(driver).Quit();
+        }
+
+        private void CheckScale(char simbol)
+        {
+            if(simbol == '+' || simbol == '-')
+            {
+                string getZoomBefore = (string)js.ExecuteScript("return window.portal.stdmap.map.getZoom().toString()");
+                long convertGetZoomBefore = Convert.ToInt64(getZoomBefore);
+                if (simbol == '-')
+                    GUI.ScaleMenu.get(driver).DecrementButton();
+                if (simbol == '+')
+                    GUI.ScaleMenu.get(driver).IncrementButton();
+                Thread.Sleep(2000);
+                string getZoomAfter = (string)js.ExecuteScript("return window.portal.stdmap.map.getZoom().toString()");
+                long convertGetZoomAfter = Convert.ToInt64(getZoomAfter);
+                if (simbol == '-')
+                {
+                    if (convertGetZoomBefore <= convertGetZoomAfter)
+                        Assert.Fail("После клика по кнопке 'Уменьшить масштаб', масштаб не уменьшился.");
+                    if (convertGetZoomAfter + 1 != convertGetZoomBefore)
+                        Assert.Fail("уровень Zoom'а не уменьшился на еденицу");
+                }
+                if (simbol == '+')
+                {
+                    if (convertGetZoomBefore >= convertGetZoomAfter)
+                        Assert.Fail("После клика по кнопке 'Увеличить масштаб', масштаб не увеличился.");
+                    if (convertGetZoomAfter - 1 != convertGetZoomBefore)
+                        Assert.Fail("уровень Zoom'а не увеличился на еденицу");
+                }
+            }
+  
         }
     }
 }

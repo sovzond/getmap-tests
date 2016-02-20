@@ -19,16 +19,13 @@ namespace GetMapTest
         private string zIndexFakel;
         private string zIndexAmbar;
         private string zIndexPlaces;
-        private const string locationLegenda = "#menuSlide div.svzSimpleButton.slidePanelLegendButton";
-        private const string locationIncDNS = "#dojoUnique4 img";
-        private const string locationIncFakel = "#dojoUnique1 img";
-        private const string locationIncAmbar = "#dojoUnique2 img";
-        private const string locationIncPlaces = "#dojoUnique3 img";
 
         [TestInitialize]
         public void Setup()
         {
             driver = Settings.Instance.createDriver();
+            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
+            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
             js = driver as IJavaScriptExecutor;
             zIndexDNS = "";
             zIndexFakel = "";
@@ -42,11 +39,13 @@ namespace GetMapTest
         [TestMethod]
         public void СheckIncrementLayers()
         {
-            LogOn();
-            IncrementLayerDNS();
-            IncrementLayerPlaces();
-            IncrementLayerAmbar();
-            IncrementLayerFakel();
+            GUI.SlideMenu.get(driver).OpenLayers();
+            if (!GUI.Layers.get(driver).GetSelectedNeftyStruct)
+                GUI.Layers.get(driver).NeftyStructCheckBoxClick();
+              IncrementLayerDNS();
+              IncrementLayerPlaces();
+              IncrementLayerAmbar();
+              IncrementLayerFakel();
         }
         [TestCleanup]
         public void Clean()
@@ -54,17 +53,13 @@ namespace GetMapTest
             Thread.Sleep(2000);
             driver.Quit();
         }
-        private void LogOn()
-        {
-            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
-            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
-        }
+
         private void IncrementLayerDNS()
         {
-            driver.FindElement(By.CssSelector(locationLegenda)).Click();
+            GUI.SlideMenu.get(driver).OpenLegenda();
             zIndexFakel = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_Факелы\")[0].div.style.zIndex;");
             for (int i = 0; i < 3; i++)
-                driver.FindElement(By.CssSelector(locationIncDNS)).Click();
+                GUI.SlideMenu.get(driver).ButtonIncDNSClick();
             zIndexDNS = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_ДНС\")[0].div.style.zIndex;");
             Assert.AreEqual(zIndexFakel, zIndexDNS, "Слой не отобразился выше предыдущего");
             Thread.Sleep(1000);
@@ -72,7 +67,7 @@ namespace GetMapTest
         private void IncrementLayerPlaces()
         {
             for (int i = 0; i < 3; i++)
-                driver.FindElement(By.CssSelector(locationIncPlaces)).Click();
+                GUI.SlideMenu.get(driver).ButtonIncPlacesClick();
             zIndexPlaces = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_Кустовые площадки\")[0].div.style.zIndex;");
             Assert.AreEqual(zIndexDNS, zIndexPlaces, "Слой не отобразился выше предыдущего");
             Thread.Sleep(1000);
@@ -80,7 +75,7 @@ namespace GetMapTest
         private void IncrementLayerAmbar()
         {
             for (int i = 0; i < 3; i++)
-                driver.FindElement(By.CssSelector(locationIncAmbar)).Click();
+                GUI.SlideMenu.get(driver).ButtonIncAmbarClick();
             zIndexAmbar = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_Амбары\")[0].div.style.zIndex;");
             Assert.AreEqual(zIndexPlaces, zIndexAmbar, "Слой не отобразился выше предыдущего");
             Thread.Sleep(1000);
@@ -88,7 +83,7 @@ namespace GetMapTest
         private void IncrementLayerFakel()
         {
             for (int i = 0; i < 3; i++)
-                driver.FindElement(By.CssSelector(locationIncFakel)).Click();
+                GUI.SlideMenu.get(driver).ButtonIncFakelClick();
             zIndexFakel = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_Факелы\")[0].div.style.zIndex;");
             Assert.AreEqual(zIndexPlaces, zIndexFakel, "Слой не отобразился выше предыдущего");
             Thread.Sleep(1000);

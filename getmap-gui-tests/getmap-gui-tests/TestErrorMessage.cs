@@ -12,14 +12,19 @@ namespace GetMapTest
     [TestClass]
     public class TestErrorMessage
     {
-        private IWebDriver driver;     
+        private IWebDriver driver;
+        private IWebElement elementErrorMessage;
         private const string charError = "Указано недопустимое значение.";
         private const string intError = "Это значение вне диапазона.";
+        private const string locationErrorMessage = "div.dijitTooltip > div.dijitTooltipContents";
 
         [TestInitialize]
         public void Setup()
         {
             driver = Settings.Instance.createDriver();
+            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
+            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
+            elementErrorMessage = null;
         }
 
         /// <summary>
@@ -28,7 +33,6 @@ namespace GetMapTest
         [TestMethod]
         public void CheckInt()
         {
-            LogOn();
             InputInt();
         }
 
@@ -38,55 +42,46 @@ namespace GetMapTest
         [TestMethod]
         public void CheckChar()
         {
-            LogOn();
             InputChar();
         }
 
         [TestCleanup]
         public void Clean()
         {
-            System.Threading.Thread.Sleep(2000);
-            driver.Quit();
+            GUI.Cleanup.get(driver).Quit();
         }
 
-        private void LogOn()
-        {
-            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
-            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
-        }
+
         private void InputChar()
         {
-            IWebElement el = null;
-            driver.FindElement(By.Id("menuNavigation"))
-                .FindElement(By.CssSelector("div.svzSimpleButton.gotoCoordsButton")).Click();
+            GUI.MenuNavigation.get(driver).GotoCoordsButton();
             try
             {
-                driver.FindElement(By.Id("dijit_form_NumberTextBox_0")).SendKeys("j");
-               el = driver.FindElement(By.CssSelector("div.dijitTooltip > div.dijitTooltipContents"));
+                driver.FindElement(By.Id("dijit_form_NumberTextBox_0")).SendKeys("k");
+                elementErrorMessage = driver.FindElement(By.CssSelector(locationErrorMessage));
+                System.Threading.Thread.Sleep(1000);
             }
             catch (Exception e)
             {
                 Assert.Fail("Отсутствует напоминание о неправильном вводе параметров" + e.Message);
             }
-            Assert.AreEqual(charError, el.Text, "Высветился неправильный текст об ошибке");
-
+            Assert.AreEqual(charError, elementErrorMessage.Text, "Высветился неправильный текст об ошибке");
         }
+
         private void InputInt()
         {
-            IWebElement el = null;
-            driver.FindElement(By.Id("menuNavigation")).FindElement(By.CssSelector("div.svzSimpleButton.gotoCoordsButton")).Click();
+            GUI.MenuNavigation.get(driver).GotoCoordsButton();
             try
             {
                 driver.FindElement(By.Id("dijit_form_NumberTextBox_0")).SendKeys("100");
-
-               el = driver.FindElement(By.CssSelector("div.dijitTooltip > div.dijitTooltipContents"));
+                elementErrorMessage = driver.FindElement(By.CssSelector(locationErrorMessage));
+                System.Threading.Thread.Sleep(1000);
             }
             catch (Exception e)
             {
                 Assert.Fail("Отсутствует напоминание о неправильном вводе параметров" + e.Message);
             }
-            Assert.AreEqual(intError, el.Text, "Высветился неправильный текст об ошибке");
-
+            Assert.AreEqual(intError, elementErrorMessage.Text, "Высветился неправильный текст об ошибке");
         }
     }
 }
