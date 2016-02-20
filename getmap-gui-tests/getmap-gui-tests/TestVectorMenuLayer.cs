@@ -8,29 +8,40 @@ using System.Drawing;
 namespace GetMapTest
 {
     /// <summary>
-    /// 
+    /// Выполняет проверку на отображение меню растрового слоя.
     /// </summary>
     [TestClass]
     public class TestVectorMenuLayer
     {
         private IWebDriver driver;
-        private const string locationButtonsLayer = "div.svzLayerManagerItem.svzLayerManagerItem1 > div.svzSimpleButton.layerContextMenu";
-        private const string locationButtonsVectorLayer = "div.userLayerMenuContainer.userLayerMenuContainerActive > div.svzSimpleButton";
+        private IList<IWebElement> listButtons;
+        private const string locationListButtons = "div.svzLayerManagerItem.svzLayerManagerItem1 div";
 
         [TestInitialize]
         public void Setup()
         {
             driver = Settings.Instance.createDriver();
             GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
+            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
         }
 
         /// <summary>
-        /// 
+        /// Выполняет проверку на отображение меню растрового слоя раздела 'Нефтяная инфраструктура'.
         /// </summary>
         [TestMethod]
-        public void CheckVectorMenu()
+        public void CheckVectorMenuNeftyStruct()
         {
             CheckVectorMenuLayerFakel();
+
+        }
+
+        /// <summary>
+        /// Выполняет проверку на отображение меню растрового слоя раздела 'Московская область'.
+        /// </summary>
+        [TestMethod]
+        public void CheckVectorMenuMoscowArea()
+        {
+            CheckVectorMenuLayerLandsat();
         }
 
         [TestCleanup]
@@ -40,18 +51,48 @@ namespace GetMapTest
         }
 
         private void CheckVectorMenuLayerFakel()
-        { 
+        {
             GUI.SlideMenu.get(driver).OpenLayers();
-            System.Threading.Thread.Sleep(1000);
-          //  GUI.Layers.NeftyStructClass.get(driver).OpenCloseList();
-         //   GUI.Layers.NeftyStructClass.SettingsButtonsClass.get(driver).FakelSettingsButtonClick();
+            GUI.Layers.get(driver).NeftyStructOpenCloseList();
+            GUI.Layers.NeftyStructClass.get(driver).FakelSBClick();
             try
             {
-                GUI.Layers.VectorButtonsClass.get(driver).StatisticsLayerClick().ZoomToLayerExtent();
+                GUI.Layers.VectorButtonsClass.get(driver).StatisticsLayerClick();
+            }
+            catch (Exception)
+            {
+                Assert.Fail("Над слоем 'Факелы' не отобразилась  кнопка  - 'Статистика слоя'.");
+            }
+            try
+            {
+                GUI.Layers.VectorButtonsClass.get(driver).ZoomToLayerExtent();
+            }
+            catch (Exception)
+            {
+                Assert.Fail("Над слоем 'Факелы' не отобразилась  кнопка  - 'Приблежение к экстенту слоя'.");
+            }
+        }
+
+        private void CheckVectorMenuLayerLandsat()
+        {
+            listButtons = driver.FindElements(By.CssSelector(locationListButtons));
+            GUI.SlideMenu.get(driver).OpenLayers();
+            GUI.Layers.get(driver).MoscowAreaOpenCloseList();
+            GUI.Layers.MoscowAreaClass.get(driver).LandsatSBClick();
+            try
+            {
+                for (int i = 0; i < listButtons.Count; i++)
+                {
+                    if (listButtons[i].Text == "Мозаика Landsat")
+                    {
+                        System.Threading.Thread.Sleep(500);
+                        listButtons[i - 2].Click();
+                    }
+                }
             }
             catch(Exception)
             {
-                Assert.Fail("Над слоем факелы не отобразились две кнопки  - 'Статистика слоя' и  'Приближение к экстенту слоя'.");
+                Assert.Fail("Над слоем 'Мозаика Landsat' не отобразилась кнопка - 'Приблежение к экстенту слоя'. ");
             }
         }
     }
