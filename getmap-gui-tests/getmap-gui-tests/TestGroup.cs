@@ -61,7 +61,7 @@ namespace GetMapTest
         public void TestMet1()
         {      
             IWebDriver driver = Settings.Instance.createDriver();
-            var builder = new Actions(driver);            
+                       
             IJavaScriptExecutor js = driver as IJavaScriptExecutor;
             Utils.TransformJS js1 = new Utils.TransformJS(driver);
             GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
@@ -72,9 +72,10 @@ namespace GetMapTest
             XY R= new XY(right);                
             int XL = L.getX();
             int YL = L.getY();
-            int XR = R.getX(); ;
-            int YR = R.getY(); ;
-            IWebElement j = driver.FindElement(By.Id("map"));
+            int XR = R.getX(); 
+            int YR = R.getY();
+            var builder = new Actions(driver);
+            IWebElement j = driver.FindElement(By.Id("map"));         
             builder.MoveToElement(j, XL, YL).ClickAndHold().MoveToElement(j, XR, YR).Release().Perform();//рисуется квадрат
             Thread.Sleep(5000);
             double k= Math.Round(((70+ 70.024)/2),2);//находим серидину по долготе
@@ -82,6 +83,7 @@ namespace GetMapTest
             Utils.LonLat startPoint = js1.getMapCenter();//находим центр карты
             double lon = startPoint.getLon();
             double lat = startPoint.getLat();
+            AssertCenter(js);
             if (k != lon || k1!= lat)
             {
                 Assert.Fail("не правильный переход");
