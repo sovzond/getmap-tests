@@ -60,8 +60,8 @@ namespace GetMapTest
                 Assert.Fail("область не отображается");
             }
             var builder = new Actions(driver);
-            IWebElement j = driver.FindElement(By.Id("map"));
-            builder.MoveToElement(j, XL, YL).ClickAndHold().MoveToElement(j, XR, YR).Release().Perform();//рисуется квадрат
+            IWebElement map = driver.FindElement(By.Id("map"));
+            builder.MoveToElement(map, XL, YL).ClickAndHold().MoveToElement(map, XR, YR).Release().Perform();//рисуется квадрат
             Thread.Sleep(5000);
             double Lon = Math.Round(((StartXL + StartXR) / 2), 2);//находим серидину по долготе
             double Lat = Math.Round(((StartYL + StartYR) / 2), 2); //находим серидину по широте
