@@ -12,11 +12,11 @@ namespace GetMapTest.Utils
         }
         public LonLat getMapCenter()
         {
-           return new LonLat((string)js.ExecuteScript("{var projWGS84 = new OpenLayers.Projection('EPSG:4326');" +
-                                             "var proj900913 = new OpenLayers.Projection('EPSG:900913'); " +
-                                            "var point1 = window.portal.stdmap.map.getCenter(); " +
-                                            "var point2 = point1.transform(proj900913, projWGS84); " +
-                                            "return point2.toString()}"));       
+            return new LonLat((string)js.ExecuteScript("{var projWGS84 = new OpenLayers.Projection('EPSG:4326');" +
+                                              "var proj900913 = new OpenLayers.Projection('EPSG:900913'); " +
+                                             "var point1 = window.portal.stdmap.map.getCenter(); " +
+                                             "var point2 = point1.transform(proj900913, projWGS84); " +
+                                             "return point2.toString()}"));
         }
         public string transferFrom(double getLon1, double getLat1, int src_cs, int dest_cs)//4326 900913
         {
@@ -30,8 +30,13 @@ namespace GetMapTest.Utils
 
         public string getLonLatFromPixel(int x, int y)
         {
-            return  (string)js.ExecuteScript("return window.portal.stdmap.map.getLonLatFromPixel(new OpenLayers.Pixel( " + x + ", " + y + " )).toString()");//переводим экранные координаты
+            return (string)js.ExecuteScript("return window.portal.stdmap.map.getLonLatFromPixel(new OpenLayers.Pixel( " + x + ", " + y + " )).toString()");//переводим экранные координаты
+
+        }
+        
+        public LonLat getPixelFromLonLat(LonLat lonLat)
+        {
+            return (LonLat)js.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(" + lonLat.getLon() + ", " + lonLat.getLat() + ")).toString()");
         }
     }
 }
-
