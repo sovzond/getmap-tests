@@ -11,6 +11,9 @@ namespace GetMapTest
        private IJavaScriptExecutor js;
         private Utils.TransformJS js1;
         private IWebDriver driver;
+        /// <summary>
+        ///  Выполняет проверку: входют ли заданные координаты в экстент карты
+        /// </summary>
         private Boolean AssertExtentMap(double XLeftH, double YbotH, double XRightH, double YTopH, double XLeftB, double YbotB, double XRightB, double YTopB)
         {
             if (XLeftH<= YTopB || YbotH <= YbotB || XRightH>= XRightB || YTopH >= YTopB)
@@ -22,6 +25,9 @@ namespace GetMapTest
                 return true;
             }
         }
+        /// <summary>
+        ///  находит X и Y
+        /// </summary>
         public class XY
         {
             private int Y;
@@ -47,6 +53,10 @@ namespace GetMapTest
                 return Y;
             }     
         }
+        /// <summary>
+        /// проверяет правильно ли отцентрирована карта после выделения области
+        /// также проверяет входит ли заданная область на экстент карты
+        /// </summary>
         public Boolean AssertCenter(Utils.TransformJS js1, IJavaScriptExecutor js, IWebDriver driver)
         {
             Utils.LonLat startPoint1 = js1.getMapCenter();
@@ -88,6 +98,10 @@ namespace GetMapTest
                 return true;
             }
         }
+        /// <summary>
+        /// проверяет находится ли экстент заданной до этого области
+        /// после нажатия кнопки приближение
+        /// </summary>
         public Boolean AssertExtent(Utils.TransformJS js1, IWebDriver driver)
         {
             Utils.LonLat startPoint1 = js1.getMapCenter();
@@ -109,6 +123,7 @@ namespace GetMapTest
                 return false;
             }
         }
+   
         [TestMethod]
         public void TestZoom()
         {      
