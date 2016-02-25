@@ -5,140 +5,148 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 namespace GetMapTest
 {
+    /// <summary>
+    ///  Выполняет проверку инструмента 'Приблежение области',а так же работает с увелечением экстента карты.
+    /// </summary>
     [TestClass]
-    public class UnitTest1
+    public class TestZoomArea
     {
-       private IJavaScriptExecutor js;
-        private Utils.TransformJS js1;
         private IWebDriver driver;
+        private IJavaScriptExecutor jsExecutor;
+        Utils.TransformJS jsTransform;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            driver = Settings.Instance.createDriver();
+            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
+            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
+            jsExecutor = driver as IJavaScriptExecutor;
+            jsTransform = new Utils.TransformJS(driver);
+        }
+
         /// <summary>
-        ///  Выполняет проверку: входют ли заданные координаты в экстент карты
+        /// Проверяет действительно ли:
+        /// указанный экстент карты целиком отображен на экране;
+        ///  центр выбранного экстента совпадает с центром карты. 
         /// </summary>
+        [TestMethod]
+        public void TestZoom()
+        {
+            Assert.IsTrue(AssertCenter(jsTransform, jsExecutor, driver), "не правильно найден центр и не отображен верный экстент карты");
+            Assert.IsFalse(AssertExtent(jsTransform, driver), "экстент карты отображается");
+        }
+
+        [TestCleanup]
+        public void Clean()
+        {
+            GUI.Cleanup.get(driver).Quit();
+        }
+
         private Boolean AssertExtentMap(double XLeftH, double YbotH, double XRightH, double YTopH, double XLeftB, double YbotB, double XRightB, double YTopB)
         {
-            if (XLeftH<= YTopB || YbotH <= YbotB || XRightH>= XRightB || YTopH >= YTopB)
-            {
+            if (XLeftH <= YTopB || YbotH <= YbotB || XRightH >= XRightB || YTopH >= YTopB)
                 return false;
-            }
-            else
-            {
-                return true;
-            }
+            return true;
         }
+
         /// <summary>
         ///  находит X и Y
         /// </summary>
         public class XY
         {
-            private int Y;
-            private int X;       
-            public  XY(String arrg)
+            private int y;
+            private int x;
+
+            public XY(String arrg)
             {
                 String[] arr = arrg.Split(new Char[] { ',', '=' });
 
-                this.Y = Int32.Parse(arr[3]);
-                this.X = Int32.Parse(arr[1]);                 
+                this.y = Int32.Parse(arr[3]);
+                this.x = Int32.Parse(arr[1]);
             }
-            public XY(int X, int Y)
+
+            public XY(int x, int y)
             {
-                this.X = X;
-                this.Y = Y;
+                this.x = x;
+                this.y = y;
             }
-            public  int getX()
+
+            public int getX
             {
-                return X;
+                get
+                {
+                    return x;
+                }
+
             }
-            public int getY()
+            public int getY
             {
-                return Y;
-            }     
+                get
+                {
+                    return y;
+                }
+
+            }
         }
+
         /// <summary>
         /// проверяет правильно ли отцентрирована карта после выделения области
         /// также проверяет входит ли заданная область на экстент карты
         /// </summary>
-        public Boolean AssertCenter(Utils.TransformJS js1, IJavaScriptExecutor js, IWebDriver driver)
+        public Boolean AssertCenter(Utils.TransformJS jsTransform, IJavaScriptExecutor jsExecutor, IWebDriver driver)
         {
-            Utils.LonLat startPoint1 = js1.getMapCenter();
+            Utils.LonLat startPoint1 = jsTransform.getMapCenter();
             double StartXL = startPoint1.getLon() - 0.03;
             double StartYL = startPoint1.getLat() - 0.03;
             double StartXR = startPoint1.getLon() + 0.03;
             double StartYR = startPoint1.getLat() + 0.03;
             GUI.MenuNavigation.get(driver).MagnifyButton();
-            string left = (string)js.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(" + StartXL + "," + StartYL + ").transform('EPSG:4326','EPSG:3857')).toString()");
-            string right = (string)js.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(" + StartXR + "," + StartYR + ").transform('EPSG:4326','EPSG:3857')).toString()");
+            string left = (string)jsExecutor.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(" + StartXL + "," + StartYL + ").transform('EPSG:4326','EPSG:3857')).toString()");
+            string right = (string)jsExecutor.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(" + StartXR + "," + StartYR + ").transform('EPSG:4326','EPSG:3857')).toString()");
             XY L = new XY(left);
             XY R = new XY(right);
-            int XL = L.getX();
-            int YL = L.getY();
-            int XR = R.getX();
-            int YR = R.getY();
-            String[] coord = GUI.GetExtents.get(driver).GetCurrentExtent;//находим экстент после нажатия кнопки приближение обл
-            Utils.LonLat bot = new Utils.LonLat(js1.transferFrom(double.Parse(coord[0]), double.Parse(coord[1]), 900913, 4326));//находим левый нижний угол
-            Utils.LonLat top = new Utils.LonLat(js1.transferFrom(double.Parse(coord[2]), double.Parse(coord[3]), 900913, 4326));//находим правый верхний угол
-            if (AssertExtentMap(StartXL, StartYL, StartXR, StartYR, bot.getLon(), bot.getLat(),  top.getLon(), top.getLat())==true)
-            {
-                Assert.Fail("область не отображается");
-            }
+            int XL = L.getX;
+            int YL = L.getY;
+            int XR = R.getX;
+            int YR = R.getY;
+            String[] coord = GUI.GetExtents.get(driver).GetCurrentExtent;
+            Utils.LonLat bot = new Utils.LonLat(jsTransform.transferFrom(double.Parse(coord[0]), double.Parse(coord[1]), 900913, 4326));
+            Utils.LonLat top = new Utils.LonLat(jsTransform.transferFrom(double.Parse(coord[2]), double.Parse(coord[3]), 900913, 4326));
+            Assert.IsFalse(AssertExtentMap(StartXL, StartYL, StartXR, StartYR, bot.getLon(), bot.getLat(), top.getLon(), top.getLat()), "область не отображается");
             var builder = new Actions(driver);
-            IWebElement map = driver.FindElement(By.Id("map"));
-            builder.MoveToElement(map, XL, YL).ClickAndHold().MoveToElement(map, XR, YR).Release().Perform();//рисуется квадрат
+            IWebElement map = driver.FindElement(By.CssSelector("#map"));
+            builder.MoveToElement(map, XL, YL).ClickAndHold().MoveToElement(map, XR, YR).Release().Perform();
             Thread.Sleep(5000);
-            double Lon = Math.Round(((StartXL + StartXR) / 2), 2);//находим серидину по долготе
-            double Lat = Math.Round(((StartYL + StartYR) / 2), 2); //находим серидину по широте
-            Utils.LonLat startPoint = js1.getMapCenter();//находим центр карты
+            double Lon = Math.Round(((StartXL + StartXR) / 2), 2);
+            double Lat = Math.Round(((StartYL + StartYR) / 2), 2);
+            Utils.LonLat startPoint = jsTransform.getMapCenter();
             double lonCenter = startPoint.getLon();
             double latCenter = startPoint.getLat();
             if (Lon != lonCenter || Lat != latCenter)
-            {
-              return  false;
-            }
-            else
-            {
-                return true;
-            }
+                return false;
+            return true;
         }
+
         /// <summary>
         /// проверяет находится ли экстент заданной до этого области
         /// после нажатия кнопки приближение
         /// </summary>
-        public Boolean AssertExtent(Utils.TransformJS js1, IWebDriver driver)
+        public Boolean AssertExtent(Utils.TransformJS jsTransform, IWebDriver driver)
         {
-            Utils.LonLat startPoint1 = js1.getMapCenter();
+            Utils.LonLat startPoint1 = jsTransform.getMapCenter();
             double StartXL = startPoint1.getLon() - 0.03;
             double StartYL = startPoint1.getLat() - 0.03;
             double StartXR = startPoint1.getLon() + 0.03;
             double StartYR = startPoint1.getLat() + 0.03;
             GUI.ScaleMenu.get(driver).IncrementButton();
             Thread.Sleep(5000);
-            String[] coordButton = GUI.GetExtents.get(driver).GetCurrentExtent; //находим экстент после нажатия кнопки приближение 
-            Utils.LonLat botBut = new Utils.LonLat(js1.transferFrom(double.Parse(coordButton[0]), double.Parse(coordButton[1]), 900913, 4326));//находим левый нижний угол
-            Utils.LonLat topBut = new Utils.LonLat(js1.transferFrom(double.Parse(coordButton[2]), double.Parse(coordButton[3]), 900913, 4326));//находим правый верхний угол
-            if (AssertExtentMap(StartXL, StartYL, StartXR, StartYR, topBut.getLon(), topBut.getLat(), botBut.getLon(), botBut.getLat())== true)              
-            {
+            String[] coordButton = GUI.GetExtents.get(driver).GetCurrentExtent;
+            Utils.LonLat botBut = new Utils.LonLat(jsTransform.transferFrom(double.Parse(coordButton[0]), double.Parse(coordButton[1]), 900913, 4326));
+            Utils.LonLat topBut = new Utils.LonLat(jsTransform.transferFrom(double.Parse(coordButton[2]), double.Parse(coordButton[3]), 900913, 4326));
+            if (AssertExtentMap(StartXL, StartYL, StartXR, StartYR, topBut.getLon(), topBut.getLat(), botBut.getLon(), botBut.getLat()))
                 return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-   
-        [TestMethod]
-        public void TestZoom()
-        {      
-            IWebDriver driver = Settings.Instance.createDriver();                    
-            IJavaScriptExecutor js = driver as IJavaScriptExecutor;
-            Utils.TransformJS js1 = new Utils.TransformJS(driver);
-            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);       
-             if( AssertCenter(js1, js, driver)==false)
-            {
-                Assert.Fail("не правильно найден центр и не отображен верный экстент карты");
-            }
-             if( AssertExtent( js1, driver)== true)
-            {
-                Assert.Fail(" экстент карты отображается");
-            }
+            return false;
         }
     }
 }

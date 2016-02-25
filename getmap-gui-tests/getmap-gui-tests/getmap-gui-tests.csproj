@@ -75,6 +75,7 @@
     <Compile Include="TestBaseLayer_Rosreestr.cs" />
     <Compile Include="TestChangePassword.cs" />
     <Compile Include="TestVectorMenuLayer.cs" />
+    <Compile Include="TestZoomArea.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\getmap-gui-test-widgets\getmap-gui-test-widgets.csproj">
