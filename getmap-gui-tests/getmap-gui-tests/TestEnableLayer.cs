@@ -14,12 +14,17 @@ namespace GetMapTest
     public class TestEnableLayer
     {
         private IWebDriver driver;
-        private const string locationImageForCheck = "#OpenLayers_Layer_OSM_2 img[src*='/10/711/292.png']";
+        private const string locationPointer = ".olAlphaImg";
+        private IList<IWebElement> listImgPointer;
+        private Rectangle area;
 
         [TestInitialize]
         public void Setup()
         {
             driver = Settings.Instance.createDriver();
+            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
+            Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
+            
         }
 
         /// <summary>
@@ -28,8 +33,7 @@ namespace GetMapTest
         [TestMethod]
         public void CheckEnables()
         {
-            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
-            GUI.SlideMenu.get(driver).OpenLayers();
+            DataPreparation();
             CheckEnableGasStructAndEnableGPZPoint();
             CheckEnableGasStruckAndDisableGPZPoint();
             CheckDisableGasStructAndEnableGPZPoint();
@@ -42,14 +46,23 @@ namespace GetMapTest
             GUI.Cleanup.get(driver).Quit();
         }
 
+        private void DataPreparation()
+        {
+            GUI.InputCoordWnd.get(driver).setLon(60, 44, 39).setLat(69, 51, 0).click();
+            listImgPointer = driver.FindElements(By.CssSelector(locationPointer));
+            int x = listImgPointer[0].Location.X + listImgPointer[0].Size.Width * 2;
+            int y = listImgPointer[0].Location.Y;
+            area = new Rectangle(x, y, 300, 300);
+            GUI.SlideMenu.get(driver).OpenLayers();
+        }
+
         private void CheckEnableGasStructAndEnableGPZPoint()
         {
-            GUI.ScaleMenu.get(driver).DecrementButton();
             GUI.Layers.get(driver).GasStructCheckBoxClick().GasStructOpenCloseList();
             GUI.Layers.GasStructClass.get(driver).GPZPointClick();
-            Bitmap imageGPZDisable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationImageForCheck);
+            Bitmap imageGPZDisable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver,area);
             GUI.Layers.GasStructClass.get(driver).GPZPointClick();
-            Bitmap imageGPZEnable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationImageForCheck);
+            Bitmap imageGPZEnable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, area);
             Utils.ImageComparer comp = new Utils.ImageComparer(imageGPZDisable, imageGPZEnable);
             bool equal = comp.IsEqual();
             if (equal)
@@ -58,9 +71,9 @@ namespace GetMapTest
 
         private void CheckEnableGasStruckAndDisableGPZPoint()
         {
-            Bitmap imageFullCBEnable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationImageForCheck);
+            Bitmap imageFullCBEnable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, area);
             GUI.Layers.GasStructClass.get(driver).GPZPointClick();
-            Bitmap imageGPZDisable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationImageForCheck);
+            Bitmap imageGPZDisable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, area);
             Utils.ImageComparer comp = new Utils.ImageComparer(imageFullCBEnable, imageGPZDisable);
             bool equal = comp.IsEqual();
             if (equal)
@@ -70,9 +83,9 @@ namespace GetMapTest
         private void CheckDisableGasStructAndEnableGPZPoint()
         {
             GUI.Layers.GasStructClass.get(driver).GPZPointClick();
-            Bitmap imageFullCBEnable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationImageForCheck);
+            Bitmap imageFullCBEnable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver,area);
             GUI.Layers.get(driver).GasStructCheckBoxClick();
-            Bitmap imageGasStruckDisable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationImageForCheck);
+            Bitmap imageGasStruckDisable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, area);
             Utils.ImageComparer comp = new Utils.ImageComparer(imageFullCBEnable, imageGasStruckDisable);
             bool equal = comp.IsEqual();
             if (equal)
@@ -82,10 +95,10 @@ namespace GetMapTest
         private void CheckDisableGasStructAndDisableGPZPoint()
         {
             GUI.Layers.GasStructClass.get(driver).GPZPointClick();
-            Bitmap imageFullCBEnable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationImageForCheck);
+            Bitmap imageFullCBEnable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, area);
             GUI.Layers.get(driver).GasStructCheckBoxClick();
             GUI.Layers.GasStructClass.get(driver).GPZPointClick();
-            Bitmap imageFullCBDisable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, locationImageForCheck);
+            Bitmap imageFullCBDisable = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, area);
             Utils.ImageComparer comp = new Utils.ImageComparer(imageFullCBEnable, imageFullCBDisable);
             bool equal = comp.IsEqual();
             if (equal)
