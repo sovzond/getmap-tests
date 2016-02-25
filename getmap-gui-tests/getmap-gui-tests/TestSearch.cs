@@ -28,6 +28,9 @@ namespace GetMapTest
             arrayForSearch[1] = "Амбары";
             arrayForSearch[2] = "Кустовые площадки";
             arrayForSearch[3] = "ДНС";
+            GUI.SlideMenu.get(driver).OpenLayers();
+            if (!GUI.Layers.get(driver).GetSelectedNeftyStruct)
+                GUI.Layers.get(driver).NeftyStructCheckBoxClick();
         }
 
         /// <summary>
@@ -36,7 +39,10 @@ namespace GetMapTest
         [TestMethod]
         public void CheckSearch()
         {
-            CheckSearch("аМбаР");
+            MakeSearch("аМбаР");
+            MakeSearch("фаКеЛ");
+            MakeSearch("доЖимНая наСосная стАнция");
+            MakeSearch("куСтоВая плоЩадка");
         }
 
         [TestCleanup]
@@ -45,8 +51,9 @@ namespace GetMapTest
             GUI.Cleanup.get(driver).Quit();
         }
 
-        private void CheckSearch(string attributeSearch)
+        private void MakeSearch(string attributeSearch)
         {
+            System.Threading.Thread.Sleep(2000);
             GUI.HeaderLinks.get(driver).MakeSearch(attributeSearch);
             System.Threading.Thread.Sleep(2000);
             IWebElement elementResultSearchPanel = driver.FindElement(By.CssSelector(locationResultSearchPanel));
