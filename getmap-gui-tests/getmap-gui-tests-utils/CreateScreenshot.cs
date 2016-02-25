@@ -26,21 +26,19 @@ namespace GetMapTest.Utils
                 return instance;
             }
         }
-        
+
         /// <summary>
-        /// Делает скриншот конктреной области на карте.
+        /// Выполняет скриншот на карте
         /// </summary>
         /// <param name="driver">Обязательный параметр, экземпляр которого вызывает фукнции создания скриншота.</param>
-        /// <param name="location">Путь к элементу, области которой будет сделан скриншот.</param>
+        /// <param name="area">Область, которую необходимо обрезать.</param>
         /// <returns></returns>
-        public Bitmap TakeScreenshot(IWebDriver driver,string location)
+        public Bitmap TakeScreenshot(IWebDriver driver,Rectangle area)
         {
             var screenshotDriver = driver as ITakesScreenshot;
             Screenshot screenshot = screenshotDriver.GetScreenshot();
             var bitmapScreen = new Bitmap(new MemoryStream(screenshot.AsByteArray));
-            IWebElement element = driver.FindElement(By.CssSelector(location));
-            var cutArea = new Rectangle(element.Location, element.Size);
-            return bitmapScreen.Clone(cutArea, bitmapScreen.PixelFormat);
+            return bitmapScreen.Clone(area, bitmapScreen.PixelFormat);
         }
     }
 }
