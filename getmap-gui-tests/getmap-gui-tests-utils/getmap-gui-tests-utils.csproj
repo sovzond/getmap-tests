@@ -50,6 +50,7 @@
     <Compile Include="JS.cs" />
     <Compile Include="LonLat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XY.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

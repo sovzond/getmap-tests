@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="Cleanup.cs" />
     <Compile Include="CoordsXY.cs" />
-    <Compile Include="GetExtents.cs" />
     <Compile Include="HeaderLinks.cs" />
     <Compile Include="InputCoordWnd.cs" />
     <Compile Include="InputNewPassword.cs" />

@@ -4,6 +4,9 @@ namespace GetMapTest.Utils
 {
     public class LonLat
     {
+        private double lon;
+        private double lat;
+
         public LonLat(string lonlat)
         {
             String[] arr = lonlat.Split(new Char[] { ',', '=' });
@@ -40,7 +43,6 @@ namespace GetMapTest.Utils
                 return false;
             }
         }
-        private double lon;
-        private double lat;
+
     }
 }
