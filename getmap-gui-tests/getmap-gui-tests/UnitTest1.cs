@@ -48,7 +48,6 @@ namespace GetMapTest
 
             }
         }
-
         [TestInitialize]
         public void Setup()
         {
