@@ -80,7 +80,8 @@ namespace GetMapTest
         private List<string> listAttributeSrcOpen()
         {
             List<string> listAttributeSrc = new List<string>();
-            listAttributeSrc = AddInListAttributeSrc(listTileC);
+      
+                listAttributeSrc = AddInListAttributeSrc(listTileC);
             listAttributeSrc = AddInListAttributeSrc(listTileA);
             listAttributeSrc = AddInListAttributeSrc(listTileB);
             return listAttributeSrc;

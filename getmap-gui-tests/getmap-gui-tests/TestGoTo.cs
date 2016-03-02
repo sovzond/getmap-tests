@@ -32,18 +32,18 @@ namespace GetMapTest
         public void GoToCoord()
         {
             Utils.TransformJS js = new Utils.TransformJS(driver);
-            Utils.LonLat startPoint = js.getMapCenter();
+            Utils.LonLat startPoint = js.GetMapCenter();
             GoToCoordWnd(driver);
             IList<IWebElement> img = driver.FindElements(By.CssSelector(locationPointer));
             int x = img[0].Location.X + img[0].Size.Width / 2;
             int y = img[0].Location.Y - img[0].Size.Height / 3;
-            string Latimg1 = js.getLonLatFromPixel(x, y);
+            string Latimg1 = js.GetLonLatFromPixel(x, y);
             Utils.LonLat imgCoord = new Utils.LonLat(Latimg1);
-            string imgPoint = js.transferFrom(imgCoord.getLon(), imgCoord.getLat(), 900913, 4326);
+            string imgPoint = js.TransferFrom(imgCoord.getLon(), imgCoord.getLat(), 900913, 4326);
             Utils.LonLat coord5 = new Utils.LonLat(imgPoint);
             double imgLon = coord5.getLon();
             double imgLat = coord5.getLat();
-            Utils.LonLat changedPoint = js.getMapCenter();
+            Utils.LonLat changedPoint = js.GetMapCenter();
             if (!Utils.LonLat.equalLonLat(changedPoint, startPoint))
                 Assert.Fail("центр не изменен");
             double changedLon = changedPoint.getLon();
