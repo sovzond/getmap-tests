@@ -96,7 +96,7 @@ namespace GetMapTest
         /// </summary>
         public Boolean AssertCenter(Utils.TransformJS jsTransform, IJavaScriptExecutor jsExecutor, IWebDriver driver)
         {
-            Utils.LonLat startPoint1 = jsTransform.getMapCenter();
+            Utils.LonLat startPoint1 = jsTransform.GetMapCenter();
             double StartXL = startPoint1.getLon() - 0.03;
             double StartYL = startPoint1.getLat() - 0.03;
             double StartXR = startPoint1.getLon() + 0.03;
@@ -104,15 +104,15 @@ namespace GetMapTest
             GUI.MenuNavigation.get(driver).MagnifyButton();
             string left = (string)jsExecutor.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(" + StartXL + "," + StartYL + ").transform('EPSG:4326','EPSG:3857')).toString()");
             string right = (string)jsExecutor.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(" + StartXR + "," + StartYR + ").transform('EPSG:4326','EPSG:3857')).toString()");
-            XY L = new XY(left);
-            XY R = new XY(right);
+            Utils.XY L = new Utils.XY(left);
+            Utils.XY R = new Utils.XY(right);
             int XL = L.getX;
             int YL = L.getY;
             int XR = R.getX;
             int YR = R.getY;
-            String[] coord = GUI.GetExtents.get(driver).GetCurrentExtent;
-            Utils.LonLat bot = new Utils.LonLat(jsTransform.transferFrom(double.Parse(coord[0]), double.Parse(coord[1]), 900913, 4326));
-            Utils.LonLat top = new Utils.LonLat(jsTransform.transferFrom(double.Parse(coord[2]), double.Parse(coord[3]), 900913, 4326));
+            String[] coord = GetExtent();
+            Utils.LonLat bot = new Utils.LonLat(jsTransform.TransferFrom(double.Parse(coord[0]), double.Parse(coord[1]), 900913, 4326));
+            Utils.LonLat top = new Utils.LonLat(jsTransform.TransferFrom(double.Parse(coord[2]), double.Parse(coord[3]), 900913, 4326));
             Assert.IsFalse(AssertExtentMap(StartXL, StartYL, StartXR, StartYR, bot.getLon(), bot.getLat(), top.getLon(), top.getLat()), "область не отображается");
             var builder = new Actions(driver);
             IWebElement map = driver.FindElement(By.CssSelector("#map"));
@@ -120,7 +120,7 @@ namespace GetMapTest
             Thread.Sleep(5000);
             double Lon = Math.Round(((StartXL + StartXR) / 2), 2);
             double Lat = Math.Round(((StartYL + StartYR) / 2), 2);
-            Utils.LonLat startPoint = jsTransform.getMapCenter();
+            Utils.LonLat startPoint = jsTransform.GetMapCenter();
             double lonCenter = startPoint.getLon();
             double latCenter = startPoint.getLat();
             if (Lon != lonCenter || Lat != latCenter)
@@ -134,19 +134,26 @@ namespace GetMapTest
         /// </summary>
         public Boolean AssertExtent(Utils.TransformJS jsTransform, IWebDriver driver)
         {
-            Utils.LonLat startPoint1 = jsTransform.getMapCenter();
+            Utils.LonLat startPoint1 = jsTransform.GetMapCenter();
             double StartXL = startPoint1.getLon() - 0.03;
             double StartYL = startPoint1.getLat() - 0.03;
             double StartXR = startPoint1.getLon() + 0.03;
             double StartYR = startPoint1.getLat() + 0.03;
             GUI.ScaleMenu.get(driver).IncrementButton();
             Thread.Sleep(5000);
-            String[] coordButton = GUI.GetExtents.get(driver).GetCurrentExtent;
-            Utils.LonLat botBut = new Utils.LonLat(jsTransform.transferFrom(double.Parse(coordButton[0]), double.Parse(coordButton[1]), 900913, 4326));
-            Utils.LonLat topBut = new Utils.LonLat(jsTransform.transferFrom(double.Parse(coordButton[2]), double.Parse(coordButton[3]), 900913, 4326));
+            String[] coordButton = GetExtent();
+            Utils.LonLat botBut = new Utils.LonLat(jsTransform.TransferFrom(double.Parse(coordButton[0]), double.Parse(coordButton[1]), 900913, 4326));
+            Utils.LonLat topBut = new Utils.LonLat(jsTransform.TransferFrom(double.Parse(coordButton[2]), double.Parse(coordButton[3]), 900913, 4326));
             if (AssertExtentMap(StartXL, StartYL, StartXR, StartYR, topBut.getLon(), topBut.getLat(), botBut.getLon(), botBut.getLat()))
                 return true;
             return false;
+        }
+
+        private string[] GetExtent()
+        {
+            string fulllink = (string)jsExecutor.ExecuteScript("return window.portal.stdmap.map.getExtent().toString()");
+            string[] splited = fulllink.Split(',');
+            return splited;
         }
     }
 }
