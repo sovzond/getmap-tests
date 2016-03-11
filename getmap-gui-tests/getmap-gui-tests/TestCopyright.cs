@@ -38,7 +38,9 @@ namespace GetMapTest
         {
             driver.FindElement(By.Name(locationButtonCopyright)).Click();
             Assert.IsTrue(IsHaveBoxShadow(), "Окно 'КОПИРАЙТЫ' отсутствует после клика по инструменту 'Копирайты'.");
-            GUI.SlideMenu.get(driver).OpenLayers().OpenBaseLayers().OpenGoogle();
+            GUI.SlideMenu.get(driver).OpenLayers();
+            System.Threading.Thread.Sleep(500);
+            GUI.SlideMenu.get(driver).OpenBaseLayers().OpenGoogle();
             CheckTextCopyright("OpenStreetMap");
             CheckTextCopyright("Росреестр");
             CheckTextCopyright("Гибрид");
