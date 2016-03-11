@@ -14,7 +14,7 @@ namespace GetMapTest
     public class TestEnableLayer
     {
         private IWebDriver driver;
-        private const int numberImgForScreen = 0;
+        private const int numberImgForScreenshot = 0;
         private const string locationPointer = ".olAlphaImg";
         private IList<IWebElement> listImgPointer;
         private Rectangle area;
@@ -51,9 +51,9 @@ namespace GetMapTest
         {
             GUI.InputCoordWnd.get(driver).setLon(60, 44, 39).setLat(69, 51, 0).click();
             listImgPointer = driver.FindElements(By.CssSelector(locationPointer));
-            int x = listImgPointer[numberImgForScreen].Location.X + listImgPointer[numberImgForScreen].Size.Width * 2;
-            int y = listImgPointer[numberImgForScreen].Location.Y;
-            int square = listImgPointer[numberImgForScreen].Size.Width * 9;
+            int x = listImgPointer[numberImgForScreenshot].Location.X + listImgPointer[numberImgForScreenshot].Size.Width * 2;
+            int y = listImgPointer[numberImgForScreenshot].Location.Y;
+            int square = listImgPointer[numberImgForScreenshot].Size.Width * 9;
             area = new Rectangle(x, y, square, square);
             GUI.SlideMenu.get(driver).OpenLayers();
         }
