@@ -13,15 +13,15 @@ namespace GetMapTest
     [TestClass]
     public class TestChangeSortLayers
     {
-        private IWebDriver driver;
-        Utils.TransformJS js;
+        private IWebDriver driver;    
         private int zIndex;
         private const string locationZindexFakel = "wms_Факелы";
         private const string locationZindexAmbar = "wms_Амбары";
         private const string locationZindexPlaces = "wms_Кустовые площадки";
         private const string locationZindexDNS = "wms_ДНС";
-        private IList<IWebElement> listButtonsIncDec;
         private const string locationButtonsIncDec = "span.move img";
+        private IList<IWebElement> listButtonsIncDec;
+        Utils.TransformJS js;
         private enum NumberButtons
         {
             Fakel = 0,
