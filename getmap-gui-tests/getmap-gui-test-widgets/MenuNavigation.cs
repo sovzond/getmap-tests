@@ -39,7 +39,6 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public MenuNavigation FullExtentButton()
         {
-            System.Threading.Thread.Sleep(1000);
             driver.FindElement(By.CssSelector(locationFullExtentButton)).Click();
             return this;
         }
@@ -49,7 +48,6 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public MenuNavigation MoveButton()
         {
-            System.Threading.Thread.Sleep(1000);
             driver.FindElement(By.CssSelector(locationMoveButton)).Click();
             return this;
         }
@@ -59,7 +57,6 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public MenuNavigation ZoomArea()
         {
-            System.Threading.Thread.Sleep(1000);
             driver.FindElement(By.CssSelector(locationZoomAreaButton)).Click();
             return this;
         }
@@ -69,7 +66,6 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public MenuNavigation MagnifyButton()
         {
-            System.Threading.Thread.Sleep(1000);
             driver.FindElement(By.CssSelector(locationMagnifyButton)).Click();
             return this;
         }
@@ -79,7 +75,6 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public MenuNavigation IdentificationButton()
         {
-            System.Threading.Thread.Sleep(1000);
             driver.FindElement(By.CssSelector(locationIdentificationButton)).Click();
             return this;
         }
@@ -89,7 +84,6 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public MenuNavigation SelectionButton()
         {
-            System.Threading.Thread.Sleep(1000);
             driver.FindElement(By.CssSelector(locationSelectionButton)).Click();
             return this;
         }
@@ -99,7 +93,6 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public MenuNavigation RuleButton()
         {
-            System.Threading.Thread.Sleep(1000);
             driver.FindElement(By.CssSelector(locationRuleButton)).Click();
             return this;
         }
@@ -109,7 +102,6 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public MenuNavigation GotoCoordsButton()
         {
-            System.Threading.Thread.Sleep(1000);
             driver.FindElement(By.CssSelector(locationGotoCoordsButton)).Click();
             return this;
         }

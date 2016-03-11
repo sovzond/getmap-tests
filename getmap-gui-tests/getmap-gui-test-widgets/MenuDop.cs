@@ -14,6 +14,7 @@ namespace GetMapTest.GUI
         private IWebDriver driver;
         private const string locationLinks = "#menuDop div.svzSimpleButton.linkBtn";
         private const string locationPrint = "#menuDop div.svzSimpleButton.printBtn";
+
         private MenuDop(IWebDriver driver)
         {
             this.driver = driver;
@@ -33,7 +34,6 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public MenuDop OpenLinks()
         {
-            System.Threading.Thread.Sleep(1000);
             driver.FindElement(By.CssSelector(locationLinks)).Click();
             return this;
         }
@@ -43,7 +43,6 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public MenuDop OpenPrint()
         {
-            System.Threading.Thread.Sleep(1000);
             driver.FindElement(By.CssSelector(locationPrint)).Click();
             return this;
         }

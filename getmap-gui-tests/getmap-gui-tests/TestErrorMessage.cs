@@ -33,7 +33,18 @@ namespace GetMapTest
         [TestMethod]
         public void CheckInt()
         {
-            InputInt();
+            GUI.MenuNavigation.get(driver).GotoCoordsButton();
+            try              
+            {
+                driver.FindElement(By.Id("dijit_form_NumberTextBox_0")).SendKeys("100");
+                elementErrorMessage = driver.FindElement(By.CssSelector(locationErrorMessage));
+                System.Threading.Thread.Sleep(1000);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail("Отсутствует напоминание о неправильном вводе параметров" + e.Message);
+            }
+            Assert.AreEqual(intError, elementErrorMessage.Text, "Высветился неправильный текст об ошибке");
         }
 
         /// <summary>
@@ -41,18 +52,6 @@ namespace GetMapTest
         ///</summary>
         [TestMethod]
         public void CheckChar()
-        {
-            InputChar();
-        }
-
-        [TestCleanup]
-        public void Clean()
-        {
-            GUI.Cleanup.get(driver).Quit();
-        }
-
-
-        private void InputChar()
         {
             GUI.MenuNavigation.get(driver).GotoCoordsButton();
             try
@@ -68,20 +67,11 @@ namespace GetMapTest
             Assert.AreEqual(charError, elementErrorMessage.Text, "Высветился неправильный текст об ошибке");
         }
 
-        private void InputInt()
+        [TestCleanup]
+        public void Clean()
         {
-            GUI.MenuNavigation.get(driver).GotoCoordsButton();
-            try
-            {
-                driver.FindElement(By.Id("dijit_form_NumberTextBox_0")).SendKeys("100");
-                elementErrorMessage = driver.FindElement(By.CssSelector(locationErrorMessage));
-                System.Threading.Thread.Sleep(1000);
-            }
-            catch (Exception e)
-            {
-                Assert.Fail("Отсутствует напоминание о неправильном вводе параметров" + e.Message);
-            }
-            Assert.AreEqual(intError, elementErrorMessage.Text, "Высветился неправильный текст об ошибке");
+            GUI.Cleanup.get(driver).Quit();
         }
+
     }
 }

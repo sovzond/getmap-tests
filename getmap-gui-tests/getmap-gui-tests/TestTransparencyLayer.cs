@@ -17,6 +17,11 @@ namespace GetMapTest
     {
         private IWebDriver driver;
         private IList<IWebElement> listImgPointer;
+        private const int numberImgForScreen = 0;
+        private const string layerFakel = "Факел";
+        private const string layerAmbar = "Амбар";
+        private const string layerPlaces = "Кустовые площадки";
+        private const string layerDns = "ДНС";
         private const string locationPointer = ".olAlphaImg";
         private const string locationRadioButtons = "div.svzLayerManagerItem input";
         private Rectangle area;
@@ -38,10 +43,10 @@ namespace GetMapTest
         public void CheckTransparency()
         {
             DataPreparation();
-            DecTransparency("Факел");
-            DecTransparency("Амбар");
-            DecTransparency("Кустовые площадки");
-            DecTransparency("ДНС");
+            DecTransparency(layerFakel);
+            DecTransparency(layerAmbar);
+            DecTransparency(layerPlaces);
+            DecTransparency(layerDns);
         }
 
         [TestCleanup]
@@ -59,44 +64,38 @@ namespace GetMapTest
             if (!GUI.Layers.get(driver).GetSelectedNeftyStruct)
                 GUI.Layers.get(driver).NeftyStructCheckBoxClick();
             GUI.SlideMenu.get(driver).OpenLegenda();
-            int x = listImgPointer[0].Location.X + listImgPointer[0].Size.Width * 2;
-            int y = listImgPointer[0].Location.Y;
-            area = new Rectangle(x, y, 300, 300);
+            int x = listImgPointer[numberImgForScreen].Location.X + listImgPointer[numberImgForScreen].Size.Width * 2;
+            int y = listImgPointer[numberImgForScreen].Location.Y;
+            int square = listImgPointer[numberImgForScreen].Size.Width * 9;
+            area = new Rectangle(x, y, square, square);
         }
 
         private void DecTransparency(string nameLayer)
-        {             
+        {
             Bitmap imagelVisible = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, area);
             Utils.ImageComparer compVisible = new Utils.ImageComparer(imagelVisible, imagelVisible);
-            int nPixelsVisible = compVisible.nDifferentPixels;
-            if (nameLayer == "Факел")
+            if (nameLayer == layerFakel)
                 GUI.SlideMenu.get(driver).ButtonDecTransparencyFakelClick(25);
-            if (nameLayer == "Амбар")
+            if (nameLayer == layerAmbar)
                 GUI.SlideMenu.get(driver).ButtonDecTransparencyAmbarClick(25);
-            if (nameLayer == "Кустовые площадки")
+            if (nameLayer == layerPlaces)
                 GUI.SlideMenu.get(driver).ButtonDecTransparencyPlacesClick(25);
-            if (nameLayer == "ДНС")
+            if (nameLayer == layerDns)
                 GUI.SlideMenu.get(driver).ButtonDecTransparencyDNSClick(25);
             Bitmap imageHalfVisible = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, area);
             Utils.ImageComparer compHalfVisible = new Utils.ImageComparer(imagelVisible, imageHalfVisible);
-            bool equalHalfVisible = compHalfVisible.IsEqual();
-            int nPixelsHalfVisible = compHalfVisible.nDifferentPixels;
-            if (nPixelsVisible == nPixelsHalfVisible && equalHalfVisible == true)
-                Assert.Fail("Слой " + nameLayer + " не стал прозрачным на половину, после сдвига ползунка.");
-            if (nameLayer == "Факел")
+            Assert.IsFalse(compHalfVisible.IsEqual(), "Слой " + nameLayer + " не стал прозрачным на половину, после сдвига ползунка.");
+            if (nameLayer == layerFakel)
                 GUI.SlideMenu.get(driver).ButtonDecTransparencyFakelClick(30);
-            if (nameLayer == "Амбар")
+            if (nameLayer == layerAmbar)
                 GUI.SlideMenu.get(driver).ButtonDecTransparencyAmbarClick(30);
-            if (nameLayer == "Кустовые площадки")
+            if (nameLayer == layerPlaces)
                 GUI.SlideMenu.get(driver).ButtonDecTransparencyPlacesClick(30);
-            if (nameLayer == "ДНС")
+            if (nameLayer == layerDns)
                 GUI.SlideMenu.get(driver).ButtonDecTransparencyDNSClick(30);
             Bitmap imageNotVisible = Utils.CreateScreenshot.Instance.TakeScreenshot(driver, area);
             Utils.ImageComparer compNotVisible = new Utils.ImageComparer(imageHalfVisible, imageNotVisible);
-            bool equalNotVisible = compNotVisible.IsEqual();
-            int nPixelsNotVisible = compNotVisible.nDifferentPixels;
-            if (nPixelsHalfVisible == nPixelsNotVisible && equalNotVisible == true)
-                Assert.Fail("Слой " + nameLayer + " не стал полностью прозрачным после сдвига ползунка.");
+            Assert.IsFalse(compNotVisible.IsEqual(), "Слой " + nameLayer + " не стал полностью прозрачным после сдвига ползунка.");
         }
 
     }

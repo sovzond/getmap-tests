@@ -33,7 +33,6 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public ScaleMenu IncrementButton()
         {
-            System.Threading.Thread.Sleep(1000);
             driver.FindElement(By.CssSelector(locationIncrementButton)).Click();
             return this;
         }
@@ -43,7 +42,6 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public ScaleMenu DecrementButton()
         {
-            System.Threading.Thread.Sleep(1000);
             driver.FindElement(By.CssSelector(locationDecrementButton)).Click();
             return this;
         }

@@ -64,6 +64,7 @@
     <Compile Include="TestBaseLayers.cs" />
     <Compile Include="TestChangeSortLayers.cs" />
     <Compile Include="TestCheckCoordsView.cs" />
+    <Compile Include="TestCopyright.cs" />
     <Compile Include="TestCurrentExtent.cs" />
     <Compile Include="TestEnableLayer.cs" />
     <Compile Include="TestErrorMessage.cs" />
@@ -72,7 +73,6 @@
     <Compile Include="TestTransparencyLayer.cs" />
     <Compile Include="TestGoTo.cs" />
     <Compile Include="TestSearch.cs" />
-    <Compile Include="TestBaseLayer_Rosreestr.cs" />
     <Compile Include="TestChangePassword.cs" />
     <Compile Include="TestVectorMenuLayer.cs" />
     <Compile Include="TestZoomArea.cs" />

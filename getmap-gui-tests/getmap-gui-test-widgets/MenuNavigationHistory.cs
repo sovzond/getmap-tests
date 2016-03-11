@@ -33,7 +33,6 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public MenuNavigationHistory Back()
         {
-            System.Threading.Thread.Sleep(1000);
             driver.FindElement(By.CssSelector(locationBackButton)).Click();
             return this;
         }
@@ -43,7 +42,6 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public MenuNavigationHistory Next()
         {
-            System.Threading.Thread.Sleep(1000);
             driver.FindElement(By.CssSelector(locationNextButton)).Click();
             return this;
         }

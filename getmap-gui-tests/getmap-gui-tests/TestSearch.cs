@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using OpenQA.Selenium;
 
-
 namespace GetMapTest
 {
     /// <summary>
@@ -15,8 +14,16 @@ namespace GetMapTest
         private IWebDriver driver;
         private string[] arrayForSearch;
         private const string locationResultSearchPanel = "#resultDiv";
+        private const string locationCloseButton = "#closeResBtn";
         private const int idxForSplitText = 19;
-
+        private enum NumberSearchAttribute
+        {
+            Fakel = 0,
+            Ambar = 1,
+            Places = 2,
+            Dns = 3
+        }
+              
         [TestInitialize]
         public void Setup()
         {
@@ -24,13 +31,11 @@ namespace GetMapTest
             GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
             arrayForSearch = new string[4];
-            arrayForSearch[0] = "Факелы";
-            arrayForSearch[1] = "Амбары";
-            arrayForSearch[2] = "Кустовые площадки";
-            arrayForSearch[3] = "ДНС";
-            GUI.SlideMenu.get(driver).OpenLayers();
-            if (!GUI.Layers.get(driver).GetSelectedNeftyStruct)
-                GUI.Layers.get(driver).NeftyStructCheckBoxClick();
+            arrayForSearch[(int)NumberSearchAttribute.Fakel] = "Факелы";
+            arrayForSearch[(int)NumberSearchAttribute.Ambar] = "Амбары";
+            arrayForSearch[(int)NumberSearchAttribute.Places] = "Кустовые площадки";
+            arrayForSearch[(int)NumberSearchAttribute.Dns] = "ДНС";
+
         }
 
         /// <summary>
@@ -39,8 +44,11 @@ namespace GetMapTest
         [TestMethod]
         public void CheckSearch()
         {
-            MakeSearch("аМбаР");
+            GUI.SlideMenu.get(driver).OpenLayers();
+            if (!GUI.Layers.get(driver).GetSelectedNeftyStruct)
+                GUI.Layers.get(driver).NeftyStructCheckBoxClick();
             MakeSearch("фаКеЛ");
+            MakeSearch("аМбаР");
             MakeSearch("доЖимНая наСосная стАнция");
             MakeSearch("куСтоВая плоЩадка");
         }
@@ -52,21 +60,25 @@ namespace GetMapTest
         }
 
         private void MakeSearch(string attributeSearch)
-        {
-            System.Threading.Thread.Sleep(2000);
+        {         
+            System.Threading.Thread.Sleep(1000);
             GUI.HeaderLinks.get(driver).MakeSearch(attributeSearch);
-            System.Threading.Thread.Sleep(2000);
+            System.Threading.Thread.Sleep(5000);
             IWebElement elementResultSearchPanel = driver.FindElement(By.CssSelector(locationResultSearchPanel));
             string fullTextResultSearch = elementResultSearchPanel.Text;
-            string splitedTextResultSearch = fullTextResultSearch.Remove(0, idxForSplitText);
+            if (fullTextResultSearch == "")
+                Assert.Fail("Вы ввели искомый элемент: " + fullTextResultSearch + " , но строка поиска осталась пустой.");
+            string splitedTextResultSearch = fullTextResultSearch.Remove(0, idxForSplitText);           
             for (int i = 0; i < arrayForSearch.GetLength(0); i++)
             {
-                if (!(splitedTextResultSearch == arrayForSearch[0] ||
-                    splitedTextResultSearch == arrayForSearch[1] ||
-                    splitedTextResultSearch == arrayForSearch[2] ||
-                    splitedTextResultSearch == arrayForSearch[3]))
-                    Assert.Fail("Искомый элемент отсутсвует на сайте.");
+                if (!(splitedTextResultSearch == arrayForSearch[(int)NumberSearchAttribute.Fakel] ||
+                    splitedTextResultSearch == arrayForSearch[(int)NumberSearchAttribute.Ambar] ||
+                    splitedTextResultSearch == arrayForSearch[(int)NumberSearchAttribute.Places] ||
+                    splitedTextResultSearch == arrayForSearch[(int)NumberSearchAttribute.Dns]))
+                    Assert.Fail("Искомый элемент отсутсвует на сайте: " + arrayForSearch[i]);
             }
+            System.Threading.Thread.Sleep(1000);
+            driver.FindElement(By.CssSelector(locationCloseButton)).Click();
         }
     }
 }

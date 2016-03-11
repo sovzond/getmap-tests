@@ -10,23 +10,46 @@ namespace GetMapTest.GUI
     /// <summary>
     /// Открывает доступ ко всем элементам шапки.
     /// </summary>
-   public class HeaderLinks
+    public class HeaderLinks
     {
         private IWebDriver driver;
         private const string locationHeaderLinks = "td.headerLinks a";
         private const string locationSearchArea = "input.searchPanel";
         private const string locationSearchButton = "#textSearch2";
+        private const string help = "Справка";
+        private const string changePassword = "Изменить пароль";
+        private const string exit = "Выход";
+        private Dictionary<string, IWebElement> dicButtons;
         IList<IWebElement> listHeaderLinks;
-            
+
         private HeaderLinks(IWebDriver driver)
         {
             this.driver = driver;
-            listHeaderLinks = driver.FindElements(By.CssSelector(locationHeaderLinks));
+            SetValueList();
+            SetValueElements();
         }
-        private void Sleep()
+
+        private HeaderLinks SetValueList()
         {
-            System.Threading.Thread.Sleep(2000);
+            dicButtons = new Dictionary<string, IWebElement>();
+            listHeaderLinks = driver.FindElements(By.CssSelector(locationHeaderLinks));
+            return this;
         }
+
+        private HeaderLinks SetValueElements()
+        {
+            for (int i = 0; i < listHeaderLinks.Count; i++)
+            {
+                if (listHeaderLinks[i].GetAttribute("title") == "Справка")
+                    dicButtons.Add(help,listHeaderLinks[i]);
+                if (listHeaderLinks[i].GetAttribute("title") == "Изменить пароль")
+                    dicButtons.Add(changePassword,listHeaderLinks[i]);
+                if (listHeaderLinks[i].GetAttribute("title") == "Выход")
+                    dicButtons.Add(exit,listHeaderLinks[i]);
+            }
+            return this;
+        }
+
         /// <summary>
         /// Принимает параметр типа IWebDriver для дальнейшей навигации по сайту.
         /// </summary>
@@ -36,7 +59,7 @@ namespace GetMapTest.GUI
         {
             return new HeaderLinks(driver);
         }
-        
+
         /// <summary>
         /// Выполняет поиск по геопорталу.
         /// </summary>
@@ -56,8 +79,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public HeaderLinks HelpClick()
         {
-            Sleep();
-            listHeaderLinks[0].Click();
+            dicButtons[help].Click();
             return this;
         }
 
@@ -67,8 +89,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public HeaderLinks ChangePasswordClick()
         {
-            Sleep();
-            listHeaderLinks[1].Click();
+            dicButtons[changePassword].Click();
             return this;
         }
 
@@ -78,8 +99,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public HeaderLinks ExitClick()
         {
-            Sleep();
-            listHeaderLinks[2].Click();
+            dicButtons[exit].Click();
             return this;
         }
 

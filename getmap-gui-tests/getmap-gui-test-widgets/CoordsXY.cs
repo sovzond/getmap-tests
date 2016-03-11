@@ -13,9 +13,10 @@ namespace GetMapTest.GUI
         private IWebDriver driver;
         private const string locationCoordsValue = "#dCoord";
         private const string locationElementsP = "#dCoord p";
-        private IWebElement elementDMS;
-        private IWebElement elementDecimal;
-        private IWebElement elementMeteres;
+        private const string dms = "Градусы, минуты, секунды";
+        private const string decimaL = "Десятичные градусы";
+        private const string metres = "Метры";
+        private Dictionary<string, IWebElement> dicElementsP;
         private IList<IWebElement> listElementsP;
 
         private CoordsXY(IWebDriver driver)
@@ -27,6 +28,9 @@ namespace GetMapTest.GUI
 
         private CoordsXY SetValueList()
         {
+            dicElementsP = new Dictionary<string, IWebElement>();
+            driver.FindElement(By.CssSelector(locationCoordsValue)).Click();
+            System.Threading.Thread.Sleep(200);
             listElementsP = driver.FindElements(By.CssSelector(locationElementsP));
             return this;
         }
@@ -35,16 +39,14 @@ namespace GetMapTest.GUI
         { 
            for(int i=0;i<listElementsP.Count;i++)
             {
-                    elementDMS = listElementsP[0];
-                    elementDecimal = listElementsP[1];
-                    elementMeteres = listElementsP[2];
+                if (listElementsP[i].Text == "Градусы, минуты, секунды")
+                    dicElementsP.Add(dms, listElementsP[i]);
+                if (listElementsP[i].Text == "Десятичные градусы")
+                    dicElementsP.Add(decimaL, listElementsP[i]);
+                if (listElementsP[i].Text == "Метры")
+                    dicElementsP.Add(metres, listElementsP[i]);
             }
             return this;
-        }
-        
-        private void Sleep()
-        {
-            System.Threading.Thread.Sleep(1000);
         }
 
         /// <summary>
@@ -63,10 +65,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public CoordsXY DegreeMinutesSecondsClick()
         {
-            Sleep();
-            driver.FindElement(By.CssSelector(locationCoordsValue)).Click();
-            Sleep();
-            elementDMS.Click();
+            dicElementsP[dms].Click();
             return this;
         }
 
@@ -76,10 +75,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public CoordsXY DecimalClick()
         {
-            Sleep();
-            driver.FindElement(By.CssSelector(locationCoordsValue)).Click();
-            Sleep();
-            elementDecimal.Click();
+            dicElementsP[decimaL].Click();
             return this;
         }
 
@@ -89,10 +85,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public CoordsXY MetresClick()
         {
-            Sleep();
-            driver.FindElement(By.CssSelector(locationCoordsValue)).Click();
-            Sleep();
-            elementMeteres.Click();
+            dicElementsP[metres].Click();
             return this;
         }
     }

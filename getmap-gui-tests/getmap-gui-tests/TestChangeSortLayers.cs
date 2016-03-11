@@ -14,13 +14,21 @@ namespace GetMapTest
     public class TestChangeSortLayers
     {
         private IWebDriver driver;
-        private IJavaScriptExecutor js;
-        private string zIndexDNS;
-        private string zIndexFakel;
-        private string zIndexAmbar;
-        private string zIndexPlaces;
+        Utils.TransformJS js;
+        private int zIndex;
+        private const string locationZindexFakel = "wms_Факелы";
+        private const string locationZindexAmbar = "wms_Амбары";
+        private const string locationZindexPlaces = "wms_Кустовые площадки";
+        private const string locationZindexDNS = "wms_ДНС";
         private IList<IWebElement> listButtonsIncDec;
         private const string locationButtonsIncDec = "span.move img";
+        private enum NumberButtons
+        {
+            Fakel = 0,
+            Ambar = 2,
+            Places = 4,
+            Dns = 6
+        }
 
         [TestInitialize]
         public void Setup()
@@ -28,31 +36,26 @@ namespace GetMapTest
             driver = Settings.Instance.createDriver();
             GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
-            js = driver as IJavaScriptExecutor;
-            zIndexDNS = "";
-            zIndexFakel = "";
-            zIndexAmbar = "";
-            zIndexPlaces = "";
+            js = new Utils.TransformJS(driver);        
         }
 
         /// <summary>
         ///Перемещает каждый последний слой на позицию первого.
         ///</summary>
         [TestMethod]
-        public void СheckIncrementLayers()
+        public void CheckIncrementLayers()
         {
             DataPreparation();
-            IncrementLayerDNS();
-            IncrementLayerPlaces();
-            IncrementLayerAmbar();
-            IncrementLayerFakel();
+            IncrementLayer(NumberButtons.Dns, locationZindexDNS);
+            IncrementLayer(NumberButtons.Places, locationZindexPlaces);
+            IncrementLayer(NumberButtons.Ambar, locationZindexAmbar);
+            IncrementLayer(NumberButtons.Fakel, locationZindexFakel);
         }
 
         [TestCleanup]
         public void Clean()
         {
-            Thread.Sleep(2000);
-            driver.Quit();
+            GUI.Cleanup.get(driver).Quit();
         }
 
         private void DataPreparation()
@@ -62,42 +65,15 @@ namespace GetMapTest
                 GUI.Layers.get(driver).NeftyStructCheckBoxClick();
             GUI.SlideMenu.get(driver).OpenLegenda();
             listButtonsIncDec = driver.FindElements(By.CssSelector(locationButtonsIncDec));
+            zIndex = js.GetZIndex(locationZindexFakel);
         }
-
-        private void IncrementLayerDNS()
-        {
-            zIndexFakel = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_Факелы\")[0].div.style.zIndex;");
-            for (int i = 0; i < 3; i++)
-                listButtonsIncDec[6].Click();
-            zIndexDNS = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_ДНС\")[0].div.style.zIndex;");
-            Assert.AreEqual(zIndexFakel, zIndexDNS, "Слой не отобразился выше предыдущего");
-            Thread.Sleep(1000);
-        }
-
-        private void IncrementLayerPlaces()
+       
+        private void IncrementLayer(NumberButtons nb,string locationzIndex)
         {
             for (int i = 0; i < 3; i++)
-                listButtonsIncDec[4].Click();
-            zIndexPlaces = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_Кустовые площадки\")[0].div.style.zIndex;");
-            Assert.AreEqual(zIndexDNS, zIndexPlaces, "Слой не отобразился выше предыдущего");
-            Thread.Sleep(1000);
-        }
-
-        private void IncrementLayerAmbar()
-        {
-            for (int i = 0; i < 3; i++)
-                listButtonsIncDec[2].Click();
-            zIndexAmbar = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_Амбары\")[0].div.style.zIndex;");
-            Assert.AreEqual(zIndexPlaces, zIndexAmbar, "Слой не отобразился выше предыдущего");
-            Thread.Sleep(1000);
-        }
-
-        private void IncrementLayerFakel()
-        {
-            for (int i = 0; i < 3; i++)
-                listButtonsIncDec[0].Click();
-            zIndexFakel = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_Факелы\")[0].div.style.zIndex;");
-            Assert.AreEqual(zIndexPlaces, zIndexFakel, "Слой не отобразился выше предыдущего");
+                listButtonsIncDec[(int)nb].Click();
+            int zIndex = js.GetZIndex(locationzIndex);
+            Assert.AreEqual(this.zIndex, zIndex, "Слой не отобразился выше предыдущего");
             Thread.Sleep(1000);
         }
     }
