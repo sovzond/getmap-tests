@@ -110,5 +110,18 @@ namespace GetMapTest.Utils
             return GetCurrentExtent();
         }
 
+        /// <summary>
+        /// Извлекает из ссылки экстент и возвращает его ввиде массива строк.
+        /// </summary>
+        /// <param name="fulllink">Ссылка, из которой необходимо извлечь экстент</param>
+        /// <returns></returns>
+        public string[] SplitExtent(string fulllink)
+        {
+            int idx = fulllink.IndexOf('=');
+            idx++;
+            string onlyExtent = fulllink.Substring(idx);
+            string[] splited = onlyExtent.Split(',');
+            return splited;
+        }
     }
 }

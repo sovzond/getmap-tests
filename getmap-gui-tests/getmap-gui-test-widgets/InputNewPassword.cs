@@ -54,7 +54,8 @@ namespace GetMapTest.GUI
             {
                 if (listInputs[i].GetAttribute("type") == "password")
                 {
-                    dicAreas.Add(verify,listInputs[i]);
+                    dicAreas.Add(verify,listInputs[i+1]);
+                    break;
                 }
             }
             return this;

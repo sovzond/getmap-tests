@@ -42,10 +42,9 @@ namespace GetMapTest
             MoveToNeftyStruct();
             GUI.MenuDop.get(driver).OpenLinks();
             IWebElement elementTextArea = driver.FindElement(By.CssSelector(locationTextArea));
-            string fullLink = elementTextArea.Text;
-            string[] extentInTextArea = fullLink.Split(',');
+            string[] extentInTextArea = js.SplitExtent(elementTextArea.Text);
             string[] extentCurrent = js.GetCurrentExtent();
-            for (int i = 0; i < fullLink.Length; i++)
+            for (int i = 0; i < extentCurrent.Length; i++)
                 Assert.AreEqual(extentInTextArea[i], extentCurrent[i], "Текущий экстент карты не совпадает с ссылкой на экстент в текстовом поле.");
         }
 
