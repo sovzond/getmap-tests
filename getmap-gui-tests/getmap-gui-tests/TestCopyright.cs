@@ -12,15 +12,15 @@ namespace GetMapTest
     public class TestCopyright
     {
         private IWebDriver driver;
-        private IWebElement elementTextArea;
-        private const string locationTitles = "div.containerTitle h6";
-        private const string locationButtonCopyright = "map_over";
-        private const string locationTextArea = "div.copyrightText";
-        private const string textOSM = "© Участники OpenStreetMap";
+        private IWebElement elementTextArea; 
         private const string textRosreestr = "© Росреестр, 2010-2016";
         private const string textGibrid = "Изображения © DigitalGlobe, 2016, Картографические данные (с) Google, 2016";
         private const string textSputnik = "Изображения © DigitalGlobe, 2016";
         private const string textScheme = "Картографические данные © Google, 2016";
+        private const string locationTitles = "div.containerTitle h6";
+        private const string locationButtonCopyright = "map_over";
+        private const string locationTextArea = "div.copyrightText";
+        private const string textOSM = "© Участники OpenStreetMap";
 
         [TestInitialize]
         public void Setup()
