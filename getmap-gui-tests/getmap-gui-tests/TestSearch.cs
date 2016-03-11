@@ -35,7 +35,6 @@ namespace GetMapTest
             arrayForSearch[(int)NumberSearchAttribute.Ambar] = "Амбары";
             arrayForSearch[(int)NumberSearchAttribute.Places] = "Кустовые площадки";
             arrayForSearch[(int)NumberSearchAttribute.Dns] = "ДНС";
-
         }
 
         /// <summary>
