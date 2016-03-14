@@ -17,7 +17,7 @@ namespace GetMapTest.GUI
         private const string locationZoomAreaButton = "#menuNavigation div.svzSimpleButton.zoomIn";
         private const string locationMagnifyButton = "#menuNavigation div.svzSimpleButton.zoomIn";
         private const string locationIdentificationButton = "#menuNavigation div.svzSimpleButton.searchMap";
-        private const string locationSelectionButton = "#menuNavigation div.svzSimpleButton.searchMap";
+        private const string locationSelectionButton = "#menuNavigation div.svzSimpleButton.selectionSearch";
         private const string locationRuleButton = "#menuNavigation div.svzSimpleButton.measureButton";
         private const string locationGotoCoordsButton = "#menuNavigation div.svzSimpleButton.gotoCoordsButton";
         private MenuNavigation(IWebDriver driver)

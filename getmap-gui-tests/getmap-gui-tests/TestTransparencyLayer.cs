@@ -30,7 +30,7 @@ namespace GetMapTest
         public void Setup()
         {
             driver = Settings.Instance.createDriver();
-            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
+            GUI.Login.get(driver, Settings.Instance.BaseUrl).loginAsGuest();
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
         }
 

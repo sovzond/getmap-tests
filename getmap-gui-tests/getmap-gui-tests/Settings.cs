@@ -54,9 +54,9 @@ namespace GetMapTest
         /// </summary>
         /// <param name="driver">Передает аргумент для закрытого конструктора</param>
         /// <param name="url">Url по которому будет осуществлен переход.</param>
-        public void Open(IWebDriver driver ,string url)
+        public void Open(IWebDriver driver,string url)
         {
-            driver.Navigate().GoToUrl(url);
+           driver.Navigate().GoToUrl(url);
         }
     }
 }

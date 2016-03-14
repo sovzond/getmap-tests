@@ -70,12 +70,14 @@
     <Compile Include="TestErrorMessage.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="TestScale.cs" />
+    <Compile Include="TestSelection.cs" />
     <Compile Include="TestTransparencyLayer.cs" />
     <Compile Include="TestGoTo.cs" />
     <Compile Include="TestSearch.cs" />
     <Compile Include="TestChangePassword.cs" />
     <Compile Include="TestVectorMenuLayer.cs" />
     <Compile Include="TestZoomArea.cs" />
+    <Compile Include="UnitTest1.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\getmap-gui-test-widgets\getmap-gui-test-widgets.csproj">
