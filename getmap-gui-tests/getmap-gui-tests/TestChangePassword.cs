@@ -36,7 +36,7 @@ namespace GetMapTest
             CheckChangePassword("12345");
             CheckChangePassword("123");
         }
-
+        
         /// <summary>
         /// Вводит пароль и нажимает кнопку 'Отмена', затем проверяет, действительно ли то, что пароль не изменился.
         /// </summary>
@@ -45,7 +45,7 @@ namespace GetMapTest
         {
             CheckNotChangePassword("12315");
         }
-
+        
         /// <summary>
         /// Проверяет, действительно ли отображается всплывающее окно  при вводе разных паролей.
         /// </summary>

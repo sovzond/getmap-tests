@@ -14,12 +14,12 @@ namespace GetMapTest.GUI
     public class SlideMenu
     {
         private IWebDriver driver;
-        private const string rosreestr = "Росреестр";
-        private const string osm = "OpenStreetMap";
-        private const string toposnova = "Топоснова";
-        private const string sputnik = "Спутник";
-        private const string scheme = "Схема";
-        private const string gibrid = "Гибрид";
+        private const string _rosreestr = "Росреестр";
+        private const string _osm = "OpenStreetMap";
+        private const string _toposnova = "Топоснова";
+        private const string _sputnik = "Спутник";
+        private const string _scheme = "Схема";
+        private const string _gibrid = "Гибрид"; 
         private const string locationSlideMenu = "#menuSlide div.svzSimpleButton.slidePanelButton";
         private const string locationBaseLayers = "#layersCon div.svzSimpleButton.accordionButton";
         private const string locationLayersInGoogleLayersRB = "div.svzLayerManagerItem.svzLayerManagerItem1 > div";
@@ -27,30 +27,31 @@ namespace GetMapTest.GUI
         private const string locationLegenda = "#menuSlide div.svzSimpleButton.slidePanelLegendButton";
         private const string locationLayersInBaseLayersRB = "div.svzLayerManagerItem.svzLayerManagerItem0 > div";
         private const string locationDecTransparencyButtons = "div.dijitSliderDecrementIconH";
-        private const string locationIncTransparencyButtons = "div.dijitSliderIncrementIconH";
+        private const string locationIncTransparencyButtons = "div.dijitSliderIncrementIconH";   
         private Dictionary<string, IWebElement> dicRB;
         private IList<IWebElement> listLayersInGoogleLayers;
         private IList<IWebElement> listButtonsIncTransparency;
         private IList<IWebElement> listButtonsDecTransparency;
         private IList<IWebElement> listLayersInBaseLayers;
-        private enum NumberButtonsIncDec
+        private enum NumberButtonsTransparencyIncDec
         {
-            Fakel = 0,
-            Ambar = 1,
-            Places = 2,
-            DNS = 3
+            Fakel = 1,
+            Ambar = 2,
+            Places = 3,
+            DNS = 4
         }
 
         private SlideMenu(IWebDriver driver)
         {
-            this.driver = driver;
+            this.driver = driver;        
             SetValueList();
             SetValueElements();
         }
 
         private SlideMenu SetValueList()
         {
-            dicRB = new Dictionary<string, IWebElement>();
+ 
+            dicRB = new Dictionary<string, IWebElement>();                    
             listLayersInBaseLayers = driver.FindElements(By.CssSelector(locationLayersInBaseLayersRB));
             listLayersInGoogleLayers = driver.FindElements(By.CssSelector(locationLayersInGoogleLayersRB));
             listButtonsIncTransparency = driver.FindElements(By.CssSelector(locationIncTransparencyButtons));
@@ -63,20 +64,20 @@ namespace GetMapTest.GUI
             for (int i = 0; i < listLayersInBaseLayers.Count; i++)
             {
                 if (listLayersInBaseLayers[i].Text == "Росреестр")
-                    dicRB.Add(rosreestr,listLayersInBaseLayers[i - 1]);
+                    dicRB.Add(_rosreestr, listLayersInBaseLayers[i - 1]);
                 if (listLayersInBaseLayers[i].Text == "OpenStreetMap")
-                    dicRB.Add(osm,listLayersInBaseLayers[i - 1]);
+                    dicRB.Add(_osm, listLayersInBaseLayers[i - 1]);
                 if (listLayersInBaseLayers[i].Text == "Топооснова")
-                   dicRB.Add(toposnova,listLayersInBaseLayers[i - 1]);
+                    dicRB.Add(_toposnova, listLayersInBaseLayers[i - 1]);
             }
             for (int i = 0; i < listLayersInGoogleLayers.Count; i++)
             {
                 if (listLayersInGoogleLayers[i].Text == "Схема")
-                    dicRB.Add(scheme,listLayersInGoogleLayers[i - 1]);
+                    dicRB.Add(_scheme, listLayersInGoogleLayers[i - 1]);
                 if (listLayersInGoogleLayers[i].Text == "Спутник")
-                    dicRB.Add(sputnik,listLayersInGoogleLayers[i - 1]);
+                    dicRB.Add(_sputnik, listLayersInGoogleLayers[i - 1]);
                 if (listLayersInGoogleLayers[i].Text == "Гибрид")
-                    dicRB.Add(gibrid,listLayersInGoogleLayers[i - 1]);
+                    dicRB.Add(_gibrid, listLayersInGoogleLayers[i - 1]);
             }
             return this;
         }
@@ -117,7 +118,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public SlideMenu LayerSchemeClick()
         {
-            dicRB[scheme].Click();
+            dicRB[_scheme].Click();
             return this;
         }
 
@@ -127,7 +128,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public SlideMenu LayerSputnikClick()
         {
-            dicRB[sputnik].Click();
+            dicRB[_sputnik].Click();
             return this;
         }
 
@@ -137,7 +138,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public SlideMenu LayerGibridClick()
         {
-            dicRB[gibrid].Click();
+            dicRB[_gibrid].Click();
             return this;
         }
 
@@ -157,7 +158,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public SlideMenu RosreestrClick()
         {
-            dicRB[rosreestr].Click();
+            dicRB[_rosreestr].Click();
             return this;
         }
 
@@ -167,7 +168,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public SlideMenu OpenStreetMapClick()
         {
-            dicRB[osm].Click();
+            dicRB[_osm].Click();
             return this;
         }
 
@@ -177,7 +178,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public SlideMenu TopOsnovaClick()
         {
-            dicRB[toposnova].Click();
+            dicRB[_toposnova].Click();
             return this;
         }
 
@@ -190,18 +191,7 @@ namespace GetMapTest.GUI
             driver.FindElement(By.CssSelector(locationLegenda)).Click();
             return this;
         }
-        /*
-                /// <summary>
-                /// Выполняет клик по кнопке 'Поднять наверх слой' слоя 'Факел'.
-                /// </summary>
-                /// <returns></returns>
-                public SlideMenu ButtonIncFakelClick()
-                {
-                    Sleep();
-                    listButtonsIncDec[0].Click();
-                    return this;
-                }
-        */
+
         /// <summary>
         /// Увеличивает прозрачность слоя  'Факел'.
         /// </summary>
@@ -211,7 +201,7 @@ namespace GetMapTest.GUI
         {
             for (int i = 0; i < count; i++)
             {
-                listButtonsIncTransparency[(int)NumberButtonsIncDec.Fakel].Click();
+                listButtonsIncTransparency[(int)NumberButtonsTransparencyIncDec.Fakel].Click();
             }
             return this;
         }
@@ -225,22 +215,11 @@ namespace GetMapTest.GUI
         {
             for (int i = 0; i < count; i++)
             {
-                listButtonsDecTransparency[(int)NumberButtonsIncDec.Fakel].Click();
+                listButtonsDecTransparency[(int)NumberButtonsTransparencyIncDec.Fakel].Click();
             }
             return this;
         }
-        /*
-                /// <summary>
-                /// Выполняет клик по кнопке 'Поднять наверх слой' слоя 'Амбар'.
-                /// </summary>
-                /// <returns></returns>
-                public SlideMenu ButtonIncAmbarClick()
-                {
-                    Sleep();
-                    listButtonsIncDec[2].Click();
-                    return this;
-                }
-        */
+
         /// <summary>
         /// Увеличивает прозрачность слоя  'Амбар'.
         /// </summary>
@@ -250,7 +229,7 @@ namespace GetMapTest.GUI
         {
             for (int i = 0; i < count; i++)
             {
-                listButtonsIncTransparency[(int)NumberButtonsIncDec.Ambar].Click();
+                listButtonsIncTransparency[(int)NumberButtonsTransparencyIncDec.Ambar].Click();
             }
             return this;
         }
@@ -264,22 +243,11 @@ namespace GetMapTest.GUI
         {
             for (int i = 0; i < count; i++)
             {
-                listButtonsDecTransparency[(int)NumberButtonsIncDec.Ambar].Click();
+                listButtonsDecTransparency[(int)NumberButtonsTransparencyIncDec.Ambar].Click();
             }
             return this;
         }
-        /*
-                /// <summary>
-                /// Выполняет клик по кнопке 'Поднять наверх слой' слоя 'Кустовые площадки'.
-                /// </summary>
-                /// <returns></returns>
-                public SlideMenu ButtonIncPlacesClick()
-                {
-                    Sleep();
-                    listButtonsIncDec[4].Click();
-                    return this;
-                }
-        */
+
         /// <summary>
         /// Увеличивает прозрачность слоя  'Кустовые площадки'.
         /// </summary>
@@ -289,7 +257,7 @@ namespace GetMapTest.GUI
         {
             for (int i = 0; i < count; i++)
             {
-                listButtonsIncTransparency[(int)NumberButtonsIncDec.Places].Click();
+                listButtonsIncTransparency[(int)NumberButtonsTransparencyIncDec.Places].Click();
             }
             return this;
         }
@@ -303,22 +271,11 @@ namespace GetMapTest.GUI
         {
             for (int i = 0; i < count; i++)
             {
-                listButtonsDecTransparency[(int)NumberButtonsIncDec.Places].Click();
+                listButtonsDecTransparency[(int)NumberButtonsTransparencyIncDec.Places].Click();
             }
             return this;
         }
-        /*
-                /// <summary>
-                /// Выполняет клик по кнопке 'Поднять наверх слой' слоя 'ДНС'.
-                /// </summary>
-                /// <returns></returns>
-                public SlideMenu ButtonIncDNSClick()
-                {
-                    Sleep();
-                    listButtonsIncDec[6].Click();
-                    return this;
-                }
-        */
+
         /// <summary>
         /// Увеличивает прозрачность слоя  'ДНС'.
         /// </summary>
@@ -328,7 +285,7 @@ namespace GetMapTest.GUI
         {
             for (int i = 0; i < count; i++)
             {
-                listButtonsIncTransparency[(int)NumberButtonsIncDec.DNS].Click();
+                listButtonsIncTransparency[(int)NumberButtonsTransparencyIncDec.DNS].Click();
             }
             return this;
         }
@@ -342,7 +299,7 @@ namespace GetMapTest.GUI
         {
             for (int i = 0; i < count; i++)
             {
-                listButtonsDecTransparency[(int)NumberButtonsIncDec.DNS].Click();
+                listButtonsDecTransparency[(int)NumberButtonsTransparencyIncDec.DNS].Click();
             }
             return this;
         }

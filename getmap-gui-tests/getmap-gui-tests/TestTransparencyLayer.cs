@@ -24,6 +24,9 @@ namespace GetMapTest
         private const string layerDns = "ДНС";
         private const string locationPointer = ".olAlphaImg";
         private const string locationRadioButtons = "div.svzLayerManagerItem input";
+        private const string locationSlideMenu = "#menuSlide div.svzSimpleButton.slidePanelButton";
+        private const string locationBaseLayers = "#layersCon div.svzSimpleButton.accordionButton";
+        private const string locationGoogle = "#stdportal_LayerManagerBase_0 div.svzLayerManagerText";
         private Rectangle area;
 
         [TestInitialize]
@@ -56,10 +59,15 @@ namespace GetMapTest
 
         private void DataPreparation()
         {
+            driver.FindElement(By.CssSelector(locationSlideMenu)).Click();
+            System.Threading.Thread.Sleep(1000);
+            driver.FindElement(By.CssSelector(locationBaseLayers)).Click();
+            driver.FindElement(By.CssSelector(locationGoogle)).Click();
             GUI.InputCoordWnd.get(driver).setLon(60, 53, 0).setLat(69, 55, 0).click();
             listImgPointer = driver.FindElements(By.CssSelector(locationPointer));
             GUI.ScaleMenu.get(driver).IncrementButton();
-            GUI.SlideMenu.get(driver).OpenLayers().OpenBaseLayers().TopOsnovaClick();
+            System.Threading.Thread.Sleep(1000);
+            GUI.SlideMenu.get(driver).TopOsnovaClick();
             if (!GUI.Layers.get(driver).GetSelectedNeftyStruct)
                 GUI.Layers.get(driver).NeftyStructCheckBoxClick();
             GUI.SlideMenu.get(driver).OpenLegenda();
