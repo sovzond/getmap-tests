@@ -24,7 +24,6 @@ namespace GetMapTest
                 this.y = Int32.Parse(arr[3]);
                 this.x = Int32.Parse(arr[1]);
             }
-
             public XY(int x, int y)
             {
                 this.x = x;
