@@ -29,7 +29,6 @@ namespace GetMapTest
                 this.x = x;
                 this.y = y;
             }
-
             public int getX
             {
                 get
