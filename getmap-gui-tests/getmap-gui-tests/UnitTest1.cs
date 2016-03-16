@@ -57,7 +57,6 @@ namespace GetMapTest
             jsExecutor = driver as IJavaScriptExecutor;
             jsTransform = new Utils.TransformJS(driver);
         }
-
         [TestMethod]
         public void TestMet1()
         {
