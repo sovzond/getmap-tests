@@ -8,8 +8,8 @@ namespace GetMapTest.Utils
 
     public class XY
     {
-        private int y;
         private int x;
+        private int y;
 
         public XY(string xy)
         {
@@ -39,13 +39,13 @@ namespace GetMapTest.Utils
             }
 
         }
+
         public int getY
         {
             get
             {
                 return y;
             }
-
         }
     }
 }

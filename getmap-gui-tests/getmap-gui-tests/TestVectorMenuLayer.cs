@@ -21,7 +21,7 @@ namespace GetMapTest
         public void Setup()
         {
             driver = Settings.Instance.createDriver();
-            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
+            GUI.Login.get(driver, Settings.Instance.BaseUrl).loginAsGuest();
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
         }
 
@@ -31,8 +31,25 @@ namespace GetMapTest
         [TestMethod]
         public void CheckVectorMenuNeftyStruct()
         {
-            CheckVectorMenuLayerFakel();
-
+            GUI.SlideMenu.get(driver).OpenLayers();
+            GUI.Layers.get(driver).NeftyStructOpenCloseList();
+            GUI.NeftyStructLayer.get(driver).FakelSBClick();
+            try
+            {
+                GUI.VectorButtonsLayer.get(driver).StatisticsLayerClick();
+            }
+            catch (Exception)
+            {
+                Assert.Fail("Над слоем 'Факелы' не отобразилась  кнопка  - 'Статистика слоя'.");
+            }
+            try
+            {
+                GUI.VectorButtonsLayer.get(driver).ZoomToLayerExtent();
+            }
+            catch (Exception)
+            {
+                Assert.Fail("Над слоем 'Факелы' не отобразилась  кнопка  - 'Приблежение к экстенту слоя'.");
+            }
         }
 
         /// <summary>
@@ -41,44 +58,10 @@ namespace GetMapTest
         [TestMethod]
         public void CheckVectorMenuMoscowArea()
         {
-            CheckVectorMenuLayerLandsat();
-        }
-
-        [TestCleanup]
-        public void Clean()
-        {
-            GUI.Cleanup.get(driver).Quit();
-        }
-
-        private void CheckVectorMenuLayerFakel()
-        {
-            GUI.SlideMenu.get(driver).OpenLayers();
-            GUI.Layers.get(driver).NeftyStructOpenCloseList();
-            GUI.Layers.NeftyStructClass.get(driver).FakelSBClick();
-            try
-            {
-                GUI.Layers.VectorButtonsClass.get(driver).StatisticsLayerClick();
-            }
-            catch (Exception)
-            {
-                Assert.Fail("Над слоем 'Факелы' не отобразилась  кнопка  - 'Статистика слоя'.");
-            }
-            try
-            {
-                GUI.Layers.VectorButtonsClass.get(driver).ZoomToLayerExtent();
-            }
-            catch (Exception)
-            {
-                Assert.Fail("Над слоем 'Факелы' не отобразилась  кнопка  - 'Приблежение к экстенту слоя'.");
-            }
-        }
-
-        private void CheckVectorMenuLayerLandsat()
-        {
             listButtons = driver.FindElements(By.CssSelector(locationListButtons));
             GUI.SlideMenu.get(driver).OpenLayers();
             GUI.Layers.get(driver).MoscowAreaOpenCloseList();
-            GUI.Layers.MoscowAreaClass.get(driver).LandsatSBClick();
+            GUI.MoscowAreaLayer.get(driver).LandsatSBClick();
             try
             {
                 for (int i = 0; i < listButtons.Count; i++)
@@ -87,13 +70,21 @@ namespace GetMapTest
                     {
                         System.Threading.Thread.Sleep(500);
                         listButtons[i - 2].Click();
+                        break;
                     }
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 Assert.Fail("Над слоем 'Мозаика Landsat' не отобразилась кнопка - 'Приблежение к экстенту слоя'. ");
             }
         }
+
+        [TestCleanup]
+        public void Clean()
+        {
+            GUI.Cleanup.get(driver).Quit();
+        }
+
     }
 }

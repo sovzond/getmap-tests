@@ -46,6 +46,9 @@
   <ItemGroup>
     <Compile Include="Cleanup.cs" />
     <Compile Include="CoordsXY.cs" />
+    <Compile Include="CosmoPhotoLayer.cs" />
+    <Compile Include="EnergyStructLayer.cs" />
+    <Compile Include="GasStructLayer.cs" />
     <Compile Include="HeaderLinks.cs" />
     <Compile Include="InputCoordWnd.cs" />
     <Compile Include="InputNewPassword.cs" />
@@ -54,9 +57,16 @@
     <Compile Include="MenuDop.cs" />
     <Compile Include="MenuNavigation.cs" />
     <Compile Include="MenuNavigationHistory.cs" />
+    <Compile Include="MoscowAreaLayer.cs" />
+    <Compile Include="NeftyStructLayer.cs" />
+    <Compile Include="NewGroupLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScaleMenu.cs" />
     <Compile Include="SlideMenu.cs" />
+    <Compile Include="TematicMapLayer.cs" />
+    <Compile Include="TestLayer.cs" />
+    <Compile Include="VectorButtonsLayer.cs" />
+    <Compile Include="ZoyaTestLayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

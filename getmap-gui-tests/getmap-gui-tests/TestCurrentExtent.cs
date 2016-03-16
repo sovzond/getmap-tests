@@ -15,6 +15,11 @@ namespace GetMapTest
     public class TestCurrentExtent
     {
         private IWebDriver driver;
+        Utils.TransformJS js;
+        private const int Xfirst = 730;
+        private const int Yfirst = 60;
+        private const int Xsecond = 800;
+        private const int Ysecond = 40;
         private const string locationTextArea = "#linkExtent textarea";
         private const string locationElementForMove = "#map";
 
@@ -22,8 +27,9 @@ namespace GetMapTest
         public void Setup()
         {
             driver = Settings.Instance.createDriver();
-            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
+            GUI.Login.get(driver, Settings.Instance.BaseUrl).loginAsGuest();
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
+            js = new Utils.TransformJS(driver);
         }
 
         /// <summary>
@@ -32,7 +38,14 @@ namespace GetMapTest
         [TestMethod]
         public void CheckButtonLink()
         {
-            ButtonLink();
+            GUI.MenuNavigation.get(driver).GotoCoordsButton();
+            MoveToNeftyStruct();
+            GUI.MenuDop.get(driver).OpenLinks();
+            IWebElement elementTextArea = driver.FindElement(By.CssSelector(locationTextArea));
+            string[] extentInTextArea = js.SplitExtent(elementTextArea.Text);
+            string[] extentCurrent = js.GetCurrentExtent();
+            for (int i = 0; i < extentCurrent.Length; i++)
+                Assert.AreEqual(extentInTextArea[i], extentCurrent[i], "Текущий экстент карты не совпадает с ссылкой на экстент в текстовом поле.");
         }
 
         /// <summary>
@@ -41,7 +54,12 @@ namespace GetMapTest
         [TestMethod]
         public void CheckButtonFullExtent()
         {
-            ButtonFullExtent();
+            string[] baseExtent = js.GetBaseExtent();
+            MoveToNeftyStruct();
+            GUI.MenuNavigation.get(driver).FullExtentButton();
+            string[] currentExtent = js.GetCurrentExtent();
+            for (int i = 0; i < baseExtent.Length; i++)
+                Assert.AreEqual(currentExtent[i], baseExtent[i], "После клика по кнопке 'Полный экстент' экстент перестал совпадать с тем, который отображается при входе. ");
         }
 
         /// <summary>
@@ -50,7 +68,15 @@ namespace GetMapTest
         [TestMethod]
         public void CheckBackButton()
         {
-            BackButton();
+            string[] extentBeforeMove = js.GetCurrentExtent();
+            GUI.MenuNavigation.get(driver).MoveButton();
+            IWebElement elementForMove = driver.FindElement(By.CssSelector(locationElementForMove));
+            var builder = new Actions(driver);
+            builder.MoveToElement(elementForMove, Xfirst, Yfirst).ClickAndHold().MoveToElement(elementForMove, Xsecond, Ysecond).Release().Perform();
+            GUI.MenuNavigationHistory.get(driver).Back();
+            string[] extentAfterMove = js.GetCurrentExtent();
+            for (int i = 0; i < extentAfterMove.Length; i++)
+                Assert.AreEqual(extentBeforeMove[i], extentAfterMove[i], "После клика по кнопке 'Предыдущий экстент' экстент перестал совпадать с тем, который был до перемещения карты. ");
         }
 
         /// <summary>
@@ -59,64 +85,23 @@ namespace GetMapTest
         [TestMethod]
         public void CheckNextButton()
         {
-            NextButton();
+            MoveToNeftyStruct();
+            string[] extentBeforeMove = js.GetCurrentExtent();
+            GUI.MenuNavigationHistory.get(driver).Back().Next();
+            string[] extentAfterMove = js.GetCurrentExtent();
+            for (int i = 0; i < extentBeforeMove.Length; i++)
+                Assert.AreEqual(extentBeforeMove[i], extentAfterMove[i], "После клика по кнопке 'Слующий экстент' экстент перестал совпадать с тем, который был до клика по кнопке 'Предыдущий экстент' .");
         }
 
         [TestCleanup]
         public void Clean()
         {
             GUI.Cleanup.get(driver).Quit();
-        }
+        }     
 
-        private void ButtonLink()
+        private void MoveToNeftyStruct()
         {
-            GUI.MenuNavigation.get(driver).GotoCoordsButton();
             GUI.InputCoordWnd.get(driver).setLon(60, 50, 50).setLat(60, 50, 50).click();
-            GUI.MenuDop.get(driver).OpenLinks();
-            IWebElement elementTextArea = driver.FindElement(By.CssSelector(locationTextArea));
-            string fullLink = elementTextArea.Text;
-            Utils.XY extentInTextArea = new Utils.XY(fullLink);
-            Utils.TransformJS js = new Utils.TransformJS(driver);
-            Utils.XY extentCurrent = js.GetCurrentExtent();
-                Assert.AreEqual(extentInTextArea, extentCurrent, "Текущий экстент карты не совпадает с ссылкой на экстент в текстовом поле.");
         }
-
-        private void ButtonFullExtent()
-        {
-            Settings.Instance.Open(driver, Settings.Instance.BaseUrl);
-            Utils.TransformJS js = new Utils.TransformJS(driver);
-            Utils.XY baseExtent = js.GetBaseExtent();
-            GUI.InputCoordWnd.get(driver).setLon(60, 50, 50).setLat(60, 50, 50).click();
-            GUI.MenuNavigation.get(driver).FullExtentButton();
-            Utils.XY currentExtent = js.GetCurrentExtent();
-                Assert.AreEqual(currentExtent, baseExtent, "После клика по кнопке 'Полный экстент' экстент перестал совпадать с тем, который отображается при входе. ");
-        }
-
-        private void BackButton()
-        {
-            Settings.Instance.Open(driver, Settings.Instance.BaseUrl);
-            Utils.TransformJS js = new Utils.TransformJS(driver);
-            Utils.XY extentBeforeMove = js.GetCurrentExtent();
-            GUI.MenuNavigation.get(driver).MoveButton();
-            IWebElement elementForMove = driver.FindElement(By.CssSelector(locationElementForMove));
-            var builder = new Actions(driver);
-            builder.MoveToElement(elementForMove, 731, 60).ClickAndHold().Perform();
-            builder.MoveToElement(elementForMove, 800, 40).Release().Perform();
-            GUI.MenuNavigationHistory.get(driver).Back();
-            Utils.XY extentAfterMove = js.GetCurrentExtent();
-                Assert.AreEqual(extentBeforeMove, extentAfterMove, "После клика по кнопке 'Предыдущий экстент' экстент перестал совпадать с тем, который был до перемещения карты. ");
-        }
-
-        private void NextButton()
-        {
-            Settings.Instance.Open(driver, Settings.Instance.BaseUrl);
-            GUI.InputCoordWnd.get(driver).setLon(60, 50, 50).setLat(60, 50, 50).click();
-            Utils.TransformJS js = new Utils.TransformJS(driver);
-            Utils.XY extentBeforeMove = js.GetCurrentExtent();
-            GUI.MenuNavigationHistory.get(driver).Back().Next();
-            Utils.XY extentAfterMove = js.GetCurrentExtent();
-                Assert.AreEqual(extentBeforeMove, extentAfterMove, "После клика по кнопке 'Слующий экстент' экстент перестал совпадать с тем, который был до клика по кнопке 'Предыдущий экстент' .");
-        }
-
     }
 }

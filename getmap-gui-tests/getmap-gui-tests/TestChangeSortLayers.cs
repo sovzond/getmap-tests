@@ -14,45 +14,61 @@ namespace GetMapTest
     public class TestChangeSortLayers
     {
         private IWebDriver driver;
-        private IJavaScriptExecutor js;
-        private string zIndexDNS;
-        private string zIndexFakel;
-        private string zIndexAmbar;
-        private string zIndexPlaces;
-        private IList<IWebElement> listButtonsIncDec;
-        private const string locationButtonsIncDec = "span.move img";
+        private int zIndex;
+        private const string _fakel = "Факел";
+        private const string _ambar = "Амбар";
+        private const string _places = "Кустовые площадки";
+        private const string _dns = "ДНС";
+        private const string locationImgButtonsFakel = "//div[@dataname='wms_Факелы']/span/img";
+        private const string locationImgButtonsAmbar = "//div[@dataname='wms_Амбары']/span/img";
+        private const string locationImgButtonsPlaces = "//div[@dataname='wms_Кустовые площадки']/span/img";
+        private const string locationImgButtonsDNS = "//div[@dataname='wms_ДНС']/span/img";
+        private const string locationZindexFakel = "wms_Факелы";
+        private const string locationZindexAmbar = "wms_Амбары";
+        private const string locationZindexPlaces = "wms_Кустовые площадки";
+        private const string locationZindexDNS = "wms_ДНС";
+        private IList<IWebElement> listImgButtonsFakel;
+        private IList<IWebElement> listImgButtonsAmbar;
+        private IList<IWebElement> listImgButtonsPlaces;
+        private IList<IWebElement> listImgButtonsDns;
+        Dictionary<string, IWebElement> dicButtonsUp;
+        Dictionary<string, IWebElement> dicButtonsDown;
+        Utils.TransformJS js;
+        private enum NumberButtonsUpDown
+        {
+            Up = 0,
+            Dowm = 1
+        }
 
         [TestInitialize]
         public void Setup()
         {
             driver = Settings.Instance.createDriver();
-            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
+            GUI.Login.get(driver, Settings.Instance.BaseUrl).loginAsGuest();
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
-            js = driver as IJavaScriptExecutor;
-            zIndexDNS = "";
-            zIndexFakel = "";
-            zIndexAmbar = "";
-            zIndexPlaces = "";
+            js = new Utils.TransformJS(driver);
+            dicButtonsUp = new Dictionary<string, IWebElement>();
+            dicButtonsDown = new Dictionary<string, IWebElement>();
         }
 
         /// <summary>
         ///Перемещает каждый последний слой на позицию первого.
         ///</summary>
         [TestMethod]
-        public void СheckIncrementLayers()
+        public void CheckIncrementLayers()
         {
-            DataPreparation();
-            IncrementLayerDNS();
-            IncrementLayerPlaces();
-            IncrementLayerAmbar();
-            IncrementLayerFakel();
+            DataPreparation();  
+            IncrementLayer(_dns, locationZindexDNS);
+            IncrementLayer(_places, locationZindexPlaces);
+            IncrementLayer(_ambar, locationZindexAmbar);
+            IncrementLayer(_fakel, locationZindexFakel);
+            
         }
 
         [TestCleanup]
         public void Clean()
         {
-            Thread.Sleep(2000);
-            driver.Quit();
+            GUI.Cleanup.get(driver).Quit();
         }
 
         private void DataPreparation()
@@ -61,43 +77,27 @@ namespace GetMapTest
             if (!GUI.Layers.get(driver).GetSelectedNeftyStruct)
                 GUI.Layers.get(driver).NeftyStructCheckBoxClick();
             GUI.SlideMenu.get(driver).OpenLegenda();
-            listButtonsIncDec = driver.FindElements(By.CssSelector(locationButtonsIncDec));
+            listImgButtonsFakel = driver.FindElements(By.XPath(locationImgButtonsFakel));
+            listImgButtonsAmbar = driver.FindElements(By.XPath(locationImgButtonsAmbar));
+            listImgButtonsPlaces = driver.FindElements(By.XPath(locationImgButtonsPlaces));
+            listImgButtonsDns = driver.FindElements(By.XPath(locationImgButtonsDNS));
+            dicButtonsUp.Add(_fakel, listImgButtonsFakel[(int)NumberButtonsUpDown.Up]);
+            dicButtonsDown.Add(_fakel, listImgButtonsFakel[(int)NumberButtonsUpDown.Dowm]);
+            dicButtonsUp.Add(_ambar, listImgButtonsAmbar[(int)NumberButtonsUpDown.Up]);
+            dicButtonsDown.Add(_ambar, listImgButtonsAmbar[(int)NumberButtonsUpDown.Dowm]);
+            dicButtonsUp.Add(_places, listImgButtonsPlaces[(int)NumberButtonsUpDown.Up]);
+            dicButtonsDown.Add(_places, listImgButtonsPlaces[(int)NumberButtonsUpDown.Dowm]);
+            dicButtonsUp.Add(_dns, listImgButtonsDns[(int)NumberButtonsUpDown.Up]);
+            dicButtonsDown.Add(_dns, listImgButtonsDns[(int)NumberButtonsUpDown.Dowm]);
+            zIndex = js.GetZIndex(locationZindexFakel);
         }
 
-        private void IncrementLayerDNS()
-        {
-            zIndexFakel = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_Факелы\")[0].div.style.zIndex;");
-            for (int i = 0; i < 3; i++)
-                listButtonsIncDec[6].Click();
-            zIndexDNS = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_ДНС\")[0].div.style.zIndex;");
-            Assert.AreEqual(zIndexFakel, zIndexDNS, "Слой не отобразился выше предыдущего");
-            Thread.Sleep(1000);
-        }
-
-        private void IncrementLayerPlaces()
+        private void IncrementLayer(string key, string locationzIndex)
         {
             for (int i = 0; i < 3; i++)
-                listButtonsIncDec[4].Click();
-            zIndexPlaces = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_Кустовые площадки\")[0].div.style.zIndex;");
-            Assert.AreEqual(zIndexDNS, zIndexPlaces, "Слой не отобразился выше предыдущего");
-            Thread.Sleep(1000);
-        }
-
-        private void IncrementLayerAmbar()
-        {
-            for (int i = 0; i < 3; i++)
-                listButtonsIncDec[2].Click();
-            zIndexAmbar = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_Амбары\")[0].div.style.zIndex;");
-            Assert.AreEqual(zIndexPlaces, zIndexAmbar, "Слой не отобразился выше предыдущего");
-            Thread.Sleep(1000);
-        }
-
-        private void IncrementLayerFakel()
-        {
-            for (int i = 0; i < 3; i++)
-                listButtonsIncDec[0].Click();
-            zIndexFakel = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_Факелы\")[0].div.style.zIndex;");
-            Assert.AreEqual(zIndexPlaces, zIndexFakel, "Слой не отобразился выше предыдущего");
+                dicButtonsUp[key].Click();
+            int zIndex = js.GetZIndex(locationzIndex);
+            Assert.AreEqual(this.zIndex, zIndex, "Слой не отобразился выше предыдущего");
             Thread.Sleep(1000);
         }
     }

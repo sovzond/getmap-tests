@@ -14,6 +14,9 @@ namespace GetMapTest
     public class TestCheckCoordsView
     {
         private IWebDriver driver;
+        private const int numberCoords = 1;
+        private const int coordMonitorX = 730;
+        private const int coordMonitorY = 60;
         private const string textDecimal = " Широта:";
         private const string textMetres = " X:";
         private const string locationMiddle = "#map";
@@ -25,7 +28,7 @@ namespace GetMapTest
         public void Setup()
         {
             driver = Settings.Instance.createDriver();
-            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
+            GUI.Login.get(driver, Settings.Instance.BaseUrl).loginAsGuest();
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
             listDivTextCoord = driver.FindElements(By.CssSelector(locationDivTextCoord));
         }
@@ -50,16 +53,16 @@ namespace GetMapTest
         {
             elementForMove = driver.FindElement(By.CssSelector(locationMiddle));
             var builder = new Actions(driver);
-            builder.MoveToElement(elementForMove, 730, 60).ClickAndHold().MoveByOffset(0, 0).Release().Perform();
+            builder.MoveToElement(elementForMove, coordMonitorX, coordMonitorY).ClickAndHold().MoveByOffset(0, 0).Release().Perform();
             GUI.CoordsXY.get(driver).DecimalClick();
-            Assert.IsTrue(listDivTextCoord[1].Text.StartsWith(textDecimal), "После перевода координат в систему счисления 'Десятичные градусы' , они не перевелись.");
+            Assert.IsTrue(listDivTextCoord[numberCoords].Text.StartsWith(textDecimal), "После перевода координат в систему счисления 'Десятичные градусы' , они не перевелись.");
         }
 
         private void CheckMetresCoords()
         {
             System.Threading.Thread.Sleep(1000);
             GUI.CoordsXY.get(driver).MetresClick();
-            Assert.IsTrue(listDivTextCoord[1].Text.StartsWith(textMetres), "После перевода координат в систему счисления 'Метры' , они не перевелись.");
+            Assert.IsTrue(listDivTextCoord[numberCoords].Text.StartsWith(textMetres), "После перевода координат в систему счисления 'Метры' , они не перевелись.");
         }
 
     }

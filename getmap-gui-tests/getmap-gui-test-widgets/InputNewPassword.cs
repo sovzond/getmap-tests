@@ -5,28 +5,60 @@ using System.Text;
 using OpenQA.Selenium;
 namespace GetMapTest.GUI
 {
-    
+
     /// <summary>
     /// Выполянет доступ к окну 'Изменение пароля'.
     /// </summary>
-   public class InputNewPassword
+    public class InputNewPassword
     {
         private IWebDriver driver;
-        private const string locationInputs = "div.container table input";
+        private const string locationInputs = "input.dijitReset.dijitInputInner";
         private const string locationButtons = "div.container table button";
+        private const string newPassword = "new password";
+        private const string verify = "verify";
         private IList<IWebElement> listInputs;
         private IList<IWebElement> listButtons;
+        private Dictionary<string, IWebElement> dicAreas;
+        private enum Buttons
+        {
+            Input = 0,
+            Cancel = 1
+        }
 
         private InputNewPassword(IWebDriver driver)
         {
             this.driver = driver;
-            listInputs = driver.FindElements(By.CssSelector(locationInputs));
-            listButtons = driver.FindElements(By.CssSelector(locationButtons));
+            SetValueList();
+            SetValueElements();
         }
 
-        private void Sleep()
+        private InputNewPassword SetValueList()
         {
-           System.Threading.Thread.Sleep(2000);   
+            dicAreas = new Dictionary<string, IWebElement>();
+            listInputs = driver.FindElements(By.CssSelector(locationInputs));
+            listButtons = driver.FindElements(By.CssSelector(locationButtons));
+            return this;
+        }
+
+        private InputNewPassword SetValueElements()
+        {
+            for (int i = 0; i < listInputs.Count; i++)
+            {
+                if (listInputs[i].GetAttribute("type") == "password")
+                {
+                    dicAreas.Add(newPassword,listInputs[i]);
+                    break;
+                }
+            }
+            for (int i = 0; i < listInputs.Count; i++)
+            {
+                if (listInputs[i].GetAttribute("type") == "password")
+                {
+                    dicAreas.Add(verify,listInputs[i+1]);
+                    break;
+                }
+            }
+            return this;
         }
 
         /// <summary>
@@ -46,8 +78,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public InputNewPassword NewPasswordSendKeys(string sendkeys)
         {
-            Sleep();
-            listInputs[22].SendKeys(sendkeys);
+            dicAreas[newPassword].SendKeys(sendkeys);
             return this;
         }
 
@@ -58,8 +89,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public InputNewPassword VerifyPasswordSendKeys(string sendkeys)
         {
-            Sleep();
-            listInputs[24].SendKeys(sendkeys);
+            dicAreas[verify].SendKeys(sendkeys);
             return this;
         }
 
@@ -69,8 +99,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public InputNewPassword ButtonInputClick()
         {
-            Sleep();
-            listButtons[0].Click();
+            listButtons[(int)Buttons.Input].Click();
             return this;
         }
 
@@ -80,8 +109,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public InputNewPassword ButtonCancelClick()
         {
-            Sleep();
-            listButtons[1].Click();
+            listButtons[(int)Buttons.Cancel].Click();
             return this;
         }
 

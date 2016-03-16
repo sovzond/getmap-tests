@@ -23,7 +23,7 @@ namespace GetMapTest
         public void SetupTest()
         {
             driver = Settings.Instance.createDriver();
-            GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", "123");
+            GUI.Login.get(driver,Settings.Instance.BaseUrl).login("student", "123");
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию.");
         }
 
@@ -36,7 +36,7 @@ namespace GetMapTest
             CheckChangePassword("12345");
             CheckChangePassword("123");
         }
-
+        
         /// <summary>
         /// Вводит пароль и нажимает кнопку 'Отмена', затем проверяет, действительно ли то, что пароль не изменился.
         /// </summary>
@@ -45,7 +45,7 @@ namespace GetMapTest
         {
             CheckNotChangePassword("12315");
         }
-
+        
         /// <summary>
         /// Проверяет, действительно ли отображается всплывающее окно  при вводе разных паролей.
         /// </summary>
@@ -89,13 +89,13 @@ namespace GetMapTest
 
         private void IsFail(string password)
         {
-            GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", password);
+            GUI.Login.get(driver,Settings.Instance.BaseUrl).login("student", password);
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Изменение пароля не прошло удачно");
         }
 
         private void IsNotFail(string password)
         {
-            GUI.Login.login(driver, Settings.Instance.BaseUrl, "student", password);
+            GUI.Login.get(driver, Settings.Instance.BaseUrl).login("student", password);
             Assert.AreEqual(loginUrl, driver.Url, "После нажатия кнопки 'Отмена' , пароль все - таки был изменен.");
         }
 

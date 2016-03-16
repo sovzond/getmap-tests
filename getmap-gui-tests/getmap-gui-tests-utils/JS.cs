@@ -67,22 +67,11 @@ namespace GetMapTest.Utils
         }
 
         /// <summary>
-        /// Возвращает целочисленные координаты карты с указаннами параметрами.
-        /// </summary>
-        /// <param name="xy"></param>
-        /// <returns></returns>
-        public XY GetPixelFromPixel(XY xy)
-        {
-            return (XY)js.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(" + xy.getX + "," + xy.getY + ").transform('EPSG:4326','EPSG:3857')).toString()");
-
-        }
-
-        /// <summary>
         /// Возвращает zIndex элемента.
         /// </summary>
         /// <param name="element">Элемент, zIndex которые будет возвращен.</param>
         /// <returns></returns>
-        public int zIndex(string element)
+        public int GetZIndex(string element)
         {
             string zIndexStr = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"" + element + "\")[0].div.style.zIndex;");
             int zIndexConverted = Convert.ToInt32(zIndexStr);
@@ -93,7 +82,7 @@ namespace GetMapTest.Utils
         /// Возвращает текущий зум карты.
         /// </summary>
         /// <returns></returns>
-        public int Zoom()
+        public int GetZoom()
         {
             string zoomStr = (string)js.ExecuteScript("return window.portal.stdmap.map.getZoom().toString()");
             int zoomConverted = Convert.ToInt32(zoomStr);
@@ -104,21 +93,35 @@ namespace GetMapTest.Utils
         /// Возвращает текущий экстент карты.
         /// </summary>
         /// <returns></returns>
-        public XY GetCurrentExtent()
+        public string[] GetCurrentExtent()
         {
-            return (XY)js.ExecuteScript("return window.portal.stdmap.map.getExtent().toString()");
-
+            string fulllink = (string)js.ExecuteScript("return window.portal.stdmap.map.getExtent().toString()");
+            string[] splited = fulllink.Split(',');
+            return splited;
         }
 
         /// <summary>
         /// Возвращает базовый экстент карты.
         /// </summary>
         /// <returns></returns>
-        public XY GetBaseExtent()
+        public string[] GetBaseExtent()
         {
             driver.FindElement(By.CssSelector("#menuNavigation div.svzSimpleButton.fullMap")).Click();
             return GetCurrentExtent();
         }
 
+        /// <summary>
+        /// Извлекает из ссылки экстент и возвращает его ввиде массива строк.
+        /// </summary>
+        /// <param name="fulllink">Ссылка, из которой необходимо извлечь экстент</param>
+        /// <returns></returns>
+        public string[] SplitExtent(string fulllink)
+        {
+            int idx = fulllink.IndexOf('=');
+            idx++;
+            string onlyExtent = fulllink.Substring(idx);
+            string[] splited = onlyExtent.Split(',');
+            return splited;
+        }
     }
 }
