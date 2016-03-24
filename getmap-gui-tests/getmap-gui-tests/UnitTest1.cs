@@ -43,7 +43,6 @@ namespace GetMapTest
                 {
                     return y;
                 }
-
             }
         }
         [TestInitialize]
