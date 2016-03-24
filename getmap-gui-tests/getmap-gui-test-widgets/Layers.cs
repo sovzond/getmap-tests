@@ -14,15 +14,16 @@ namespace GetMapTest.GUI
     public class Layers
     {
         private IWebDriver driver;
-        private const string newGroup = "Новая группа";
-        private const string test = "Тест";
-        private const string zoyaTest = "Зоя. Тест";
-        private const string moscowArea = "Московская область";
-        private const string gasStruct = "Газовая инфраструктура";
-        private const string energyStruct = "Энергетическая инфраструктура";
-        private const string neftyStrcut = "Нефтяная инфраструктура";
-        private const string tematicMap = "Тематические карты";
-        private const string cosmoPhoto = "Космические снимки";
+        private const string _newGroup = "Новая группа";
+        private const string _newGroup2 = "Новая группа 2";
+        private const string _test = "Тест";
+        private const string _zoyaTest = "Зоя. Тест";
+        private const string _moscowArea = "Московская область";
+        private const string _gasStruct = "Газовая инфраструктура";
+        private const string _energyStruct = "Энергетическая инфраструктура";
+        private const string _neftyStrcut = "Нефтяная инфраструктура";
+        private const string _tematicMap = "Тематические карты";
+        private const string _cosmoPhoto = "Космические снимки";
         private const string locationDropDownMenu = "div.svzLayerManagerText";
         private const string locationCheckBoxes = "div.svzLayerManagerItem.svzLayerManagerItemSection div";
         private Dictionary<string, IWebElement> dicDDM;
@@ -51,70 +52,77 @@ namespace GetMapTest.GUI
             foreach (var el in listDropDowmMenu)
             {
                 if (el.Text == "Тест")
-                    dicDDM.Add(test, el);
+                    dicDDM.Add(_test, el);
+                if (el.Text == "Новая группа 2")
+                    dicDDM.Add(_newGroup2, el);
                 if (el.Text == "Новая группа")
-                    dicDDM.Add(newGroup, el);
+                    dicDDM.Add(_newGroup, el);
                 if (el.Text == "Зоя. Тест")
-                    dicDDM.Add(zoyaTest, el);
+                    dicDDM.Add(_zoyaTest, el);
                 if (el.Text == "Московская область")
-                    dicDDM.Add(moscowArea, el);
+                    dicDDM.Add(_moscowArea, el);
                 if (el.Text == "Газовая инфраструктура")
-                    dicDDM.Add(gasStruct, el);
+                    dicDDM.Add(_gasStruct, el);
                 if (el.Text == "Энергетическая инфраструктура")
-                    dicDDM.Add(energyStruct, el);
+                    dicDDM.Add(_energyStruct, el);
                 if (el.Text == "Нефтяная инфраструктура")
-                    dicDDM.Add(neftyStrcut, el);
+                    dicDDM.Add(_neftyStrcut, el);
                 if (el.Text == "Тематические карты")
-                    dicDDM.Add(tematicMap, el);
+                    dicDDM.Add(_tematicMap, el);
                 if (el.Text == "Космические снимки")
-                    dicDDM.Add(cosmoPhoto, el);
+                    dicDDM.Add(_cosmoPhoto, el);
             }
             for (int i = 0; i < listCheckBoxes.Count; i++)
             {
                 if (listCheckBoxes[i].Text == "Тест")
                 {
                     Thread.Sleep(200);
-                    dicCB.Add(test, listCheckBoxes[i - 1]);                  
+                    dicCB.Add(_test, listCheckBoxes[i - 1]);                  
+                }
+                if(listCheckBoxes[i].Text =="Новая группа 2")
+                {
+                    Thread.Sleep(200);
+                    dicCB.Add(_newGroup2, listCheckBoxes[i - 1]);
                 }
                 if (listCheckBoxes[i].Text == "Новая группа")
                 {
                     Thread.Sleep(200);
-                    dicCB.Add(newGroup, listCheckBoxes[i - 1]);
+                    dicCB.Add(_newGroup, listCheckBoxes[i - 1]);
                 }
                 if (listCheckBoxes[i].Text == "Зоя. Тест")
                 {
                     Thread.Sleep(200);
-                    dicCB.Add(zoyaTest, listCheckBoxes[i - 1]);
+                    dicCB.Add(_zoyaTest, listCheckBoxes[i - 1]);
                 }
                 if (listCheckBoxes[i].Text == "Московская область")
                 {
                     Thread.Sleep(200);
-                    dicCB.Add(moscowArea, listCheckBoxes[i - 1]);
+                    dicCB.Add(_moscowArea, listCheckBoxes[i - 1]);
                 }
                 if (listCheckBoxes[i].Text == "Газовая инфраструктура")
                 {
                     Thread.Sleep(200);
-                    dicCB.Add(gasStruct, listCheckBoxes[i - 1]);
+                    dicCB.Add(_gasStruct, listCheckBoxes[i - 1]);
                 }
                 if (listCheckBoxes[i].Text == "Энергетическая инфраструктура")
                 {
                     Thread.Sleep(200);
-                    dicCB.Add(energyStruct, listCheckBoxes[i - 1]);
+                    dicCB.Add(_energyStruct, listCheckBoxes[i - 1]);
                 }
                 if (listCheckBoxes[i].Text == "Нефтяная инфраструктура")
                 {
                     Thread.Sleep(200);
-                    dicCB.Add(neftyStrcut, listCheckBoxes[i - 1]);
+                    dicCB.Add(_neftyStrcut, listCheckBoxes[i - 1]);
                 }
                 if (listCheckBoxes[i].Text == "Тематические карты")
                 {
                     Thread.Sleep(200);
-                    dicCB.Add(tematicMap, listCheckBoxes[i - 1]);
+                    dicCB.Add(_tematicMap, listCheckBoxes[i - 1]);
                 }
                 if (listCheckBoxes[i].Text == "Космические снимки")
                 {
                     Thread.Sleep(200);
-                    dicCB.Add(cosmoPhoto, listCheckBoxes[i - 1]);
+                    dicCB.Add(_cosmoPhoto, listCheckBoxes[i - 1]);
                 }
             }
             return this;
@@ -133,7 +141,7 @@ namespace GetMapTest.GUI
 
         private bool getSelectedTest()
         {
-            if (dicDDM[test].Selected)
+            if (dicDDM[_test].Selected)
                 return true;
             return false;
         }
@@ -149,9 +157,29 @@ namespace GetMapTest.GUI
             }
         }
 
+        private bool getSelectedNewGroup2()
+        {
+            if (dicDDM[_newGroup2].Selected)
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Возвращает значение 'true' если чекбокс слоя 'Новая группа 2' активен.
+        /// </summary>
+        /// <returns></returns>
+        public bool GetSelectedNewGroup2
+        {
+            get
+            {
+                return getSelectedNewGroup2();
+            }
+        }
+
+    
         private bool getSelectedNewGroup()
         {
-            if (dicDDM[newGroup].Selected)
+            if (dicDDM[_newGroup].Selected)
                 return true;
             return false;
         }
@@ -169,7 +197,7 @@ namespace GetMapTest.GUI
 
         private bool getSelectedZoyaTest()
         {
-            if (dicDDM[zoyaTest].Selected)
+            if (dicDDM[_zoyaTest].Selected)
                 return true;
             return false;
         }
@@ -187,7 +215,7 @@ namespace GetMapTest.GUI
 
         private bool getSelectedMoscowArea()
         {
-            if (dicDDM[moscowArea].Selected)
+            if (dicDDM[_moscowArea].Selected)
                 return true;
             return false;
         }
@@ -205,7 +233,7 @@ namespace GetMapTest.GUI
 
         private bool getSelectedGasStruct()
         {
-            if (dicDDM[gasStruct].Selected)
+            if (dicDDM[_gasStruct].Selected)
                 return true;
             return false;
         }
@@ -223,7 +251,7 @@ namespace GetMapTest.GUI
 
         private bool getSelectedEnergyStruct()
         {
-            if (dicDDM[energyStruct].Selected)
+            if (dicDDM[_energyStruct].Selected)
                 return true;
             return false;
         }
@@ -241,7 +269,7 @@ namespace GetMapTest.GUI
 
         private bool getSelectedNeftyStruct()
         {
-            if (dicDDM[neftyStrcut].Selected)
+            if (dicDDM[_neftyStrcut].Selected)
                 return true;
             return false;
         }
@@ -258,7 +286,7 @@ namespace GetMapTest.GUI
         }
         private bool getSelectedTimaticMap()
         {
-            if (dicDDM[tematicMap].Selected)
+            if (dicDDM[_tematicMap].Selected)
                 return true;
             return false;
         }
@@ -276,7 +304,7 @@ namespace GetMapTest.GUI
 
         private bool getSelectedCosmoPhoto()
         {
-            if (dicDDM[cosmoPhoto].Selected)
+            if (dicDDM[_cosmoPhoto].Selected)
                 return true;
             return false;
         }
@@ -298,7 +326,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers TestCheckBoxClick()
         {
-            dicCB[test].Click();
+            dicCB[_test].Click();
             return this;
         }
 
@@ -308,7 +336,27 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers TestOpenCloseList()
         {
-            dicDDM[test].Click();
+            dicDDM[_test].Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Выполняет клик по чекбоксу слоя 'Новая группа 2'.
+        /// </summary>
+        /// <returns></returns>
+        public Layers NewGroup2CheckBoxClick()
+        {
+            dicCB[_newGroup2].Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Открывает раздел 'Новая группа 2'.
+        /// </summary>
+        /// <returns></returns>
+        public Layers NewGroup2OpenCloseList()
+        {
+            dicDDM[_newGroup2].Click();
             return this;
         }
 
@@ -318,7 +366,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers NewGroupCheckBoxClick()
         {
-            dicCB[newGroup].Click();
+            dicCB[_newGroup].Click();
             return this;
         }
 
@@ -328,7 +376,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers NewGroupOpenCloseList()
         {
-            dicDDM[newGroup].Click();
+            dicDDM[_newGroup].Click();
             return this;
         }
 
@@ -338,7 +386,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers ZoyaTestCheckBoxClick()
         {
-            dicCB[zoyaTest].Click();
+            dicCB[_zoyaTest].Click();
             return this;
         }
 
@@ -348,7 +396,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers ZoyaTestOpenCloseList()
         {
-            dicDDM[zoyaTest].Click();
+            dicDDM[_zoyaTest].Click();
             return this;
         }
 
@@ -358,7 +406,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers MoscowAreaCheckBoxClick()
         {
-            dicCB[moscowArea].Click();
+            dicCB[_moscowArea].Click();
             return this;
         }
 
@@ -368,7 +416,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers MoscowAreaOpenCloseList()
         {
-            dicDDM[moscowArea].Click();
+            dicDDM[_moscowArea].Click();
             return this;
         }
 
@@ -378,7 +426,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers GasStructCheckBoxClick()
         {
-            dicCB[gasStruct].Click();
+            dicCB[_gasStruct].Click();
             return this;
         }
 
@@ -388,7 +436,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers GasStructOpenCloseList()
         {
-            dicDDM[gasStruct].Click();
+            dicDDM[_gasStruct].Click();
             return this;
         }
 
@@ -398,7 +446,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers EnergyStructCheckBoxClick()
         {
-            dicCB[energyStruct].Click();
+            dicCB[_energyStruct].Click();
             return this;
         }
 
@@ -408,7 +456,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers EnergyStructOpenCloseList()
         {
-            dicDDM[energyStruct].Click();
+            dicDDM[_energyStruct].Click();
             return this;
         }
 
@@ -418,7 +466,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers NeftyStructCheckBoxClick()
         {
-            dicCB[neftyStrcut].Click();
+            dicCB[_neftyStrcut].Click();
             return this;
         }
 
@@ -428,7 +476,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers NeftyStructOpenCloseList()
         {
-            dicDDM[neftyStrcut].Click();
+            dicDDM[_neftyStrcut].Click();
             return this;
         }
 
@@ -438,7 +486,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers TematicMapCheckBoxClick()
         {
-            dicCB[tematicMap].Click();
+            dicCB[_tematicMap].Click();
             return this;
         }
 
@@ -449,7 +497,7 @@ namespace GetMapTest.GUI
         public Layers TematicMapOpenCloseList()
         {
 
-            dicDDM[tematicMap].Click();
+            dicDDM[_tematicMap].Click();
             return this;
         }
 
@@ -459,7 +507,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers CosmoPhotoCheckBoxClick()
         {
-            dicCB[cosmoPhoto].Click();
+            dicCB[_cosmoPhoto].Click();
             return this;
         }
 
@@ -469,7 +517,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Layers CosmoPhotoOpenCloseList()
         {
-            dicDDM[cosmoPhoto].Click();
+            dicDDM[_cosmoPhoto].Click();
             return this;
         }
     }

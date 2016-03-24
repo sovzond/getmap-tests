@@ -14,7 +14,7 @@ namespace GetMapTest.Utils
         }
 
         /// <summary>
-        ///  Возвращает центр карты.
+        ///  Возвращает центр карты типа LonLat
         /// </summary>
         /// <returns></returns>
         public LonLat GetMapCenter()
@@ -27,7 +27,17 @@ namespace GetMapTest.Utils
         }
 
         /// <summary>
-        /// 
+        /// Возвращает центра карты типа string
+        /// </summary>
+        /// <returns></returns>
+        public string GetMapCenterString()
+        {
+            string lonlatCenter = (string)js.ExecuteScript("return window.portal.stdmap.map.getCenter().toString()");
+            return lonlatCenter;
+        }
+
+        /// <summary>
+        ///  
         /// </summary>
         /// <param name="getLon1"></param>
         /// <param name="getLat1"></param>
@@ -45,25 +55,48 @@ namespace GetMapTest.Utils
         }
 
         /// <summary>
-        /// 
+        /// Возвращает lon lat типа string из пикселей.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="x">Пиксели по оси X</param>
+        /// <param name="y">Пиксели по оси Y</param>
         /// <returns></returns>
         public string GetLonLatFromPixel(int x, int y)
         {
             return (string)js.ExecuteScript("return window.portal.stdmap.map.getLonLatFromPixel(new OpenLayers.Pixel( " + x + ", " + y + " )).toString()");
-
         }
-
+        
         /// <summary>
-        /// Возвращает вещественные(с плавающей точкой) координаты карты с указанными параметрами. 
+        /// Возвращает вещественные(с плавающей точкой) координаты карты с указанными параметрами типа LonLat
         /// </summary>
         /// <param name="lonLat"></param>
         /// <returns></returns>
-        public LonLat GetPixelFromLonLat(LonLat lonLat)
+        public LonLat GetPixelsFromLonLat(LonLat lonLat)
         {
-            return (LonLat)js.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(" + lonLat.getLon() + ", " + lonLat.getLat() + ")).toString()");
+            return new LonLat((string)js.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(" + lonLat.getLon() + ", " + lonLat.getLat() + ")).toString()"));
+        }
+
+        /// <summary>
+        /// Возвращает пиксели типа string из lon lat.
+        /// </summary>
+        /// <param name="lon">Широта</param>
+        /// <param name="lat">Долгота</param>
+        /// <returns></returns>
+        public string GetPixelsFromLonLat(string lon,string lat)
+        {
+            string pixels = (string)js.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(" + lon + "," + lat + ")).toString()");
+            return pixels;
+        }
+
+        /// <summary>
+        /// Возвращает пиксели типа string из lon lat.
+        /// </summary>
+        /// <param name="lonlat">Строка включающая в себя не только цифры</param>
+        /// <returns></returns>
+        public string GetPixelsFromLonLat(string lonlat)
+        {
+            string[] splitedLonLat = lonlat.Split('=', ',');
+            string pixels = (string)js.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(" + splitedLonLat[1] + "," + splitedLonLat[3] + ")).toString()");
+            return pixels;
         }
 
         /// <summary>
@@ -93,21 +126,31 @@ namespace GetMapTest.Utils
         /// Возвращает текущий экстент карты.
         /// </summary>
         /// <returns></returns>
-        public string[] GetCurrentExtent()
+        public string[] GetCurrentExtentSplited()
         {
-            string fulllink = (string)js.ExecuteScript("return window.portal.stdmap.map.getExtent().toString()");
-            string[] splited = fulllink.Split(',');
+           
+            string[] splited = GetCurrentExtent().Split(',');
             return splited;
         }
 
         /// <summary>
-        /// Возвращает базовый экстент карты.
+        /// Возвращает текущий экстент карты типа string
         /// </summary>
         /// <returns></returns>
-        public string[] GetBaseExtent()
+        public string GetCurrentExtent()
+        {
+            string fulllink = (string)js.ExecuteScript("return window.portal.stdmap.map.getExtent().toString()");
+            return fulllink;
+        }
+
+        /// <summary>
+        /// Возвращает базовый экстент карты типа string[].
+        /// </summary>
+        /// <returns></returns>
+        public string[] GetBaseExtentSplited()
         {
             driver.FindElement(By.CssSelector("#menuNavigation div.svzSimpleButton.fullMap")).Click();
-            return GetCurrentExtent();
+            return GetCurrentExtentSplited();
         }
 
         /// <summary>
@@ -115,13 +158,39 @@ namespace GetMapTest.Utils
         /// </summary>
         /// <param name="fulllink">Ссылка, из которой необходимо извлечь экстент</param>
         /// <returns></returns>
-        public string[] SplitExtent(string fulllink)
+        public string[] SplitExtentFromLink(string fulllink)
         {
             int idx = fulllink.IndexOf('=');
             idx++;
             string onlyExtent = fulllink.Substring(idx);
             string[] splited = onlyExtent.Split(',');
             return splited;
+        }
+
+        /// <summary>
+        /// Возвращает целочисленный массив пикселей.
+        /// </summary>
+        /// <param name="pixels">Строка пикселей, которую необходимо распелить на массив.</param>
+        /// <returns></returns>
+        public  int[] SplitPixels(string pixels)
+        {
+            int[] array = new int[2];
+            string[] splited = pixels.Split('=', ',', 'y', 'x');
+            array[0] = Convert.ToInt32(splited[2]);
+            array[1] = Convert.ToInt32(splited[5]);
+            return array;
+        }
+
+        /// <summary>
+        /// Переводит значение из lon lat в пиксели, возвращает в качестве целочисленного массива.
+        /// </summary>
+        /// <param name="lonlat">Строка включающая в себя не только цифры</param>
+        /// <returns></returns>
+        public int[] ConvertToSplitedPixelsFromLonLat(string lonlat)
+        {
+            string[] splitedLonLat = lonlat.Split('=', ',');
+            string pixels = (string)js.ExecuteScript("return window.portal.stdmap.map.getPixelFromLonLat(new OpenLayers.LonLat(" + splitedLonLat[1] + "," + splitedLonLat[3] + ")).toString()");
+            return SplitPixels(pixels);
         }
     }
 }

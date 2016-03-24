@@ -54,7 +54,7 @@
     <Compile Include="InputNewPassword.cs" />
     <Compile Include="Layers.cs" />
     <Compile Include="Login.cs" />
-    <Compile Include="MenuDop.cs" />
+    <Compile Include="BottomMenu.cs" />
     <Compile Include="MenuNavigation.cs" />
     <Compile Include="MenuNavigationHistory.cs" />
     <Compile Include="MoscowAreaLayer.cs" />

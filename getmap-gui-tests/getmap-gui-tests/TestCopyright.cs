@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using OpenQA.Selenium;
@@ -6,21 +7,21 @@ using OpenQA.Selenium;
 namespace GetMapTest
 {
     /// <summary>
-    /// Выполняет проверку инструмента 'Копирайт'.
+    /// Выполняет проверку корректно отображенного текста копирайта в нижнем правом углу.
     /// </summary>
     [TestClass]
     public class TestCopyright
     {
         private IWebDriver driver;
-        private IWebElement elementTextArea; 
+        private IWebElement elementOSMRosreestr;
+        private IWebElement elementsGoolgeLayers;
         private const string textRosreestr = "© Росреестр, 2010-2016";
-        private const string textGibrid = "Изображения © DigitalGlobe, 2016, Картографические данные (с) Google, 2016";
-        private const string textSputnik = "Изображения © DigitalGlobe, 2016";
-        private const string textScheme = "Картографические данные © Google, 2016";
-        private const string locationTitles = "div.containerTitle h6";
-        private const string locationButtonCopyright = "map_over";
-        private const string locationTextArea = "div.copyrightText";
-        private const string textOSM = "© Участники OpenStreetMap";
+        private const string textGibrid = "Картографические данные © 2016 Google Изображения ©2016 TerraMetrics";
+        private const string textSputnik = "Изображения ©2016 TerraMetrics";
+        private const string textScheme = "Картографические данные © 2016 Google";
+        private const string textOSM = "© OpenStreetMap contributors";
+        private const string locationOSMRosreestr = "div.olControlAttribution.olControlNoSelect";
+        private const string locationGoogleLayers = "div.olForeignContainer > div";
 
         [TestInitialize]
         public void Setup()
@@ -31,21 +32,23 @@ namespace GetMapTest
         }
 
         /// <summary>
-        /// Перебирает  слои и проверяет, верно ли отображен текст в окне 'КОПИРАЙТЫ'.
+        /// Перебирает  слои и проверяет, верно ли отображен текст копирайта.
         /// </summary>
         [TestMethod]
         public void CheckAreaInCopyright()
         {
-            driver.FindElement(By.Name(locationButtonCopyright)).Click();
-            Assert.IsTrue(IsHaveBoxShadow(), "Окно 'КОПИРАЙТЫ' отсутствует после клика по инструменту 'Копирайты'.");
             GUI.SlideMenu.get(driver).OpenLayers();
             System.Threading.Thread.Sleep(500);
             GUI.SlideMenu.get(driver).OpenBaseLayers().OpenGoogle();
-            CheckTextCopyright("OpenStreetMap");
-            CheckTextCopyright("Росреестр");
-            CheckTextCopyright("Гибрид");
-            CheckTextCopyright("Спутник");
-            CheckTextCopyright("Схема");
+            AssertOSMRosreestr(textOSM);
+            GUI.SlideMenu.get(driver).RosreestrClick();
+            AssertOSMRosreestr(textRosreestr);
+            GUI.SlideMenu.get(driver).LayerSputnikClick().LayerGibridClick();
+            AssertGoogleLayers(textGibrid, 68);
+            GUI.SlideMenu.get(driver).LayerSchemeClick();
+            AssertGoogleLayers(textScheme, 37);
+            GUI.SlideMenu.get(driver).LayerSputnikClick();
+            AssertGoogleLayers(textSputnik, 30);
         }
 
         [TestCleanup]
@@ -54,40 +57,18 @@ namespace GetMapTest
             GUI.Cleanup.get(driver).Quit();
         }
 
-        private Boolean IsHaveBoxShadow()
+        private void AssertOSMRosreestr(string expected)
         {
-            IList<IWebElement> listTitles = driver.FindElements(By.CssSelector(locationTitles));
-            foreach (var element in listTitles)
-            {
-                if (element.Text == "КОПИРАЙТЫ")
-                    return true;
-            }
-            return false;
+            elementOSMRosreestr = driver.FindElement(By.CssSelector(locationOSMRosreestr));
+            Assert.AreEqual(expected, elementOSMRosreestr.Text, "Внизу справа отобразился неверный текст копирайта");
         }
 
-        private void CheckTextCopyright(string text)
+        private void AssertGoogleLayers(string expected,int count)
         {
-            if (text == "OpenStreetMap")
-                GUI.SlideMenu.get(driver).OpenStreetMapClick();
-            if (text == "Росреестр")
-                GUI.SlideMenu.get(driver).RosreestrClick();
-            if (text == "Гибрид")
-                GUI.SlideMenu.get(driver).LayerGibridClick();
-            if (text == "Спутник")
-                GUI.SlideMenu.get(driver).LayerSputnikClick();
-            if (text == "Схема")
-                GUI.SlideMenu.get(driver).LayerSchemeClick();
-            elementTextArea = driver.FindElement(By.CssSelector(locationTextArea));
-            if(text == "OpenStreetMap")
-                Assert.AreEqual(textOSM, elementTextArea.Text, "Окно 'КОПИРАЙТЫ' отобразило неверный текст слоя 'OpenStreetMap'.");
-            if (text == "Росреестр")
-                Assert.AreEqual(textRosreestr, elementTextArea.Text, "Окно 'КОПИРАЙТЫ' отобразило неверный текст слоя 'Росреестр'.");
-            if (text == "Гибрид")
-                Assert.AreEqual(textGibrid, elementTextArea.Text, "Окно 'КОПИРАЙТЫ' отобразило неверный текст слоя 'Гибрид' .");
-            if (text == "Спутник")
-                Assert.AreEqual(textSputnik, elementTextArea.Text, "Окно 'КОПИРАЙТЫ' отобразило неверный текст слоя 'Спутник' .");
-            if (text == "Схема")
-                Assert.AreEqual(textScheme, elementTextArea.Text, "Окно 'КОПИРАЙТЫ' отобразило неверный текст слоя 'Схема' .");
+            elementsGoolgeLayers = driver.FindElement(By.CssSelector(locationGoogleLayers));
+            string substring = elementsGoolgeLayers.Text;
+            substring = substring.Substring(0, count);
+            Assert.AreEqual(expected, substring, "Внизу справа отобразился неверный текст копирайта");
         }
 
     }

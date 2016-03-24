@@ -17,6 +17,11 @@ namespace GetMapTest.GUI
         private const string locationZoomAreaButton = "#menuNavigation div.svzSimpleButton.zoomIn";
         private const string locationMagnifyButton = "#menuNavigation div.svzSimpleButton.zoomIn";
         private const string locationIdentificationButton = "#menuNavigation div.svzSimpleButton.searchMap";
+        private const string locationSelectionButtonSquare = "div.svzDropMenuButtonMenu > div.svzSimpleButton.selectSquare";
+        private const string locationSelectionButtonLine = "div.svzDropMenuButtonMenu > div.svzSimpleButton.editorAddLine";
+        private const string locationSelectionButtonBuffer = "div.svzDropMenuButtonMenu > div.svzSimpleButton.selectBuffer";
+        private const string locationSelectionButtonCancel = "div.svzDropMenuButtonMenu > div.svzSimpleButton.editorStop";
+        private const string locationSelectionButtonPoligon = "div.svzDropMenuButtonMenu > div.svzSimpleButton.editorAddPoligon";
         private const string locationSelectionButton = "#menuNavigation div.svzSimpleButton.selectionSearch";
         private const string locationRuleButton = "#menuNavigation div.svzSimpleButton.measureButton";
         private const string locationGotoCoordsButton = "#menuNavigation div.svzSimpleButton.gotoCoordsButton";
@@ -87,6 +92,53 @@ namespace GetMapTest.GUI
             driver.FindElement(By.CssSelector(locationSelectionButton)).Click();
             return this;
         }
+
+        public MenuNavigation SelectionButtonSquare()
+        {
+            driver.FindElement(By.CssSelector(locationSelectionButtonSquare)).Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Выполняет клик по кнопке 'Полигон' компонента 'Выборка'.
+        /// </summary>
+        /// <returns></returns>
+        public MenuNavigation SelectionButtonPoligon()
+        {
+            driver.FindElement(By.CssSelector(locationSelectionButtonPoligon)).Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Выполняет клик по кнопке 'Линия' компонента 'Выборка'.
+        /// </summary>
+        /// <returns></returns>
+        public MenuNavigation SelectionButtonLine()
+        {
+            driver.FindElement(By.CssSelector(locationSelectionButtonLine)).Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Выполняет клик по кнопке 'Буфер' компонента 'Выборка'.
+        /// </summary>
+        /// <returns></returns>
+        public MenuNavigation SelectionButtonBuffer()
+        {          
+            driver.FindElement(By.CssSelector(locationSelectionButtonBuffer)).Click();
+            return this;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public MenuNavigation SelectionButtonCancel()
+        {
+            driver.FindElement(By.CssSelector(locationSelectionButtonCancel)).Click();
+            return this;
+        }
+
         /// <summary>
         /// Выполняет клик по кнопке 'Измерение'.
         /// </summary>
