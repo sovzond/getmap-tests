@@ -24,13 +24,11 @@ namespace GetMapTest
                 this.y = Int32.Parse(arr[3]);
                 this.x = Int32.Parse(arr[1]);
             }
-
             public XY(int x, int y)
             {
                 this.x = x;
                 this.y = y;
             }
-
             public int getX
             {
                 get
@@ -45,24 +43,22 @@ namespace GetMapTest
                 {
                     return y;
                 }
-
             }
         }
         [TestInitialize]
         public void Setup()
         {
             driver = Settings.Instance.createDriver();
-            GUI.Login.loginAsGuest(driver, Settings.Instance.BaseUrl);
+            GUI.Login.get(driver, Settings.Instance.BaseUrl).loginAsGuest();
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "Не удалось пройти авторизацию");
             jsExecutor = driver as IJavaScriptExecutor;
             jsTransform = new Utils.TransformJS(driver);
         }
-
         [TestMethod]
         public void TestMet1()
         {
             Utils.TransformJS jsTransform = new Utils.TransformJS(driver);
-            Utils.LonLat startPoint1 = jsTransform.getMapCenter();
+            Utils.LonLat startPoint1 = jsTransform.GetMapCenter();
             double StartXL = startPoint1.getLon() + 0.004;
             double StartYL = startPoint1.getLat() + 0.004;
             double StartXR = startPoint1.getLon();
@@ -75,8 +71,8 @@ namespace GetMapTest
             int YL = L.getY;
             int XR = R.getX;
             int YR = R.getY;
-            string Latimg = jsTransform.getLonLatFromPixel(XL, YL);
-            string Latimg1 = jsTransform.getLonLatFromPixel(XR, YR);
+            string Latimg = jsTransform.GetLonLatFromPixel(XL, YL);
+            string Latimg1 = jsTransform.GetLonLatFromPixel(XR, YR);
             Utils.LonLat Coord = new Utils.LonLat(Latimg);
             Utils.LonLat Coord1 = new Utils.LonLat(Latimg1);
             var builder = new Actions(driver);
