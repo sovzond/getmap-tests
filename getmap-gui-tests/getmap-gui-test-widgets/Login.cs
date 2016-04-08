@@ -10,7 +10,7 @@ namespace GetMapTest.GUI
     /// произвольная авторизация пользовалетя 
     /// и авторизация пользователя 'guest'
     /// </summary>
-   public class Login
+    public class Login
     {
         private IWebDriver driver;
         private const string locationAuthButton = "#entry";
@@ -23,10 +23,10 @@ namespace GetMapTest.GUI
         private IList<IWebElement> listInputs;
         private IList<IWebElement> listButtons;
 
-        private Login(IWebDriver driver,string baseUrl)
+        private Login(IWebDriver driver, string baseUrl)
         {
             this.driver = driver;
-             driver.Navigate().GoToUrl(baseUrl);
+            driver.Navigate().GoToUrl(baseUrl);
             driver.FindElement(By.CssSelector(locationAuthButton)).Click();
             SetValueList();
             SetValueElements();
@@ -34,7 +34,7 @@ namespace GetMapTest.GUI
 
         private Login SetValueList()
         {
-            dicAuth = new Dictionary<string, IWebElement>();     
+            dicAuth = new Dictionary<string, IWebElement>();
             listButtons = driver.FindElements(By.CssSelector(locationEntryButtons));
             listInputs = driver.FindElements(By.CssSelector(locationInputs));
             return this;
@@ -42,34 +42,34 @@ namespace GetMapTest.GUI
 
         private Login SetValueElements()
         {
-            for(int i=0;i<listInputs.Count;i++)
+            for (int i = 0; i < listInputs.Count; i++)
             {
                 if (listInputs[i].GetAttribute("name") == "login")
                     dicAuth.Add(_login, listInputs[i]);
                 if (listInputs[i].GetAttribute("name") == "pass")
-                    dicAuth.Add(_pass, listInputs[i]);              
+                    dicAuth.Add(_pass, listInputs[i]);
             }
-            for(int i=0;i<listButtons.Count;i++)
+            for (int i = 0; i < listButtons.Count; i++)
             {
                 if (listButtons[i].GetAttribute("value") == "Войти")
                 {
                     dicAuth.Add(_entry, listButtons[i]);
                     break;
                 }
-                               
+
             }
             return this;
         }
-       
+
         /// <summary>
         /// Принимает параметр типа IWebDriver для дальнейшей навигации по сайту.
         /// </summary>
         /// <param name="driver">Передает аргумент для закрытого конструктора.</param>
         /// <param name="baseUrl">Ссылка, по которой хотите перейти.</param>
         /// <returns></returns>
-        public static Login get(IWebDriver driver,string baseUrl)
+        public static Login get(IWebDriver driver, string baseUrl)
         {
-            return new Login(driver,baseUrl);
+            return new Login(driver, baseUrl);
         }
 
         /// <summary>
@@ -80,21 +80,27 @@ namespace GetMapTest.GUI
         /// <param name="login">Произвольный логин для авторизации</param>
         /// <param name="passwd">Произвольный пароль для авторизации</param>
         public void login(String login, String passwd)
-        {                             
+        {
             dicAuth[_login].SendKeys(login);
             dicAuth[_pass].SendKeys(passwd);
-            dicAuth[_entry].Click();  
+            dicAuth[_entry].Click();
         }
 
         /// <summary>
-        /// Выполняет авторизацию на сайт пользователя 'guest'
+        /// Выполняет авторизацию на сайт пользователя 'Гость'.
         /// </summary>
-        /// <param name="driver">Параметр типа IWebDriver для дальнейшей навигации по сайту</param>
-        /// <param name="baseUrl">Ссылка на сайт, на который соответственно хотим авторизоваться</param>
         public void loginAsGuest()
         {
             login("guest", "guest");
         }
-        
+
+        /// <summary>
+        /// Выполняет авторизация на сайте пользователя 'Администратор'.
+        /// </summary>
+        public void loginAsAdmin()
+        {
+            login("admin", "111");
+        }
+
     }
 }

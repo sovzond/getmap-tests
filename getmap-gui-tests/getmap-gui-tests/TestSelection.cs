@@ -99,7 +99,7 @@ namespace GetMapTest
         ///   выделение области, в которой отсутствуют объекты группы слоев 'Газовая инфраструктура'.
         /// </summary>
         [TestMethod]
-        public void CheckAlternativeOptions()
+        public void CheckAltOptSelection()
         {
             RandomClickOnMap();
             AreaIsNull();

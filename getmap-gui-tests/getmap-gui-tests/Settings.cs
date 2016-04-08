@@ -36,7 +36,12 @@ namespace GetMapTest
             return new FirefoxDriver();
         }
 
-        private const string baseUrl = "http://91.143.44.249/sovzond_test/portal/";
+        private const string baseUrl = "http://91.143.44.249/sovzond_students/portal/";
+        private const string adminUrl = "http://91.143.44.249/sovzond_students/admin/";
+        private const string linkUsers = "http://91.143.44.249/sovzond_students/admin/Users";
+        private const string linkRole = "http://91.143.44.249/sovzond_students/admin/Roles?SelectedRow=1";
+        private const string linkAccess = "http://91.143.44.249/sovzond_students/admin/Permissions";
+        private const string linkLayers = "http://91.143.44.249/sovzond_students/admin/";
 
         /// <summary>
         /// Адрес базовой ссылки.
@@ -46,6 +51,61 @@ namespace GetMapTest
             get
             {
                 return baseUrl;
+            }
+        }
+
+        /// <summary>
+        /// Адрес ссылки на администрирование.
+        /// </summary>
+        public string AdminUrl
+        {
+            get
+            {
+                return adminUrl;
+            }
+        }
+
+        /// <summary>
+        /// Адрес ссылки на вкладку 'Пользователи'.
+        /// </summary>
+        public string LinkUsers
+        {
+            get
+            {
+                return linkUsers;
+            }
+        }
+
+        /// <summary>
+        /// Адрес ссылки на вкладку 'Роли'.
+        /// </summary>
+        public string LinkRole
+        {
+            get
+            {
+                return linkRole;
+            }
+        }
+
+        /// <summary>
+        /// Адрес ссылки на вкладку 'Права доступа'.
+        /// </summary>
+        public string LinkAccess
+        {
+            get
+            {
+                return linkAccess;
+            }
+        }
+
+        /// <summary>
+        /// Адрес ссылки на вкладку 'Слои'.
+        /// </summary>
+        public string LinkLayers
+        {
+            get
+            {
+                return linkLayers;
             }
         }
 

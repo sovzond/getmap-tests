@@ -13,7 +13,7 @@ namespace GetMapTest.GUI
     public class HeaderLinks
     {
         private IWebDriver driver;
-        private const string locationHeaderLinks = "td.headerLinks a";
+        private const string locationHeaderLinks = "td.headerLink a";
         private const string locationSearchArea = "input.searchPanel";
         private const string locationSearchButton = "#textSearch2";
         private const string help = "Справка";

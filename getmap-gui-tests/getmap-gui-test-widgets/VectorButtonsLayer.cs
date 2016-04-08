@@ -13,12 +13,14 @@ namespace GetMapTest.GUI
         private IWebDriver driver;
         private IWebElement elementStatisticsLayer;
         private IWebElement elementZoomToLayerExtext;
+        private IWebElement elementEditLayer;
         private const string locationButtonsVectorLayer = "div.userLayerMenuContainer.userLayerMenuContainerActive > div.svzSimpleButton";
         private IList<IWebElement> listButtonsVectorLayer;
         private enum NumberButtons
         {
             Statistic = 0,
-            Zoom = 1
+            Zoom = 1,
+            Edit = 2
         }
 
         private VectorButtonsLayer(IWebDriver driver)
@@ -38,6 +40,7 @@ namespace GetMapTest.GUI
         {
             elementStatisticsLayer = listButtonsVectorLayer[(int)NumberButtons.Statistic];
             elementZoomToLayerExtext = listButtonsVectorLayer[(int)NumberButtons.Zoom];
+            elementEditLayer = listButtonsVectorLayer[(int)NumberButtons.Edit];
             return this;
         }
 
@@ -68,6 +71,16 @@ namespace GetMapTest.GUI
         public VectorButtonsLayer ZoomToLayerExtent()
         {
             elementZoomToLayerExtext.Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Выполняет клик по вектороной кнопке 'Редактировать слой'.
+        /// </summary>
+        /// <returns></returns>
+        public VectorButtonsLayer EditLayer()
+        {
+            elementEditLayer.Click();
             return this;
         }
     }
