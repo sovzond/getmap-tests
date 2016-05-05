@@ -60,6 +60,7 @@ namespace GetMapTest.GUI
         private const string cmdCancel = "Отмена";
         private const string cmdCreateRole = "Создать роль";
         private const string cmdCreateGroup = "Создать группу";
+        private const string cmdCreateStyle = "Создать стиль";
         private IList<IWebElement> listRoles;
         private IList<IWebElement> listUsers;
         private IList<IWebElement> listUserRoles;
@@ -469,7 +470,7 @@ namespace GetMapTest.GUI
         /// Сохраняет изменения, затем выходит из пользователя и закрывает вкладку.
         /// Данная функция относится ко вкладке 'Права доступа'.
         /// <returns></returns>
-        public Administration  SaveExitCloseAccess()
+        public Administration SaveExitCloseAccess()
         {
             get(driver).SaveClickAccess();
             get(driver).ExitClick();
@@ -486,7 +487,7 @@ namespace GetMapTest.GUI
             elementLayers.Click();
             return this;
         }
-        
+
         /// <summary>
         /// Запоняет поле 'Имя Группы'.
         /// </summary>
@@ -539,9 +540,9 @@ namespace GetMapTest.GUI
         {
             listSB = driver.FindElements(By.CssSelector(locationDeleteGroupButton));
             listGroupName = driver.FindElements(By.CssSelector(locationGroupNameLayers));
-            for(int i=0;i<listGroupName.Count;i++)
+            for (int i = 0; i < listGroupName.Count; i++)
             {
-                if(listGroupName[i].Text == name)
+                if (listGroupName[i].Text == name)
                 {
                     listSB[i].Click();
                     break;
@@ -550,14 +551,14 @@ namespace GetMapTest.GUI
             ClickOnButtonOK();
             System.Threading.Thread.Sleep(1000);
             listGroupName = driver.FindElements(By.CssSelector(locationGroupNameLayers));
-            for(int i=0;i<listGroupName.Count;i++)
+            for (int i = 0; i < listGroupName.Count; i++)
             {
                 if (listGroupName[i].Text == name)
                 {
                     ClickOnButtonOK();
                     break;
                 }
-            }         
+            }
         }
 
         /// <summary>
@@ -586,7 +587,7 @@ namespace GetMapTest.GUI
         /// <param name="name">Наименование слоя.</param>
         public void ClickOnPreviewLayer(string name)
         {
-           listSB = driver.FindElements(By.CssSelector(locationPreviewLayerSB));
+            listSB = driver.FindElements(By.CssSelector(locationPreviewLayerSB));
             ClickOnSB(name);
         }
 
@@ -738,7 +739,7 @@ namespace GetMapTest.GUI
         {
             driver.FindElement(By.CssSelector(locationButtonExit)).Click();
             return this;
-        }     
+        }
 
         /// <summary>
         /// Выполняет клик по элементу input исходя из его текстового значения.
@@ -818,6 +819,18 @@ namespace GetMapTest.GUI
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public string CmdCreateStyle
+        {
+            get
+            {
+                return cmdCreateStyle;
+            }
+        }
+
+
+        /// <summary>
         /// Сохраняет изменения, затем выходит из пользователя и закрывает вкладку.
         /// Данная функция относится ко вкладке 'Пользователи' и  'Роли'.
         /// </summary>
@@ -883,7 +896,7 @@ namespace GetMapTest.GUI
             }
             return assert;
         }
-        
+
         /// <summary>
         /// Возвращает место нахождения строки для поиска.
         /// </summary>
@@ -901,7 +914,7 @@ namespace GetMapTest.GUI
         /// <param name="listLayers">Список , которого надо возвратить количество слоев.</param>
         /// <param name="location">Место нахождение слоев.</param>
         /// <returns></returns>
-        public Int32 CountLayers(IList<IWebElement> listLayers,string location)
+        public Int32 CountLayers(IList<IWebElement> listLayers, string location)
         {
             listLayers = driver.FindElements(By.CssSelector(location));
             int count = listLayers.Count;

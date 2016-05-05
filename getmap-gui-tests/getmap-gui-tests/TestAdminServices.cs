@@ -15,15 +15,22 @@ namespace GetMapTest
         private bool assert;
         private IWebElement sortPointerUp;
         private IWebElement sortPointerDown;
-        private const string locationNewNameLayer = "students_newLine";
+        private IWebElement elementErrorMessage;
+        private string errorMessage;
+        private const string newNameLayer = "students_newLine";
         private const string nameSourceData = "students";
         private const string newNameSourceData = "trainees";
         private const string nameLayerForSearch = "stuDe";
+        private const string nameStyleForSearch = "faKe";
         private const string nameLayerForPreview = "students_polygon";
+        private const string nameStyle = "students_style";
+        private const string newNameStyle = "students_newStyle";
         private const string cmdPublication = "Публикация";
         private const string cmdSourceData = "Источники данных";
         private const string cmdStyles = "Стили";
         private const string messageIsNull = "Данных не найдено";
+        private const string messageNameIsNull = "Задайте название стиля";
+        private const string messageStyleIsNull = "Пустой стиль";
         private const string locationButtonAddSourceData = "#addSource";
         private const string locationAreaNameSourceData = "input.required";
         private const string locationAreaDescriptionSourceData = "description";
@@ -57,6 +64,14 @@ namespace GetMapTest
         private const string locationButtonAddLayer = "#loadLayer";
         private const string locationAreaNameLayer = "name";
         private const string locationErrorMessage = "div.windowBlockTitle";
+        private const string locationErrorMessageInCreateStyle = "p.messageWarning";
+        private const string linkForCheckStyle = "http://192.168.11.151:8083/admin";
+        private const string linkServicesForCheckStyle = "http://192.168.11.151:8083/admin/Sources";
+        private const string locationButtonsInCreateStyle = "input.button";
+        private const string locationButtonOpenListTypesStyle = "select.tip";
+        private const string locationButtonAddStyle = "input.add";
+        private const string locationButtonApplyInCreateStyle = "div.Rule input.button";
+        private const string locationHeaderInputsInCreateStyle = "#topOptions input";
         IList<IWebElement> listItems;
         IList<IWebElement> listTitle;
 
@@ -67,6 +82,8 @@ namespace GetMapTest
             assert = false;
             sortPointerDown = null;
             sortPointerUp = null;
+            elementErrorMessage = null;
+            errorMessage = "";
         }
 
         /// <summary>
@@ -295,6 +312,155 @@ namespace GetMapTest
         }
 
         /// <summary>
+        /// Выполняет проверку на создание нового стиля.
+        /// </summary>
+        [TestMethod]
+        public void CheckCreateStyle()
+        {
+            GUI.Cleanup.get(driver).Quit();
+            LoginForCheckStyles();
+            System.Threading.Thread.Sleep(500);
+            SetValueForCreateStyle();
+            elementButtonApply().Click();
+            System.Threading.Thread.Sleep(500);
+            ClickOnButtonsInCreateStyle(adm.get(driver).CmdSave);
+            adm.get(driver).MakeSearchClick(nameStyle);
+            Assert.IsTrue(AssertOnSearchInCreateStyle(nameStyle), "После создания нового стиля, стиль не создался.");
+            ClickOnButtonDeleteStyle(nameStyle);
+        }
+
+        /// <summary>
+        /// Выполняет проверку на нажатие кнопки 'Отмена' во время создания нового стиля.
+        /// </summary>
+        [TestMethod]
+        public void CheckButtonCancel()
+        {
+            GUI.Cleanup.get(driver).Quit();
+            LoginForCheckStyles();
+            SetValueForCreateStyle();
+            elementButtonApply().Click();
+            ClickOnButtonsInCreateStyle(adm.get(driver).CmdCancel);
+            adm.get(driver).MakeSearchClick(nameStyle);
+            Assert.IsFalse(AssertOnSearchInCreateStyle(nameStyle), "После нажатия кнопки 'Отмена' во время создания нового стиля," 
+                + " стиль создался.");
+        }
+
+        /// <summary>
+        /// Выполняет проверку на сортировку колонки 'Стили'.
+        /// </summary>
+        [TestMethod]
+        public void CheckSortInStyle()
+        {
+            GUI.Cleanup.get(driver).Quit();
+            LoginForCheckStyles();
+            AssertOnSortInPublication(locationNameLayerItems, locationSortButtonNameLayer);
+        }
+
+        /// <summary>
+        /// Выполняет проверку на поиск путем нажатия на кнопку 'Поиск'.
+        /// </summary>
+        [TestMethod]
+        public void CheckSearchClickInStyle()
+        {
+            GUI.Cleanup.get(driver).Quit();
+            LoginForCheckStyles();
+            adm.get(driver).MakeSearchClick(nameStyleForSearch);
+            Assert.IsTrue(AssertOnSearchInCreateStyle("fakely"),"После выполнения поиска по стилю 'fakely' путем нажатия на кнопку поиск" +
+                " поиск не осуществился.");
+        }
+
+        /// <summary>
+        /// Выполняет проверку на поиск путем нажатия на клавишу 'Enter'.
+        /// </summary>
+        [TestMethod]
+        public void CheckSearchEnterInStyle()
+        {
+            GUI.Cleanup.get(driver).Quit();
+            LoginForCheckStyles();
+            adm.get(driver).MakeSearchEnter(nameStyleForSearch);
+            Assert.IsTrue(AssertOnSearchInCreateStyle("fakely"), "После выполнения поиска по стилю 'fakely' путем нажатия на кнопку 'Enter'" +
+                " поиск не осуществился.");
+        }
+
+        /// <summary>
+        /// Выполняет проверку на отмену поиска путем нажатия на черный крестик,
+        ///  а так же путем удаления символов из строки для поиска.
+        /// </summary>
+        [TestMethod]
+        public void CheckCancelResSearchInAdminServicesStyle()
+        {
+            GUI.Cleanup.get(driver).Quit();
+            LoginForCheckStyles();
+            adm.get(driver).MakeSearchClick(nameStyleForSearch);
+            adm.get(driver).ClickCancelSearch();
+            GetItemsIn(locationNameLayerItems);
+            Assert.IsTrue(listItems.Count > 4, "После отмены поиска путем нажатия на черный крестик,"
+                + " табоица не вернулась в первоначальное положение.");
+            adm.get(driver).MakeSearchEnter(nameStyleForSearch);
+            adm.get(driver).ClearSearch();
+            GetItemsIn(locationNameLayerItems);
+            Assert.IsTrue(listItems.Count > 4, "После отмены поиска путем удаления всех символов из строки поиска,"
+             + " таблица не вернулась в первоначальное положение.");
+        }
+
+        /// <summary>
+        /// Выполняет проверку на удаление стиля.
+        /// </summary>
+        [TestMethod]
+        public void CheckDeleteStyle()
+        {
+            GUI.Cleanup.get(driver).Quit();
+            LoginForCheckStyles();
+            SetValueForCreateStyle();
+            elementButtonApply().Click();
+            ClickOnButtonsInCreateStyle(adm.get(driver).CmdSave);
+            ClickOnButtonDeleteStyle(nameStyle);
+            GetItemsIn(locationNameLayerItems);
+            for(int i=0;i<listItems.Count;i++)
+            {
+                Assert.IsFalse(listItems[i].Text == nameStyle, "После удаления стиля, стиль не удалился.");
+            }
+        }
+
+        /// <summary>
+        /// Выполняет проверку на редактирование стиля.
+        /// </summary>
+        [TestMethod]
+        public void CheckEditStyle()
+        {
+            GUI.Cleanup.get(driver).Quit();
+            LoginForCheckStyles();
+            SetValueForCreateStyle();
+            elementButtonApply().Click();
+            ClickOnButtonsInCreateStyle(adm.get(driver).CmdSave);
+            ClickOnButtonEditStyle();
+            NameStyle().Clear();
+            NameStyle().SendKeys(newNameStyle);
+            ClickOnButtonsInCreateStyle(adm.get(driver).CmdSave);
+            adm.get(driver).MakeSearchClick(nameStyle);
+            Assert.IsTrue(AssertOnSearchInCreateStyle(newNameStyle),"После выполнения редактирования стиля,"
+                + " у стиля не изменилось название");
+            ClickOnButtonDeleteStyle(newNameStyle);
+        }
+
+        /// <summary>
+        /// Выполняет клик по кнопке в окне создания стиля.
+        /// </summary>
+        /// <param name="value">Надпись на кнопке('Сохранить','Отменить','Применить').</param>
+        private void ClickOnButtonsInCreateStyle(string value)
+        {
+            IList<IWebElement> listButtonsInCreateStyle = driver.FindElements(By.CssSelector(locationButtonsInCreateStyle));
+            for (int i = 0; i < listButtonsInCreateStyle.Count; i++)
+            {
+                if (listButtonsInCreateStyle[i].GetAttribute("value") == value)
+                {
+                    listButtonsInCreateStyle[i].Click();
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
         /// Выполняет проверку на все альтернативные варианты, а именно:
         /// 1.Поиск сервиса отсутствующего в таблице.
         /// 2.Поиск заголовка отсутствующего в таблице.
@@ -333,7 +499,7 @@ namespace GetMapTest
         private void AssertOnNotChooseFile()
         {
             driver.FindElement(By.CssSelector(locationButtonAddLayer)).Click();
-            driver.FindElement(By.Name(locationAreaNameLayer)).SendKeys(locationNewNameLayer);
+            driver.FindElement(By.Name(locationAreaNameLayer)).SendKeys(newNameLayer);
             ClickOnButtonsInUploadLayer("Загрузить");
             listTitle = driver.FindElements(By.CssSelector(locationErrorMessage));
             for (int i = 0; i < listTitle.Count; i++)
@@ -392,6 +558,49 @@ namespace GetMapTest
             Assert.IsTrue(listItems.Count == 1, error);
         }
 
+        /// <summary>
+        /// Выполняет проверку на все альтернативные варианты подраздела 'Стили', а именно: 
+        /// 1.Проверка на создание стиля без указания его имени.
+        /// 2.Проверка на создание стиля без применения рисунка стиля.
+        /// 3.Проверка на поиск не существующего стиля.
+        /// </summary>
+        [TestMethod]
+        public void CheckAltOptAdminServicesStyle()
+        {
+
+            LoginForCheckStyles();
+            adm.get(driver).ClickInputFromValue(adm.get(driver).CmdCreateStyle);
+            AssertOnCreateStyle("После попытки создать новый стиль без указания имени,"
+                    + " не появилось окно с сообщением об ошибке.", "После попытки создать новый стиль без указания имени, "
+                + "высветилось не верное сообщение об ошибке.",messageNameIsNull);
+            SetValueForCreateStyle();
+            AssertOnCreateStyle("После попытки создать новой стиль без нажатия кнопки 'Применить' в окне выбора рисунка стиля"
+                    + " не появилось окно с сообщением об ошибке.", "После попытки создать новой стиль без нажатия кнопки"
+                + " 'Применить' в окне выбора рисунка стиля"
+                + " высветилось не верное сообщение об ошибке.",messageStyleIsNull);
+            adm.get(driver).MakeSearchClick("Стиль отсутствующий в таблице");
+            GetItemsIn(locationNameLayerItems);
+            Assert.IsTrue(listItems.Count < 4, "После выполнения поиска на стиль отсутствующий в таблице, не отобразилась пустой.");
+        }
+
+        private void AssertOnCreateStyle(string messageForTry,string messageForEqual,string errorMessage)
+        {
+            ClickOnButtonsInCreateStyle(adm.get(driver).CmdSave);
+            System.Threading.Thread.Sleep(2000);
+            try
+            {
+                elementErrorMessage = driver.FindElement(By.CssSelector(locationErrorMessageInCreateStyle));
+                this.errorMessage = elementErrorMessage.Text;
+                adm.get(driver).ClickOnButtonOK();
+            }
+            catch (Exception)
+            {
+                Assert.Fail(messageForTry);
+            }          
+            Assert.AreEqual(errorMessage, this.errorMessage, messageForEqual);
+            ClickOnButtonsInCreateStyle(adm.get(driver).CmdCancel);
+        }
+
         [TestCleanup]
         public void Clean()
         {
@@ -407,6 +616,18 @@ namespace GetMapTest
             System.Threading.Thread.Sleep(1000);
             adm.get(driver).ServicesClick();
             Assert.AreEqual(Settings.Instance.LinkServices, driver.Url, "После клика по вкладке 'Сервисы', вкладка не открылась.");
+        }
+
+        private void LoginForCheckStyles()
+        {
+            driver = Settings.Instance.createDriver();
+            driver.Manage().Window.Maximize();
+            GUI.Login.get(driver, linkForCheckStyle).loginAsAdmin();
+            Assert.AreEqual(linkForCheckStyle, driver.Url, "Не отобразилась страница 'Администрирование'.");
+            System.Threading.Thread.Sleep(1000);
+            adm.get(driver).ServicesClick();
+            Assert.AreEqual(linkServicesForCheckStyle, driver.Url, "После клика по вкладке 'Сервисы', вкладка не открылась.");
+            OpenInService(cmdStyles);
         }
 
         /// <summary>
@@ -533,6 +754,78 @@ namespace GetMapTest
             }
         }
 
+        private void SetValueForCreateStyle()
+        {
+            adm.get(driver).ClickInputFromValue(adm.get(driver).CmdCreateStyle);
+            NameStyle().SendKeys(nameStyle);
+            IWebElement elementButtonOpenListTypesStyle = driver.FindElement(By.CssSelector(locationButtonOpenListTypesStyle));
+            elementButtonOpenListTypesStyle.Click();
+            IList<IWebElement> listTypesStyle = driver.FindElements(By.CssSelector(locationButtonOpenListTypesStyle + " > option"));
+            for (int i = 0; i < listTypesStyle.Count; i++)
+            {
+                if (listTypesStyle[i].Text == "Точка")
+                {
+                    elementButtonOpenListTypesStyle.Click();
+                    listTypesStyle[i].Click();
+                    break;
+                }
+            }
+            driver.FindElement(By.CssSelector(locationButtonAddStyle)).Click();
+            System.Threading.Thread.Sleep(500);
+        }
+
+        private IWebElement elementButtonApply()
+        {
+            IWebElement element = driver.FindElement(By.CssSelector(locationButtonApplyInCreateStyle));
+            return element;
+        }
+
+        private void ClickOnButtonDeleteStyle(string nameStyle)
+        {
+            adm.get(driver).MakeSearchClick(nameStyle);
+            GetItemsIn(locationNameLayerItems);
+            IList<IWebElement> listButtonsDelete = driver.FindElements(By.CssSelector(locationDeleteButton));
+            for (int i = 0; i < listItems.Count; i++)
+            {
+                if (listItems[i].Text == nameStyle)
+                {
+                    listButtonsDelete[i].Click();
+                    adm.get(driver).ClickOnButtonOK();
+                    break;
+                }
+            }
+        }
+
+        private IWebElement NameStyle()
+        {
+            IWebElement elementNameStyle = null;
+            IList<IWebElement> listHeaderInputsInCreateStyle = driver.FindElements(By.CssSelector(locationHeaderInputsInCreateStyle));
+            for (int i = 0; i < listHeaderInputsInCreateStyle.Count; i++)
+            {
+                if (listHeaderInputsInCreateStyle[i].GetAttribute("data-dojo-attach-point") == "_styleName")
+                {
+                    elementNameStyle = listHeaderInputsInCreateStyle[i];
+                    break;
+                }
+            }
+            return elementNameStyle;
+        }
+
+        private void ClickOnButtonEditStyle()
+        {
+            adm.get(driver).MakeSearchClick(nameStyle);
+            GetItemsIn(locationNameLayerItems);
+            IList<IWebElement> listButtonsEdit = driver.FindElements(By.CssSelector(locationEditButton));
+            for (int i = 0; i < listItems.Count; i++)
+            {
+                if (listItems[i].Text == nameStyle)
+                {
+                    listButtonsEdit[i].Click();
+                    break;
+                }
+            }
+        }
+
         private Boolean AssertOnExistDataSourceInList()
         {
             OpenListSourcesData();
@@ -652,6 +945,20 @@ namespace GetMapTest
             GetItemsIn(locationItems);
             Assert.IsTrue(before != listItems[1].Text, "После выполнения сортировки,"
                 + " сортировка не была произведена.");
+        }
+
+        private Boolean AssertOnSearchInCreateStyle(string nameStyle)
+        {
+            GetItemsIn(locationNameLayerItems);
+            for (int i = 0; i < listItems.Count; i++)
+            {
+                if (listItems[i].Text == nameStyle)
+                {
+                    assert = true;
+                    break;
+                }
+            }
+            return assert;
         }
 
         private IList<IWebElement> GetItemsIn(string location)
