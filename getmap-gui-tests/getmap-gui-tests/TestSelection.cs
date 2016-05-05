@@ -19,7 +19,7 @@ namespace GetMapTest
         private const int countObjectsPratialSquare = 2;
         private const int countObjectsPartialPoligon = 3;
         private const int countObjectsPartialBuffer = 2;
-        private const int countObjectsFull = 23;
+        private const int countObjectsFull = 24;
         private const string _gpzpoint = "ГПЗ (точка)";
         private const string _gpzpoligon = "ГПЗ (полигон)";
         private const string _gazoprovod = "Газопровод";
@@ -47,7 +47,7 @@ namespace GetMapTest
         private const string locationButtonsExportToExcel = "a.excel";
         private const string extentGPZPoligon = "7779587.7387138,8563218.0409028,7782993.9637862,8564639.2918972";
         private const string extentGPZPoint = "7790786.6785935,8571267.4096605,7794192.9036659,8572688.6606549";
-        private const string extentGazoprovod = "7311214.731272,8298708.0082566,8183208.349828,8662548.2628434";
+        private const string extentGazoprovod = "7778005.8267775,8564446.8962055,7784818.2769225,8567289.3981945";
         private const string locationButtonsInSelection = "div.svzDropMenuButtonMenu > div";
         private const string locationButtonSquareActive = "div.svzDropMenuButtonMenu > div.selectSquareActive";
         private const string locationButtonPoligonActive = "div.svzDropMenuButtonMenu > div.editorAddPoligonActive";

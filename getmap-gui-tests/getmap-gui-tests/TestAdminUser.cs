@@ -35,6 +35,7 @@ namespace GetMapTest
         private const string locationMessageResNull = "div.dgrid-status";
         private const string locationUserNameInPortal = "td.headerLink #userName";
         private const string notFoundText = "Данных не найдено";
+
         private IList<IWebElement> listNames;
 
         [TestInitialize]
@@ -88,8 +89,7 @@ namespace GetMapTest
             System.Threading.Thread.Sleep(1000);
             listNames = driver.FindElements(By.CssSelector(locationNames));
             countBefore = listNames.Count;
-            driver.FindElement(By.CssSelector(locationAreaSearch)).Clear();
-            driver.FindElement(By.CssSelector(locationAreaSearch)).SendKeys(Keys.Delete);
+            adm.get(driver).ClearSearch();
             listNames = driver.FindElements(By.CssSelector(locationNames));
             countAfter = listNames.Count;
             Assert.IsFalse(countBefore == countAfter, "После удалению ключевого слова в поиске, в таблице осталось"
@@ -105,13 +105,27 @@ namespace GetMapTest
             adm.get(driver).CreateUser();
             adm.get(driver).SaveExitClose();
             driver = Settings.Instance.createDriver();
-            GUI.Login.get(driver, Settings.Instance.BaseUrl).login("pasha", "88");
+            GUI.Login.get(driver, Settings.Instance.BaseUrl).loginAsPasha();
             System.Threading.Thread.Sleep(1000);
             Assert.AreEqual(Settings.Instance.BaseUrl, driver.Url, "После создания нового пользователя, не удалось авторизоваться под новой учетной записью.");
             GUI.Cleanup.get(driver).Close();
             Login();
-            adm.get(driver).ClickOnDelete("Петрик");
-            //Удалить пользователя
+            adm.get(driver).ClickOnDeleteUserOrRole(); 
+        }
+
+        /// <summary>
+        /// Выполняет проверку на нажатия кнопки '' во время создания нового пользователя.
+        /// </summary>
+        [TestMethod]
+        public void CheckCancelCreateUser()
+        {
+            adm.get(driver).ClickInputFromValue(adm.get(driver).CmdCreateUser);
+            adm.get(driver).SetValueForCreateUser("pasha", "mail@mail.ru", "Петрик", "88", "88");
+            adm.get(driver).ClickInputFromValue(adm.get(driver).CmdCancel);
+            GUI.Cleanup.get(driver).Quit();
+            driver = Settings.Instance.createDriver();
+            GUI.Login.get(driver, Settings.Instance.BaseUrl).loginAsPasha();
+            Assert.IsFalse(Settings.Instance.BaseUrl == driver.Url, "После нажатия кнопки 'Отмена' во время создания нового пользователя, пользователь не создался.");
         }
 
         /// <summary>
@@ -120,8 +134,14 @@ namespace GetMapTest
         [TestMethod]
         public void CheckDeleteUser()
         {
-            //Создать 
-            //Удалить
+           
+            System.Threading.Thread.Sleep(2000);
+            adm.get(driver).ClickOnDeleteUserOrRole();
+            listNames = driver.FindElements(By.CssSelector(locationLogins));
+            for(int i=0;i<listNames.Count;i++)
+            {
+                Assert.IsFalse(listNames[i].Text == "pasha", "После удаления пользователя, пользователь остался.");
+            }
         }
 
         /// <summary>
@@ -130,11 +150,11 @@ namespace GetMapTest
         [TestMethod]
         public void CheckEditUser()
         {
-            //создать
+            adm.get(driver).CreateUser();
             adm.get(driver).ClickOnEdit("Петрик").SetValueInFIO("Петруля");
             adm.get(driver).SaveExitClose();
             driver = Settings.Instance.createDriver();
-            GUI.Login.get(driver, Settings.Instance.BaseUrl).login("pasha", "88");
+            GUI.Login.get(driver, Settings.Instance.BaseUrl).loginAsPasha();
             System.Threading.Thread.Sleep(5000);
             IWebElement elementUserName = driver.FindElement(By.CssSelector(locationUserNameInPortal));
             Assert.AreEqual("Петруля", elementUserName.Text, "После изменение 'ФИО' пользователя, 'ФИО' не изменилось.");
@@ -143,7 +163,7 @@ namespace GetMapTest
             Login();
             adm.get(driver).ClickOnEdit("Петруля").SetValueInFIO("Петрик");
             adm.get(driver).ClickInputFromValue(adm.get(driver).CmdSave);
-            //удалить
+            adm.get(driver).ClickOnDeleteUserOrRole();
         }
 
         /// <summary>
@@ -234,8 +254,7 @@ namespace GetMapTest
         /// 1.Создание пользователя с существующим логином.
         /// 2.Создание пользователя с существующим мейлом.
         /// 3.Создание нового пользователя с разными паролями(Пароль, подтверждение пароля).
-        /// 4.Нажатие кнопки 'Отмена' во время создания нового пользователя.
-        /// 5.Проверка на поиск не существующего пользователя.
+        /// 4.Проверка на поиск не существующего пользователя.
         /// </summary>
         [TestMethod]
         public void CheckAltOptAdminUsers()
@@ -249,8 +268,6 @@ namespace GetMapTest
             AssertAlternative("ivan", "testmail@mail.ru", "11", "222", "После создания нового пользователя"
                  + " с разными паролями, пользователь действительно создался.", adm.get(driver).CmdSave);
             Login();
-            AssertAlternative("ivan", "testmail@mail.ru", "11", "11", "После клик по кнопке 'Отмена' создания пользователя"
-                 + " пользователь все равно создался.", adm.get(driver).CmdCancel);
             AssertNotFound("фио отсутствующее в таблице");
         }
 
@@ -265,9 +282,12 @@ namespace GetMapTest
             adm.get(driver).AddRoleInUser("admin");
             adm.get(driver).SaveExitClose();
             driver = Settings.Instance.createDriver();
-            GUI.Login.get(driver, Settings.Instance.BaseUrl).login("pasha", "88");
+            GUI.Login.get(driver, Settings.Instance.BaseUrl).loginAsPasha();
             adm.get(driver).AssertOnAdmin();
-            //удалить пользователя
+            GUI.Cleanup.get(driver).Close();
+            Login();
+            System.Threading.Thread.Sleep(2000);
+            adm.get(driver).ClickOnDeleteUserOrRole();
         }
 
         [TestCleanup]
@@ -324,12 +344,12 @@ namespace GetMapTest
         private void Login()
         {
             driver = Settings.Instance.createDriver();
+            driver.Manage().Window.Maximize();
             GUI.Login.get(driver, Settings.Instance.AdminUrl).loginAsAdmin();
             Assert.AreEqual(Settings.Instance.AdminUrl, driver.Url, "Не отобразилась страница 'Администрирование'.");
             System.Threading.Thread.Sleep(1000);
             adm.get(driver).UsersClick();
-            Assert.AreEqual(Settings.Instance.LinkUsers, driver.Url, "После клика по вкладке 'Пользователи', вкладка не открылась.");
-            driver.Manage().Window.Maximize();
+            Assert.AreEqual(Settings.Instance.LinkUsers, driver.Url, "После клика по вкладке 'Пользователи', вкладка не открылась.");       
         }
 
         private string GetItemFromIndex(int index, IList<IWebElement> list, string updateList)

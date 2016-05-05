@@ -42,6 +42,8 @@ namespace GetMapTest
         private const string linkRole = "http://91.143.44.249/sovzond_students/admin/Roles?SelectedRow=1";
         private const string linkAccess = "http://91.143.44.249/sovzond_students/admin/Permissions";
         private const string linkLayers = "http://91.143.44.249/sovzond_students/admin/";
+        private const string linkJournal = "http://91.143.44.249/sovzond_students/admin/Journal";
+        private const string linkServices = "http://91.143.44.249/sovzond_students/admin/Sources";
 
         /// <summary>
         /// Адрес базовой ссылки.
@@ -106,6 +108,28 @@ namespace GetMapTest
             get
             {
                 return linkLayers;
+            }
+        }
+
+        /// <summary>
+        /// Адоес ссылки на вкладку 'Журнал'.
+        /// </summary>
+        public string LinkJournal
+        {
+            get
+            {
+                return linkJournal;
+            }
+        }
+
+        /// <summary>
+        /// Адрес ссылки на вкладку 'Сервисы'.
+        /// </summary>
+        public string LinkServices
+        {
+            get
+            {
+                return linkServices;
             }
         }
 

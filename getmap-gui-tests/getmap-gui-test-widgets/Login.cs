@@ -87,7 +87,7 @@ namespace GetMapTest.GUI
         }
 
         /// <summary>
-        /// Выполняет авторизацию на сайт пользователя 'Гость'.
+        /// Выполняет авторизацию на портал под пользователем 'Гость'.
         /// </summary>
         public void loginAsGuest()
         {
@@ -95,12 +95,19 @@ namespace GetMapTest.GUI
         }
 
         /// <summary>
-        /// Выполняет авторизация на сайте пользователя 'Администратор'.
+        /// Выполняет авторизацию на портал под пользователем 'Администратор'.
         /// </summary>
         public void loginAsAdmin()
         {
             login("admin", "111");
         }
 
+        /// <summary>
+        /// Выполняет авторизацию на портал под пользователем для тестов 'pasha'.
+        /// </summary>
+        public void loginAsPasha()
+        {
+            login("pasha", "88");
+        }
     }
 }

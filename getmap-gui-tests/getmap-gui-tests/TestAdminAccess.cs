@@ -67,8 +67,7 @@ namespace GetMapTest
             string searchAttribute = "днс";
             MakeSearch(searchAttribute);
             before = adm.get(driver).CountLayers(listLayers, locationLayersInTable);
-            for (int i = 0; i < searchAttribute.Length; i++)
-                driver.FindElement(By.CssSelector(locationSearchArea)).SendKeys(Keys.Backspace);
+            driver.FindElement(By.CssSelector(locationSearchArea)).Clear();
             driver.FindElement(By.CssSelector(locationSearchArea)).SendKeys(Keys.Enter);
             after = adm.get(driver).CountLayers(listLayers, locationLayersInTable);
             Assert.IsTrue(before != after, "После очистки поля для поиск путем удаления, в таблице остались отображаться искомые элементы.");
@@ -82,6 +81,7 @@ namespace GetMapTest
         public void CheckAccessRead()
         {
             bool assert = false;
+            bool neft = false;
             DataPreparation();
             adm.get(driver).ActivateLayerRead("Нефтяная инфраструктура", (int)Layers.Нефтянная_инфраструктура);
             adm.get(driver).SaveExitCloseAccess();
@@ -97,11 +97,15 @@ namespace GetMapTest
             }
             Assert.IsTrue(assert, "После присвоение прав роли 'ivan' пользователю 'pasha'"
                 + " только на чтение, ему присвоились права и на редактирование.");
-            Assert.AreEqual("Нефтяная инфраструктура", listTematicLayers[6].Text, "После присвоение прав роли 'ivan' пользователю 'pasha'"
+            for (int i = 0; i < listTematicLayers.Count; i++)
+            {
+                if (listTematicLayers[i].Text == "Нефтяная инфраструктура")
+                    neft = true;
+            }
+            Assert.IsTrue(neft, "После присвоение прав роли 'ivan' пользователю 'pasha'"
                 + " только на чтение/редактирование группы слоев 'Нефтяная инфраструктура' ,"
                 + " фактически на портале не отобразилась группа слоев 'Нефтяная инфраструктура'.");
-            //удалить пользователя
-            //удалить роль
+            ClearData();
         }
 
         /// <summary>
@@ -112,7 +116,7 @@ namespace GetMapTest
         public void CheckAccessEdit()
         {
             DataPreparation();
-            adm.get(driver).ActiveLayerEdit("Нефтянная_инфраструктура", (int)Layers.Нефтянная_инфраструктура);
+            adm.get(driver).ActiveLayerEdit("Нефтяная инфраструктура", (int)Layers.Нефтянная_инфраструктура);
             adm.get(driver).SaveExitCloseAccess();
             OpenSettingsButtonLayer();
             try
@@ -125,8 +129,7 @@ namespace GetMapTest
                 Assert.Fail("После присвоение прав роли 'ivan' пользователю 'pasha' на редактирование слоев группы 'Нефтяная инфраструктура'"
                     + " у пользователя не появилось возможности редактировать слой.");
             }
-            //удалить пользователя
-            //удалить роль
+            ClearData();
         }
 
         /// <summary>
@@ -139,16 +142,13 @@ namespace GetMapTest
             listReadSelected = driver.FindElements(By.CssSelector(locationSelectedCBRead));
             listEditSelected = driver.FindElements(By.CssSelector(locationSelectedCBEdit));
             int countActiveCBBefore = 0;
-            adm.get(driver).ActiveLayerEdit("Нефтянная_инфраструктура", (int)Layers.Нефтянная_инфраструктура);
-            adm.get(driver).SaveExitCloseAccess();
-            System.Threading.Thread.Sleep(1000);
+            adm.get(driver).ActiveLayerEdit("Нефтяная инфраструктура", (int)Layers.Нефтянная_инфраструктура);
             adm.get(driver).CancelClickAccess();
             listReadSelected = driver.FindElements(By.CssSelector(locationSelectedCBRead));
             listEditSelected = driver.FindElements(By.CssSelector(locationSelectedCBEdit));
             int countActiveCBAfter = 0;
             Assert.AreEqual(countActiveCBBefore, countActiveCBAfter, "После выполнения клика по кнопке 'Отмена', не были отменены последние изменения.");
-            //удалить пользователя
-            //удалить роль
+            ClearData();
         }
 
         /// <summary>
@@ -178,9 +178,9 @@ namespace GetMapTest
         {
             bool assert = false;
             DataPreparation();
-            adm.get(driver).ActiveLayerEdit("Нефтянная_инфраструктура", (int)Layers.Нефтянная_инфраструктура);
+            adm.get(driver).ActiveLayerEdit("Нефтяная инфраструктура", (int)Layers.Нефтянная_инфраструктура);
             System.Threading.Thread.Sleep(1000);
-            adm.get(driver).ActivateLayerRead("Нефтянная_инфраструктура", (int)Layers.Нефтянная_инфраструктура);
+            adm.get(driver).ActivateLayerRead("Нефтяная инфраструктура", (int)Layers.Нефтянная_инфраструктура);
             adm.get(driver).SaveExitCloseAccess();
             listEditSelected = driver.FindElements(By.CssSelector(locationSelectedCBEdit));
             listReadSelected = driver.FindElements(By.CssSelector(locationSelectedCBRead));
@@ -198,8 +198,7 @@ namespace GetMapTest
             }
             Assert.IsTrue(assert, "После снятия галочки с чек бокса 'Чтение' группы слоев 'Нефтяная инфраструктура'" +
                 " на портале у пользователя осталась возможность просматривать эту группы слоев.");
-            //удалить пользователя
-            //удалить роль
+            ClearData();
         }
 
         /// <summary>
@@ -212,6 +211,7 @@ namespace GetMapTest
             DataPreparation();
             adm.get(driver).ActivateLayerRead("Нефтяная инфраструктура", (int)Layers.Амбары);
             listReadSelected = driver.FindElements(By.CssSelector(locationSelectedCBRead));
+            listLayers = driver.FindElements(By.CssSelector(locationLayersInTable));
             for (int i = 0; i < listLayers.Count; i++)
             {
                 if (listLayers[i].Text == "Нефтяная инфраструктура")
@@ -231,8 +231,7 @@ namespace GetMapTest
                 Assert.Fail("После выполнения клика по чек боксу слоя 'Амбар' группы слоев"
                 + " 'Нефтяная инфраструктура', на портале не отобразилась группа слоев 'Нефтяная инфраструктура'.");
             }
-            //удалить пользователя
-            //удалить роль
+            ClearData();
         }
 
         /// <summary>
@@ -256,31 +255,48 @@ namespace GetMapTest
         private void Login()
         {
             driver = Settings.Instance.createDriver();
+            driver.Manage().Window.Maximize();
             GUI.Login.get(driver, Settings.Instance.AdminUrl).loginAsAdmin();
             Assert.AreEqual(Settings.Instance.AdminUrl, driver.Url, "Не отобразилась страница 'Администрирование'.");
             System.Threading.Thread.Sleep(1000);
             adm.get(driver).AccessClick();
             Assert.AreEqual(Settings.Instance.LinkAccess, driver.Url, "Не отобразилась вкладка 'Права доступа'.");
-            driver.Manage().Window.Maximize();
         }
 
         private void DataPreparation()
         {
-            adm.get(driver).UsersClick().CreateUser();
+            adm.get(driver).UsersClick();
+            System.Threading.Thread.Sleep(2000);
+            adm.get(driver).CreateUser();
+            System.Threading.Thread.Sleep(2000);
+            adm.get(driver).RoleClick();
             System.Threading.Thread.Sleep(1000);
-            adm.get(driver).RoleClick().CreateRole("admin");
+            adm.get(driver).CreateRole("admin");
             adm.get(driver).ClickOnEdit("ivan").AddUserInRole("pasha");
             adm.get(driver).ClickInputFromValue(adm.get(driver).CmdSave);
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(2000);
             adm.get(driver).AccessClick();
+            System.Threading.Thread.Sleep(2000);
             adm.get(driver).UseFilter();
-            //vernut
+        }
+
+        private void ClearData()
+        {
+            GUI.Cleanup.get(driver).Close();
+            Login();
+            adm.get(driver).UsersClick();
+            System.Threading.Thread.Sleep(1000);
+            adm.get(driver).ClickOnDeleteUserOrRole();
+            adm.get(driver).RoleClick();
+            System.Threading.Thread.Sleep(1000);
+            adm.get(driver).ClickOnDeleteUserOrRole();
+
         }
 
         private void OpenSettingsButtonLayer()
         {
             driver = Settings.Instance.createDriver();
-            GUI.Login.get(driver, Settings.Instance.BaseUrl).login("pasha", "88");
+            GUI.Login.get(driver, Settings.Instance.BaseUrl).loginAsPasha();
             System.Threading.Thread.Sleep(1000);
             GUI.SlideMenu.get(driver).OpenLayers();
             System.Threading.Thread.Sleep(1000);

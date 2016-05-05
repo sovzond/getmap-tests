@@ -14,12 +14,15 @@ namespace GetMapTest.GUI
         private IWebElement elementAccess;
         private IWebElement elementLayers;
         private IWebElement elementButtonSearch;
+        private IWebElement elementJournal;
+        private IWebElement elementServices;
         int idx;
         int idxAfter;
         private const string locationUsers = "#headTable td";
         private const string locationButtonSearch = "form.searchGrid input";
         private const string locationSearchArea = "input.searchString";
         private const string locationNameUsers = "td.field-name";
+        private const string locationNameLayersInLayers = "td.field-title";
         private const string locationSettingsButtons = "table.dgrid-row-table span";
         private const string locationButtonExit = "table.noBorder #exit";
         private const string locationLoginForCreateUser = "#login";
@@ -45,6 +48,13 @@ namespace GetMapTest.GUI
         private const string locationGroupLayersName = "td.groupName";
         private const string locationHeaderLinks = "td.headerLink a";
         private const string locationAllItemsInTable = "tr.permissionRow > td";
+        private const string locationPreviewLayerSB = "td[class$='field-engine'] div.mapStructPreview";
+        private const string locationEditLayerSB = "td[class$='field-engine'] div.mapStructEdit";
+        private const string locationDeleteLayerSB = "td[class$='field-engine'] div.mapStructDelete";
+        private const string locationEditGroupButton = "tr[class^='group'] div.mapStructEdit";
+        private const string locationDeleteGroupButton = "tr[class^='group'] div.mapStructDelete";
+        private const string locationButtonsAccess = "input.button";
+        private const string locationInputsInBoxShadowDelete = "div.container input";
         private const string cmdCreateUser = "Создать пользователя";
         private const string cmdSave = "Сохранить";
         private const string cmdCancel = "Отмена";
@@ -60,6 +70,8 @@ namespace GetMapTest.GUI
         private IList<IWebElement> listInputs;
         private IList<IWebElement> listGroupName;
         private IList<IWebElement> listLayers;
+        private IList<IWebElement> listSB;
+        private IList<IWebElement> listInputsInBoxShadowDelete;
         private List<IWebElement> listRead;
         private List<IWebElement> listEdit;
 
@@ -84,6 +96,10 @@ namespace GetMapTest.GUI
                     elementAccess = listHeaderTable[i];
                 if (listHeaderTable[i].Text == "Слои")
                     elementLayers = listHeaderTable[i];
+                if (listHeaderTable[i].Text == "Журнал")
+                    elementJournal = listHeaderTable[i];
+                if (listHeaderTable[i].Text == "Сервисы")
+                    elementServices = listHeaderTable[i];
             }
 
         }
@@ -359,7 +375,7 @@ namespace GetMapTest.GUI
             DataPreparationForActiveLayer(groupName);
             for (int i = this.idx; i < idxAfter; i++)
             {
-                if (listLayers[i].GetAttribute("class") == "readTd")
+                if (listLayers[i].GetAttribute("class").StartsWith("readTd"))
                     listRead.Add(listLayers[i]);
             }
             listRead[idx].Click();
@@ -375,7 +391,7 @@ namespace GetMapTest.GUI
             DataPreparationForActiveLayer(groupName);
             for (int i = this.idx; i < idxAfter; i++)
             {
-                if (listLayers[i].GetAttribute("class") == "editTd")
+                if (listLayers[i].GetAttribute("class").StartsWith("editTd"))
                     listEdit.Add(listLayers[i]);
             }
             listEdit[idx].Click();
@@ -387,7 +403,7 @@ namespace GetMapTest.GUI
         /// <returns></returns>
         public Administration FilterClickAccess()
         {
-            ClickOnInput("Фильтр");
+            ClickOnInput("Фильтр ролей");
             return this;
         }
 
@@ -432,6 +448,21 @@ namespace GetMapTest.GUI
         {
             ClickOnInput("Отмена");
             return this;
+        }
+
+        private void ClickOnInput(string name)
+        {
+            IWebElement elementForClick = null;
+            IList<IWebElement> listButtons = driver.FindElements(By.CssSelector(locationButtonsAccess));
+            for (int i = 0; i < listButtons.Count; i++)
+            {
+                if (listButtons[i].GetAttribute("value") == name)
+                {
+                    elementForClick = listButtons[i];
+                    break;
+                }
+            }
+            elementForClick.Click();
         }
 
         /// <summary>
@@ -486,11 +517,11 @@ namespace GetMapTest.GUI
         /// <param name="name">Название группы</param>
         public void ClickOnEditGroup(string name)
         {
-            IList<IWebElement> listSB = driver.FindElements(By.CssSelector("tr[class^='group'] div.mapStructEdit"));
-            IList<IWebElement> listGroup = driver.FindElements(By.CssSelector(locationGroupNameLayers));
-            for (int i = 0; i < listGroup.Count; i++)
+            listSB = driver.FindElements(By.CssSelector(locationEditGroupButton));
+            listGroupName = driver.FindElements(By.CssSelector(locationGroupNameLayers));
+            for (int i = 0; i < listGroupName.Count; i++)
             {
-                if (listGroup[i].Text == name)
+                if (listGroupName[i].Text == name)
                 {
                     listSB[i].Click();
                     break;
@@ -499,19 +530,103 @@ namespace GetMapTest.GUI
 
         }
 
-        private void ClickOnInput(string name)
+        /// <summary>
+        /// Выполняет клик по кнопке 'Удалить группу' группы слоев,
+        ///  затем её удаляет.
+        /// </summary>
+        /// <param name="name">Имя группы, которую надо удалить.</param>
+        public void ClickOnDeleteGroup(string name)
         {
-            IWebElement elementForClick = null;
-            IList<IWebElement> listButtons = driver.FindElements(By.CssSelector("input.button"));
-            for (int i = 0; i < listButtons.Count; i++)
+            listSB = driver.FindElements(By.CssSelector(locationDeleteGroupButton));
+            listGroupName = driver.FindElements(By.CssSelector(locationGroupNameLayers));
+            for(int i=0;i<listGroupName.Count;i++)
             {
-                if (listButtons[i].GetAttribute("value") == name)
+                if(listGroupName[i].Text == name)
                 {
-                    elementForClick = listButtons[i];
+                    listSB[i].Click();
                     break;
                 }
             }
-            elementForClick.Click();
+            ClickOnButtonOK();
+            System.Threading.Thread.Sleep(1000);
+            listGroupName = driver.FindElements(By.CssSelector(locationGroupNameLayers));
+            for(int i=0;i<listGroupName.Count;i++)
+            {
+                if (listGroupName[i].Text == name)
+                {
+                    ClickOnButtonOK();
+                    break;
+                }
+            }         
+        }
+
+        /// <summary>
+        /// Выполняет клик по кнопке 'Редактировать' слой на вклакде 'Слои'.
+        /// </summary>
+        /// <param name="name">Наименованеи слоя.</param>
+        public void ClickOnEditLayer(string name)
+        {
+            listSB = driver.FindElements(By.CssSelector(locationEditLayerSB));
+            ClickOnSB(name);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        public void ClickOnDeleteLayer(string name)
+        {
+            listSB = driver.FindElements(By.CssSelector(locationDeleteLayerSB));
+            ClickOnSB(name);
+        }
+
+        /// <summary>
+        /// Выполняет клик по кнопке 'Предпросмотр' слоя на вкладке  'Слои'.
+        /// </summary>
+        /// <param name="name">Наименование слоя.</param>
+        public void ClickOnPreviewLayer(string name)
+        {
+           listSB = driver.FindElements(By.CssSelector(locationPreviewLayerSB));
+            ClickOnSB(name);
+        }
+
+        /// <summary>
+        /// Выполняет клик по определенной кнопки настройки слоя.
+        /// </summary>
+        /// <param name="name">Название слоя, по кнопке которого надо кликнуть.</param>
+        private void ClickOnSB(string name)
+        {
+            listLayers = driver.FindElements(By.CssSelector(locationNameLayersInLayers));
+            for (int i = 0; i < listLayers.Count; i++)
+            {
+                if (listLayers[i].Text == name)
+                {
+                    listSB[i].Click();
+                    break;
+                }
+            }
+            System.Threading.Thread.Sleep(500);
+            ClickOnButtonOK();
+        }
+
+        /// <summary>
+        /// Выполняет клик по вкладке 'Журнал'.
+        /// </summary>
+        /// <returns></returns>
+        public Administration JournalClick()
+        {
+            elementJournal.Click();
+            return this;
+        }
+
+        /// <summary>
+        /// Выполняет килик по вкладке 'Сервисы'.
+        /// </summary>
+        /// <returns></returns>
+        public Administration ServicesClick()
+        {
+            elementServices.Click();
+            return this;
         }
 
         /// <summary>
@@ -566,35 +681,53 @@ namespace GetMapTest.GUI
                 }
             }
             if (idx == -1)
-                throw new Exception("Вы ввели некорретное 'ФИО', проще говоря, искомое 'ФИО' не найдено.");
+                throw new Exception("Вы ввели некорретное 'ФИО' или наименование роли, проще говоря, искомое 'ФИО' или наименование роли не найдено.");
             idx = idx * 2;
             listSettingsButtons[idx].Click();
             return this;
         }
-
         /// <summary>
-        /// Выполняет клик по кнопке 'Удалить'.
+        /// Удаляет пользователя или роль, в зависимости от того, 
+        /// какая вкладка будет открыта.
         /// </summary>
-        /// <param name="userName">Имя(ФИО пользователя, Наименование роли и т.д.).</param>
         /// <returns></returns>
-        public Administration ClickOnDelete(string userName)
+        public Administration ClickOnDeleteUserOrRole()
         {
             int idx = -1;
             listName = driver.FindElements(By.CssSelector(locationNameUsers));
             listSettingsButtons = driver.FindElements(By.CssSelector(locationSettingsButtons));
             for (int i = 0; i < listName.Count; i++)
             {
-                if (listName[i].Text == userName)
+                if (listName[i].Text == "Петрик"
+                    || listName[i].Text == "ivan")
                 {
                     idx = i;
                     break;
                 }
             }
             if (idx == -1)
-                throw new Exception("Вы ввели некорретное 'ФИО', проще говоря, искомое 'ФИО' не найдено.");
+                throw new Exception("Вы ввели некорретное 'ФИО' или наименование роли, проще говоря, искомое 'ФИО' или наименование роли не найдено.");
             idx = (idx * 2) + 1;
             listSettingsButtons[idx].Click();
+            System.Threading.Thread.Sleep(500);
+            ClickOnButtonOK();
             return this;
+        }
+
+        /// <summary>
+        /// Метод для методов на удаление пользователей, ролей, групп слоев и прочее.
+        /// </summary>
+        public void ClickOnButtonOK()
+        {
+            listInputsInBoxShadowDelete = driver.FindElements(By.CssSelector(locationInputsInBoxShadowDelete));
+            for (int i = 0; i < listInputsInBoxShadowDelete.Count; i++)
+            {
+                if (listInputsInBoxShadowDelete[i].GetAttribute("value") == "Ok")
+                {
+                    listInputsInBoxShadowDelete[i].Click();
+                    break;
+                }
+            }
         }
 
         /// <summary>
@@ -696,7 +829,7 @@ namespace GetMapTest.GUI
         }
 
         /// <summary>
-        /// Выполняет клик по кнопке 'Сортировка'(логина, наименование).
+        /// Выполняет клик по кнопке 'Сортировка' ('Логин').
         /// </summary>
         /// <returns></returns>
         public Administration ChangeSortLogin()
@@ -716,7 +849,7 @@ namespace GetMapTest.GUI
         }
 
         /// <summary>
-        /// Выполняет клик по кнопке 'Сортировка'('ФИО').
+        /// Выполняет клик по кнопке 'Сортировка'('ФИО', 'Наименование').
         /// </summary>
         /// <returns></returns>
         public Administration ChangeSortName()
@@ -763,8 +896,10 @@ namespace GetMapTest.GUI
         }
 
         /// <summary>
-        /// 
+        /// Возвращает количество слоев в заданном списке.
         /// </summary>
+        /// <param name="listLayers">Список , которого надо возвратить количество слоев.</param>
+        /// <param name="location">Место нахождение слоев.</param>
         /// <returns></returns>
         public Int32 CountLayers(IList<IWebElement> listLayers,string location)
         {

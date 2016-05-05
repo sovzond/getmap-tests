@@ -35,10 +35,10 @@ namespace GetMapTest.GUI
         private IList<IWebElement> listLayersInBaseLayers;
         private enum NumberButtonsTransparencyIncDec
         {
-            Fakel = 1,
-            Ambar = 2,
-            Places = 3,
-            DNS = 4
+            Fakel = 0,
+            Ambar = 1,
+            Places = 2,
+            DNS = 3
         }
 
         private SlideMenu(IWebDriver driver)

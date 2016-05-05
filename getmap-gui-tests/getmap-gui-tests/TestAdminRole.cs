@@ -42,7 +42,7 @@ namespace GetMapTest
             adm.get(driver).MakeSearchClick("iVa");
             System.Threading.Thread.Sleep(1000);
             AssertForSearch("ivan");
-            //удалить роль
+            adm.get(driver).ClickOnDeleteUserOrRole();
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace GetMapTest
             driver.FindElement(By.CssSelector(locationAreaSearch)).SendKeys("iVa");
             driver.FindElement(By.CssSelector(locationAreaSearch)).SendKeys(Keys.Enter);
             AssertForSearch("ivan");
-            //удалить роль
+            adm.get(driver).ClickOnDeleteUserOrRole();
         }
 
         /// <summary>
@@ -80,13 +80,12 @@ namespace GetMapTest
             System.Threading.Thread.Sleep(1000);
             listNames = driver.FindElements(By.CssSelector(locationNames));
             countBefore = listNames.Count;
-            driver.FindElement(By.CssSelector(locationAreaSearch)).Clear();
-            driver.FindElement(By.CssSelector(locationAreaSearch)).SendKeys(Keys.Delete);
+            adm.get(driver).ClearSearch();
             listNames = driver.FindElements(By.CssSelector(locationNames));
             countAfter = listNames.Count;
             Assert.IsFalse(countBefore == countAfter, "После удалению ключевого слова в поиске, в таблице осталось"
                 + " количество строк, соответствующих искомому элементу.");
-            //удалить роль
+            adm.get(driver).ClickOnDeleteUserOrRole();
         }
 
         /// <summary>
@@ -104,7 +103,28 @@ namespace GetMapTest
                     assert = true;
             }
             Assert.IsTrue(assert, "После создания роли, роль не создалась.");
-            //удалить роль
+            adm.get(driver).ClickOnDeleteUserOrRole();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [TestMethod]
+        public void CheckCancelCreateRole()
+        {
+            adm.get(driver).ClickInputFromValue(adm.get(driver).CmdCreateRole);
+            adm.get(driver).SetValueForCreateRole("ivan", "user").ClickInputFromValue(adm.get(driver).CmdCancel);
+            GUI.Cleanup.get(driver).Close();
+            Login();
+            IList<IWebElement> listTd = driver.FindElements(By.CssSelector(locationLinesTd));
+            for (int i = 0; i < listTd.Count; i++)
+            {
+                if (listTd[i].Text == "ivan")
+                {
+                    Assert.IsTrue(listTd[i + 1].Text == "Администратор", "После нажатия кнопки 'Отмена' во время создания новой роли, роль все таки создалась.");
+                    break;
+                }
+            }
         }
 
         /// <summary>
@@ -115,7 +135,13 @@ namespace GetMapTest
         {
             Assert.IsTrue(DataPreparationForRoleAdd("admin"), "После добавления роли с типом ролей 'Администратор',"
                 + " пользователю не присвоились права администратора.");
-            //удалить роль
+            GUI.Cleanup.get(driver).Close();
+            Login();
+            System.Threading.Thread.Sleep(2000);
+            adm.get(driver).ClickOnDeleteUserOrRole();
+            adm.get(driver).UsersClick();
+            System.Threading.Thread.Sleep(2000);
+            adm.get(driver).ClickOnDeleteUserOrRole();
         }
 
         /// <summary>
@@ -126,7 +152,13 @@ namespace GetMapTest
         {            
             Assert.IsFalse(DataPreparationForRoleAdd("user"), "После добавления роли с типом ролей 'Пользователь',"
                 + " пользователю  присвоились права администратора.");
-            //удалить роль
+            GUI.Cleanup.get(driver).Close();
+            Login();
+            System.Threading.Thread.Sleep(2000);
+            adm.get(driver).ClickOnDeleteUserOrRole();
+            adm.get(driver).UsersClick();
+            System.Threading.Thread.Sleep(2000);
+            adm.get(driver).ClickOnDeleteUserOrRole();
         }
 
         /// <summary>
@@ -136,7 +168,12 @@ namespace GetMapTest
         public void CheckDeleteRole()
         {
             adm.get(driver).CreateRole("admin");
-            //удалить роль           
+            adm.get(driver).ClickOnDeleteUserOrRole();
+            listNames = driver.FindElements(By.CssSelector(locationNames));
+            for(int i=0;i<listNames.Count;i++)
+            {
+                Assert.IsFalse(listNames[i].Text == "ivan","После удаления роли, роль не удалилась.");
+            }         
         }
         /// <summary>
         /// Выполняет проверку на редактирование роли параметра 'Наименование'.
@@ -145,8 +182,15 @@ namespace GetMapTest
         public void CheckEditRole()
         {
             bool assert = false;
+            adm.get(driver).UsersClick();
+            System.Threading.Thread.Sleep(1000);
+            adm.get(driver).CreateUser();
+            System.Threading.Thread.Sleep(2000);
+            adm.get(driver).RoleClick();
+            System.Threading.Thread.Sleep(1000);
             adm.get(driver).CreateRole("admin");
             adm.get(driver).ClickOnEdit("ivan").ChangeValueInNameRole("ivanko").ClickInputFromValue(adm.get(driver).CmdSave);
+            System.Threading.Thread.Sleep(2000);
             adm.get(driver).UsersClick();
             System.Threading.Thread.Sleep(1000);
             adm.get(driver).ClickOnEdit("Петрик");
@@ -158,7 +202,14 @@ namespace GetMapTest
             }
             Assert.IsTrue(assert, "После внесения изменений в наименование роли, "
                 + " наименование не изменилось.");
-            //удалить роль
+            adm.get(driver).ClickInputFromValue(adm.get(driver).CmdCancel);
+            System.Threading.Thread.Sleep(1000);
+            adm.get(driver).ClickOnDeleteUserOrRole();
+            System.Threading.Thread.Sleep(1000);
+            adm.get(driver).RoleClick();
+            System.Threading.Thread.Sleep(1000);
+            adm.get(driver).ClickOnEdit("ivanko").ChangeValueInNameRole("ivan").ClickInputFromValue(adm.get(driver).CmdSave);
+            adm.get(driver).ClickOnDeleteUserOrRole();
         }
 
         /// <summary>
@@ -180,7 +231,7 @@ namespace GetMapTest
             {
                 Assert.Fail("В сортировке по наименованию отсутствует стрелка повернутая вверх.");
             }
-            adm.get(driver).ChangeSortLogin();
+            adm.get(driver).ChangeSortName();
             try
             {
                 elDown = driver.FindElement(By.CssSelector(locationLoginSortDown));
@@ -196,18 +247,16 @@ namespace GetMapTest
 
         /// <summary>
         /// Выполняет проверку на все альтернативные варианты, а именно:
-        /// 1.Создание роли с существующим наименованием.2
-        /// 2.Нажатие кнопки 'Отмена' во время создания новой роли.
-        /// 3.Провера на поиск не существующей роли.
+        /// 1.Создание роли с существующим наименованием.
+        /// 2.Провера на поиск не существующей роли.
         /// </summary>
         [TestMethod]
         public void CheckAltOptAdminRole()
         {
             adm.get(driver).CreateRole("admin");
-            AssertAlternative("После созданию роли с уже существующим логином, роль создалась.", adm.get(driver).CmdSave);
-            AssertAlternative("После отмены создания роли, роль все равно создалась.", adm.get(driver).CmdCancel);
-            AssertNotFound("Роль отсутствующая в таблице");
-            //удалить пользователя
+            AssertRoleExist();
+            adm.get(driver).ClickOnDeleteUserOrRole();
+            AssertNotFound("Роль отсутствующая в таблице");           
         }       
 
         [TestCleanup]
@@ -216,10 +265,10 @@ namespace GetMapTest
             GUI.Cleanup.get(driver).Quit();
         }
 
-        private void AssertAlternative(string message,string cmd)
+        private void AssertRoleExist()
         {        
             adm.get(driver).ClickInputFromValue(adm.get(driver).CmdCreateRole);
-            adm.get(driver).SetValueForCreateRole("ivan", "user").ClickInputFromValue(cmd);
+            adm.get(driver).SetValueForCreateRole("ivan", "user").ClickInputFromValue(adm.get(driver).CmdSave);
             GUI.Cleanup.get(driver).Close();
             Login();
             IList<IWebElement> listTd = driver.FindElements(By.CssSelector(locationLinesTd));
@@ -227,7 +276,7 @@ namespace GetMapTest
             {
                 if (listTd[i].Text == "ivan")
                 {
-                    Assert.IsTrue(listTd[i + 1].Text == "Администратор", message);
+                    Assert.IsTrue(listTd[i + 1].Text == "Администратор", "После созданию роли с уже существующим логином, роль создалась.");
                     break;
                 }
             }          
@@ -235,9 +284,6 @@ namespace GetMapTest
 
         private void AssertNotFound(string value)
         {
-            driver = Settings.Instance.createDriver();
-            GUI.Login.get(driver, Settings.Instance.AdminUrl).loginAsAdmin();
-            adm.get(driver).UsersClick();
             adm.get(driver).MakeSearchClick(value);
             IWebElement elementNotFound = driver.FindElement(By.CssSelector(locationMessageNotFound));
             IWebElement elementResNull = driver.FindElement(By.CssSelector(locationMessageResNull));
@@ -257,12 +303,12 @@ namespace GetMapTest
         private void Login()
         {
             driver = Settings.Instance.createDriver();
+            driver.Manage().Window.Maximize();
             GUI.Login.get(driver,Settings.Instance.AdminUrl).loginAsAdmin();
             Assert.AreEqual(Settings.Instance.AdminUrl, driver.Url, "Не отобразилась страница 'Администрирование'.");
             System.Threading.Thread.Sleep(1000);
             adm.get(driver).RoleClick();
             Assert.AreEqual(Settings.Instance.LinkRole, driver.Url, "После клика по вкладке 'Роли', вкладка не открылась.");
-            driver.Manage().Window.Maximize();
         }
 
         /// <summary>
@@ -273,11 +319,16 @@ namespace GetMapTest
         private Boolean DataPreparationForRoleAdd(string type)
         {
             adm.get(driver).CreateRole(type);
+            adm.get(driver).UsersClick();
+            System.Threading.Thread.Sleep(2000);
+            adm.get(driver).CreateUser();
+            adm.get(driver).RoleClick();
+            System.Threading.Thread.Sleep(2000);
             adm.get(driver).ClickOnEdit("ivan");
             adm.get(driver).AddUserInRole("pasha");
             adm.get(driver).SaveExitClose();
             driver = Settings.Instance.createDriver();
-            GUI.Login.get(driver, Settings.Instance.BaseUrl).login("pasha", "88");
+            GUI.Login.get(driver, Settings.Instance.BaseUrl).loginAsPasha();
             return adm.get(driver).AssertOnAdmin();
         }
 

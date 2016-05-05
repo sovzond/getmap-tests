@@ -18,8 +18,8 @@ namespace GetMapTest.GUI
         private IList<IWebElement> listButtonsVectorLayer;
         private enum NumberButtons
         {
-            Statistic = 0,
-            Zoom = 1,
+            Statistic = 1,
+            Zoom = 0,
             Edit = 2
         }
 
@@ -40,7 +40,8 @@ namespace GetMapTest.GUI
         {
             elementStatisticsLayer = listButtonsVectorLayer[(int)NumberButtons.Statistic];
             elementZoomToLayerExtext = listButtonsVectorLayer[(int)NumberButtons.Zoom];
-            elementEditLayer = listButtonsVectorLayer[(int)NumberButtons.Edit];
+            if (listButtonsVectorLayer.Count > 2)
+                elementEditLayer = listButtonsVectorLayer[(int)NumberButtons.Edit];
             return this;
         }
 
