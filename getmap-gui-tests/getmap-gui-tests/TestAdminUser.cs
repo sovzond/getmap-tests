@@ -134,14 +134,17 @@ namespace GetMapTest
         [TestMethod]
         public void CheckDeleteUser()
         {
-           
+            bool assert = false;
+            adm.get(driver).CreateUser();
             System.Threading.Thread.Sleep(2000);
             adm.get(driver).ClickOnDeleteUserOrRole();
             listNames = driver.FindElements(By.CssSelector(locationLogins));
             for(int i=0;i<listNames.Count;i++)
             {
-                Assert.IsFalse(listNames[i].Text == "pasha", "После удаления пользователя, пользователь остался.");
+                if (listNames[i].Text == "pasha")
+                    assert = true;
             }
+            Assert.IsFalse(assert, "После удаления пользователя, пользователь остался.");
         }
 
         /// <summary>
