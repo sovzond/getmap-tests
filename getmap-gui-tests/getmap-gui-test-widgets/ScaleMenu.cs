@@ -11,40 +11,7 @@ namespace GetMapTest.GUI
     /// </summary>
     public class ScaleMenu
     {
-        private IWebDriver driver;
-        private const string locationIncrementButton = "#menuIncrement div.svzSimpleButton.zoomIncrement";
-        private const string locationDecrementButton = "#menuIncrement div.svzSimpleButton.zoomDecrement";
-        private ScaleMenu(IWebDriver driver)
-        {
-            this.driver = driver;
-        }
-        /// <summary>
-        /// Принимает параметр типа IWebDriver для дальнейшей навигации по сайту.
-        /// </summary>
-        /// <param name="driver">Передает аргумент для закрытого конструктора</param>
-        /// <returns></returns>
-        public static ScaleMenu get(IWebDriver driver)
-        {
-            return new ScaleMenu(driver);
-        }
-        /// <summary>
-        /// Выполняет клик по кнопке 'Приблежение'.
-        /// </summary>
-        /// <returns></returns>
-        public ScaleMenu IncrementButton()
-        {
-            driver.FindElement(By.CssSelector(locationIncrementButton)).Click();
-            return this;
-        }
-        /// <summary>
-        /// Выполняет клик по кнопке 'Отдаление'.
-        /// </summary>
-        /// <returns></returns>
-        public ScaleMenu DecrementButton()
-        {
-            driver.FindElement(By.CssSelector(locationDecrementButton)).Click();
-            return this;
-        }
+      
     }
 }
 
